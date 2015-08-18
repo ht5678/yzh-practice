@@ -76,8 +76,10 @@ public class SoapClient {
 			System.out.println();
 			//将响应的对象转换成dom对象
 			Document doc = response.getSOAPPart().getEnvelope().getBody().extractContentAsDocument();
-			String str = doc.getElementsByTagName("addResult").item(0).getTextContent();
-			System.out.println(str);
+			//TODO:报错，未解决，暂时注释掉:2015-08-18
+//			String str = doc.getElementsByTagName("addResult").item(0).getTextContent();
+//			System.out.println(str);
+			//----------------------------------------------------------------------
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -106,8 +108,10 @@ public class SoapClient {
 			//如果使用以下方式进行设置，会见<>转换为&lt;和&gt
 			//body.addBodyElement(qname).setValue("<a>1</a><b>2</b>");
 			SOAPBodyElement element = body.addBodyElement(qname);
-			element.addChildElement("a").setTextContent("11");
-			element.addChildElement("b").setTextContent("22");
+			//TODO:报错，未解决，暂时注释掉:2015-08-18
+//			element.addChildElement("a").setTextContent("11");
+//			element.addChildElement("b").setTextContent("22");
+			//----------------------------------------------------------------------
 			//打印消息内容
 			message.writeTo(System.out);
 		} catch (SOAPException e) {

@@ -59,13 +59,15 @@ public class TestStax {
 			NodeList list = (NodeList) xpath.evaluate("//book[title='Learning XML']", document , XPathConstants.NODESET);
 			for(int i = 0 ; i < list.getLength() ; i++){
 				Element e = (Element)list.item(0);
+				//TODO:报错，未解决，暂时注释掉:2015-08-18--------------------
 				//输出书的价格
-				System.out.println(e.getElementsByTagName("price").item(0).getTextContent());
+//				System.out.println(e.getElementsByTagName("price").item(0).getTextContent());
 				
-				 e = (Element)(e.getElementsByTagName("price").item(0));
+//				 e = (Element)(e.getElementsByTagName("price").item(0));
 				 
-				 e.setTextContent("333.9");
-				 
+//				 e.setTextContent("333.9");
+				//---------------------------------------------------------------------- 
+				
 				 Result result = new StreamResult(System.out);
 				//通过tranformer修改节点
 				 transformer.transform(new DOMSource(document), result);
@@ -136,7 +138,9 @@ public class TestStax {
 //				}
 				//遍历输出相应的结果
 				Element e = (Element)list.item(i);
-				System.out.println(e.getElementsByTagName("title").item(0).getTextContent());
+				//TODO:报错，未解决，暂时注释掉:2015-08-18--------------------
+//				System.out.println(e.getElementsByTagName("title").item(0).getTextContent());
+				//----------------------------------------------------------------------
 			}
 		}catch(Exception e){
 			System.out.println(e.getMessage());
