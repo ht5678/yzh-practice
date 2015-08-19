@@ -40,7 +40,8 @@ public class MyHashMap<K,V> {
     public V put(K key , V value){
         //计算hash值
         int hash = key.hashCode();
-        int index = hash & (table.length-1);
+//        int index = hash & (table.length-1);
+        int index = Math.abs(hash) % table.length;
         //是否有重复key,替换
         for (Entry<K,V> e = table[index]; e != null; e = e.next) {
             Object k;
@@ -51,16 +52,14 @@ public class MyHashMap<K,V> {
             }
         }
         //扩容 size*2
-        if((size+1)>=table.length){
-            Entry<K,V>[] newTable = (Entry<K,V>[]) new Entry<?,?>[table.length*2];
-            for(int i = 0 ; i < size;i++){
-                newTable[i] = table[i];
-            }
-            table = newTable;
+        if(size>=threshold){
+            resize(table.length*2);
+            index = hash & (table.length-1);
         }
         //直接添加
-//        table[size++] = new Entry<K, V>(key, value);
-        
+        Entry<K,V> e = table[index];
+        table[index] = new Entry<K, V>(key, value, e, hash);
+        size++;
         return value;
     }
     
@@ -71,7 +70,19 @@ public class MyHashMap<K,V> {
      * @param newCapacity
      */
     private void resize(int newCapacity){
-        
+        Entry<K,V>[] newTable = (Entry<K,V>[]) new Entry<?,?>[newCapacity];
+        for (Entry<K,V> e : table) {
+            while(null != e) {
+                Entry<K,V> next = e.next;
+                int hash = e.key.hashCode();
+                int index = hash & (newCapacity-1);
+                e.next = newTable[index];
+                newTable[index] = e;
+                e = next;
+            }
+        }
+        table = newTable;
+        threshold = (int)(newCapacity*loadFactor);
     }
     
     
@@ -83,16 +94,24 @@ public class MyHashMap<K,V> {
      */
     public V remove(Object key) {
       //是否有重复key
-      Entry<K,V>[] tmpTable = (Entry<K,V>[]) new Entry<?,?>[table.length];
-      for(int i = 0 ; i < size;i++){
-          if(key.equals(table[i].key)){
-              System.arraycopy(table, 0, tmpTable, 0, i);
-              System.arraycopy(table, i+1, tmpTable, i, size);
-              table = tmpTable;
-              size--;
-              return table[i].value;
-          }
-      }
+        int hash = key.hashCode();
+        int index = hash & (table.length-1);
+        Entry<K,V> prev = table[index];
+        Entry<K,V> e = prev;
+        while(null != e) {
+            Entry<K,V> next = e.next;
+            Object k;
+            if (e.hash == hash &&
+                    ((k = e.key) == key || (key != null && key.equals(k)))) {
+                size--;
+                if (prev == e)
+                    table[index] = next;
+                else
+                    prev.next = next;
+                return e.value;
+            }
+            e = next;
+        }
         return null;
     }
     
@@ -112,11 +131,17 @@ public class MyHashMap<K,V> {
      */
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        for(int i = 0 ; i < size;i++){
-            sb.append("key:").append(table[i].key).append("  ---  value:").append(table[i].value).append(" ## ");
+        for (Entry<K,V> e : table) {
+            while(null != e) {
+                Entry<K,V> next = e.next;
+                sb.append("key:").append(e.key).append("  ---  value:").append(e.value).append(" ## ");
+                e = next;
+            }
+            System.out.println(" ** ");
         }
         return sb.toString();
     }
+    
     
     
     private static class Entry<K,V>{

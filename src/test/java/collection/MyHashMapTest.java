@@ -1,5 +1,6 @@
 package collection;
 
+import org.junit.Before;
 import org.junit.Test;
 
 
@@ -11,10 +12,28 @@ import org.junit.Test;
 public class MyHashMapTest {
     
     
+    private MyHashMap<String, String> map = new MyHashMap<>(8);
+    
+    
+    @Before
+    public void before(){
+        map.put("zhangsan", "zhangsan");
+        map.put("xianka", "xianka");
+        map.put("neicun", "neicun");
+        map.put("yingpan", "yingpan");
+        map.put("cpu", "cpu");
+    }
     
     
     
     
+    /**
+     * 测试打印所有元素
+     */
+    @Test
+    public void testToString(){
+        System.out.println(map.toString());
+    }
     
     
     
