@@ -11,14 +11,14 @@ package collection;
 public class MyHashMap<K,V> {
 
     /** 默认1000 **/
-    Entry<K,V>[] table = (Entry<K,V>[]) new Entry<?,?>[999];
+    Entry<K,V>[] table = (Entry<K,V>[]) new Entry<?,?>[16];
     
     int size;
     
     float loadFactor = 0.75f;
     
     //当前size*loadFactor=threshold
-    int threshold;
+    int threshold = (int)(16 * loadFactor);
     
     
     public MyHashMap(){
@@ -96,7 +96,8 @@ public class MyHashMap<K,V> {
     public V remove(Object key) {
       //是否有重复key
         int hash = key.hashCode();
-        int index = hash & (table.length-1);
+//        int index = hash & (table.length-1);
+        int index = Math.abs(hash) % table.length;
         Entry<K,V> prev = table[index];
         Entry<K,V> e = prev;
         while(null != e) {
