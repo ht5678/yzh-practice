@@ -27,7 +27,7 @@ public class MyHashMap<K,V> {
     
     public MyHashMap(int number){
         table = (Entry<K,V>[]) new Entry<?,?>[number];
-        threshold = (int)(size*loadFactor);
+        threshold = (int)(table.length*loadFactor);
     }
     
     
@@ -55,6 +55,7 @@ public class MyHashMap<K,V> {
         if(size>=threshold){
             resize(table.length*2);
             index = hash & (table.length-1);
+            System.out.println("扩容后："+table.length);
         }
         //直接添加
         Entry<K,V> e = table[index];
@@ -137,7 +138,7 @@ public class MyHashMap<K,V> {
                 sb.append("key:").append(e.key).append("  ---  value:").append(e.value).append(" ## ");
                 e = next;
             }
-            System.out.println(" ** ");
+            sb.append(" ** ");
         }
         return sb.toString();
     }

@@ -25,10 +25,47 @@ public class MyHashMapTest {
     }
     
     
+    /**
+     * 测试删除
+     */
+    @Test
+    public void testRemvoe(){
+    	System.out.println(map.size());
+    	map.remove("xianka");
+    	System.out.println(map.size());
+    	System.out.println(map.toString());
+    }
+    
+    
+    /**
+     * 测试添加相同数据
+     */
+    @Test
+    public void testRepeatPut(){
+    	System.out.println(map.size());
+    	map.put("yingpan", "yingpan");
+    	System.out.println(map.size());
+    	System.out.println(map.toString());
+    }
+    
+    
+    /**
+     * 测试扩容
+     */
+    @Test
+    public void testResize(){
+    	map.put("shanliang", "善良");
+    	map.put("shanliang1", "善良1");
+    }
+    
     
     
     /**
      * 测试打印所有元素
+     * 
+     * **代表分隔数组
+     * ##代表分隔链表元素
+     * 
      */
     @Test
     public void testToString(){
