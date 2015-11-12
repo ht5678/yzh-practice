@@ -18,7 +18,8 @@ public class SyncProduce {
         Random rnd = new Random();
  
         Properties props = new Properties();
-        props.put("metadata.broker.list", "192.168.10.163:9092,192.168.10.164:9092,192.168.10.165:9092");
+//        props.put("metadata.broker.list", "192.168.10.163:9092,192.168.10.164:9092,192.168.10.165:9092");
+        props.put("metadata.broker.list", "10.99.205.17:9092,10.99.205.18:9092,10.99.205.22:9092");
         props.put("serializer.class", "kafka.serializer.StringEncoder");
 		//kafka.serializer.DefaultEncoder
 //        props.put("partitioner.class", "messagequeue.kafka.jike.SimplePartitioner");

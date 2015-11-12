@@ -66,7 +66,7 @@ public class ConsumerDemo {
     }
  
     public static void main(String[] arg) {
-        String[] args = { "10.99.205.22:2281", "group-1", "demo", "12" };
+        String[] args = { "10.99.205.18:2281,10.99.205.22:2281,10.99.205.17:2281", "group-1", "test", "12" };
         String zooKeeper = args[0];
         String groupId = args[1];
         String topic = args[2];

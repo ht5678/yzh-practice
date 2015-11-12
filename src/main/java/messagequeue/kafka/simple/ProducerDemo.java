@@ -22,7 +22,7 @@ public class ProducerDemo {
  
         // 设置配置属性
         Properties props = new Properties();
-        props.put("metadata.broker.list","10.99.205.22:9092");
+        props.put("metadata.broker.list","10.99.205.22:9092,10.99.205.18:9092,10.99.205.17:9092");
         props.put("serializer.class", "kafka.serializer.StringEncoder");
         // key.serializer.class默认为serializer.class
         props.put("key.serializer.class", "kafka.serializer.StringEncoder");
@@ -44,7 +44,7 @@ public class ProducerDemo {
             String msg = runtime + ",www.example.com," + ip;
             //如果topic不存在，则会自动创建，默认replication-factor为1，partitions为0
             KeyedMessage<String, String> data = new KeyedMessage<String, String>(
-                    "demo", ip, msg);
+                    "test", ip, msg);
             producer.send(data);
         }
         System.out.println("耗时:" + (System.currentTimeMillis() - start));

@@ -36,7 +36,10 @@ public class PartitionConsumerTest {
 		}
 		
 		List<String> seeds = new ArrayList<String>();
-		String hosts="192.168.10.163,192.168.10.164,192.168.10.165";
+//		String hosts="192.168.10.163,192.168.10.164,192.168.10.165";
+		
+		String hosts="10.99.205.17,10.99.205.18,10.99.205.22";
+		
 		String[] hostArr = hosts.split(",");
 		for(int index = 0;index < hostArr.length;index++){
 			seeds.add(hostArr[index].trim());
