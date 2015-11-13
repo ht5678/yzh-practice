@@ -13,6 +13,8 @@ import kafka.producer.ProducerConfig;
  *
  */
 public class SyncProduce {
+	
+	
 	public static void main(String[] args) {
         long events = Long.MAX_VALUE;
         Random rnd = new Random();
@@ -22,8 +24,12 @@ public class SyncProduce {
         props.put("metadata.broker.list", "10.99.205.17:9092,10.99.205.18:9092,10.99.205.22:9092");
         props.put("serializer.class", "kafka.serializer.StringEncoder");
 		//kafka.serializer.DefaultEncoder
+        //指定自定义分区算法
 //        props.put("partitioner.class", "messagequeue.kafka.jike.SimplePartitioner");
+        //默认的分区算法，根据key的hash值来分区
 		//kafka.producer.DefaultPartitioner: based on the hash of the key
+        
+        //是否确认收到
         props.put("request.required.acks", "1");
 		//0;  绝不等确认  1:   leader的一个副本收到这条消息，并发回确认 -1：   leader的所有副本都收到这条消息，并发回确认
  

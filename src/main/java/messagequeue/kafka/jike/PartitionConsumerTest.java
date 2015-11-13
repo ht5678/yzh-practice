@@ -27,6 +27,9 @@ import kafka.message.MessageAndOffset;
  *
  */
 public class PartitionConsumerTest {
+	
+	
+	
 	public static void main(String args[]) {
 		PartitionConsumerTest example = new PartitionConsumerTest();
         long maxReads = Long.MAX_VALUE;
@@ -68,10 +71,23 @@ public class PartitionConsumerTest {
 	        m_replicaBrokers = new ArrayList<String>();
 	    }
 	 
+	    
+	    
+	    
+	    /**
+	     *	执行分区消费 
+	     * @param a_maxReads
+	     * @param a_topic
+	     * @param a_partition
+	     * @param a_seedBrokers
+	     * @param a_port
+	     * @throws Exception
+	     */
 	    public void run(long a_maxReads, String a_topic, int a_partition, List<String> a_seedBrokers, int a_port) throws Exception {
 	        // find the meta data about the topic and partition we are interested in
-	        //
+	        //查找topic的分区leader
 	        PartitionMetadata metadata = findLeader(a_seedBrokers, a_port, a_topic, a_partition);
+	        //查找不到就返回
 	        if (metadata == null) {
 	            System.out.println("Can't find metadata for Topic and Partition. Exiting");
 	            return;
@@ -80,10 +96,13 @@ public class PartitionConsumerTest {
 	            System.out.println("Can't find Leader for Topic and Partition. Exiting");
 	            return;
 	        }
+	        
+	        //
 	        String leadBroker = metadata.leader().host();
 	        String clientName = "Client_" + a_topic + "_" + a_partition;
 	 
 	        SimpleConsumer consumer = new SimpleConsumer(leadBroker, a_port, 100000, 64 * 1024, clientName);
+	        //获取最后消费的偏移量
 	        long readOffset = getLastOffset(consumer,a_topic, a_partition, kafka.api.OffsetRequest.EarliestTime(), clientName);
 	 
 	        int numErrors = 0;
@@ -93,7 +112,7 @@ public class PartitionConsumerTest {
 	            }
 	            FetchRequest req = new FetchRequestBuilder()
 	                    .clientId(clientName)
-	                    .addFetch(a_topic, a_partition, readOffset, 100000) // Note: this fetchSize of 100000 might need to be increased if large batches are written to Kafka
+	                    .addFetch(a_topic, a_partition, readOffset, 100000) // Note:指定能取多大的字节数， this fetchSize of 100000 might need to be increased if large batches are written to Kafka
 	                    .build();
 	            FetchResponse fetchResponse = consumer.fetch(req);
 	 
@@ -142,6 +161,17 @@ public class PartitionConsumerTest {
 	        if (consumer != null) consumer.close();
 	    }
 	 
+	    
+	    
+	    /**
+	     * 从consumer中获取topic的某个分区的偏移量
+	     * @param consumer
+	     * @param topic
+	     * @param partition
+	     * @param whichTime
+	     * @param clientName
+	     * @return
+	     */
 	    public static long getLastOffset(SimpleConsumer consumer, String topic, int partition,
 	                                     long whichTime, String clientName) {
 	        TopicAndPartition topicAndPartition = new TopicAndPartition(topic, partition);
@@ -186,6 +216,16 @@ public class PartitionConsumerTest {
 	        throw new Exception("Unable to find new leader after Broker failure. Exiting");
 	    }
 	 
+	    
+	    
+	    /**
+	     * 请求查找a_topic的分区leader
+	     * @param a_seedBrokers
+	     * @param a_port
+	     * @param a_topic
+	     * @param a_partition
+	     * @return
+	     */
 	    private PartitionMetadata findLeader(List<String> a_seedBrokers, int a_port, String a_topic, int a_partition) {
 	        PartitionMetadata returnMetaData = null;
 	        loop:
