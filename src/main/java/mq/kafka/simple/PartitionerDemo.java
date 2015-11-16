@@ -1,4 +1,4 @@
-package messagequeue.kafka.simple;
+package mq.kafka.simple;
 
 import kafka.producer.Partitioner;
 import kafka.utils.VerifiableProperties;

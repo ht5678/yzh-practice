@@ -1,4 +1,4 @@
-package messagequeue.kafka.jike;
+package mq.kafka.jike;
 import java.util.*;
 
 import kafka.javaapi.producer.Producer;

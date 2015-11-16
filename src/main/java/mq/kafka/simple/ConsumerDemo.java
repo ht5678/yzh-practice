@@ -1,4 +1,4 @@
-package messagequeue.kafka.simple;
+package mq.kafka.simple;
 
 import java.util.HashMap;
 import java.util.List;

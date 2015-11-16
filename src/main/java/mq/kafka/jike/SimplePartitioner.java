@@ -1,4 +1,4 @@
-package messagequeue.kafka.jike;
+package mq.kafka.jike;
 
 import kafka.producer.Partitioner;
 import kafka.utils.VerifiableProperties;

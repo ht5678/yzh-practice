@@ -1,4 +1,4 @@
-package messagequeue.kafka.simple;
+package mq.kafka.simple;
 
 import java.util.Date;
 import java.util.Properties;

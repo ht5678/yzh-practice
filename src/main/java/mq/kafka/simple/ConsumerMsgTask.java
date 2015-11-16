@@ -1,4 +1,4 @@
-package messagequeue.kafka.simple;
+package mq.kafka.simple;
 
 import kafka.consumer.ConsumerIterator;
 import kafka.consumer.KafkaStream;
