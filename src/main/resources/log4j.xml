@@ -2,6 +2,8 @@
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
 
+
+  <!-- #####################打印到控制台########################### -->
   <appender name="Console" class="org.apache.log4j.ConsoleAppender">
     <param name="Threshold" value="INFO" />
     <layout class="org.apache.log4j.PatternLayout">
@@ -9,8 +11,21 @@
     </layout>
   </appender>
   
+  
+  <!-- #####################打印到远程的logstash监控端口########################### -->
+  <appender name="socketAppender" class="org.apache.log4j.net.SocketAppender"> 
+      <param name="remoteHost" value="10.99.205.17" /> 
+      <param name="port" value="4560" /> 
+      <param name="Threshold" value="INFO" /> 
+      <param name="ReconnectionDelay" value="1000" /> 
+      <param name="LocationInfo" value="true" /> 
+    </appender>
+  
+  
 
   <root>
     <appender-ref ref="Console" />
+    <appender-ref ref="socketAppender" />
   </root>
+  
 </log4j:configuration>

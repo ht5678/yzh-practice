@@ -77,7 +77,7 @@ public class GroupConsumerTest extends Thread {
 			System.out.println("Please assign partition number.");
 		}
 		
-        String zooKeeper = "192.168.10.163:2181,192.168.10.163:2181,192.168.10.163:2181";
+        String zooKeeper = "10.250.1.11:12181,10.250.1.12:12181,10.250.1.13:12181";
         String groupId = "grouptest";
         String topic = "test";
         //TODO:默认为2
