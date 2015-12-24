@@ -1,4 +1,4 @@
-package messagequeue.kafka.quickstart;
+package mq.kafka.quickstart;
 
 /**
  * 
