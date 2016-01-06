@@ -23,8 +23,8 @@ public class ProducerDemo {
         // 设置配置属性
         Properties props = new Properties();
         //这里即使是写一台机器的地址也是可以的，因为可以通过一台机器来获取所有的机器地址
-//        props.put("metadata.broker.list","10.99.205.22:9092,10.99.205.18:9092,10.99.205.17:9092");
-        props.put("metadata.broker.list","10.250.1.11:19092,10.250.1.12:19092,10.250.1.13:19092");
+        props.put("metadata.broker.list","10.99.205.22:9092,10.99.205.18:9092,10.99.205.17:9092");
+//        props.put("metadata.broker.list","10.250.1.11:9001,10.250.1.12:9001,10.250.1.13:9001");
         props.put("serializer.class", "kafka.serializer.StringEncoder");
         // key.serializer.class默认为serializer.class
         props.put("key.serializer.class", "kafka.serializer.StringEncoder");
@@ -43,7 +43,7 @@ public class ProducerDemo {
         for (long i = 0; i < events; i++) {
             long runtime = new Date().getTime();
             String ip = "192.168.2." + i;//rnd.nextInt(255);
-            String msg = runtime + ",www.example.com," + ip;
+            String msg = runtime + ",www.example.com你好啊世界," + ip;
             //如果topic不存在，则会自动创建，默认replication-factor为1，partitions为0
             KeyedMessage<String, String> data = new KeyedMessage<String, String>(
                     "test", ip, msg);

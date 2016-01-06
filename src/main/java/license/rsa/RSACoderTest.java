@@ -35,6 +35,8 @@ public class RSACoderTest {
 		
 		byte[] encodedData  = RSACoder.encryptByPublicKey(data, publicKey);
 		
+		System.out.println(new String(encodedData));
+		
 		byte[] decodedData = RSACoder.decryptByPrivateKey(encodedData, privateKey);
 		
 		String outputStr = new String(decodedData);
