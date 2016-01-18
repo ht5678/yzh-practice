@@ -35,12 +35,12 @@ public class ConsumerDemo {
     }
  
     public void run(int numThreads) {
-    	
+    	while(true){
         Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
         topicCountMap.put(topic, new Integer(numThreads));
         Map<String, List<KafkaStream<byte[], byte[]>>> consumerMap = consumer
                 .createMessageStreams(topicCountMap);
-//        while(true){
+        
         List<KafkaStream<byte[], byte[]>> streams = consumerMap.get(topic);
  
         // now launch all the threads
@@ -58,7 +58,7 @@ public class ConsumerDemo {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-//    	}
+    	}
     }
  
     private static ConsumerConfig createConsumerConfig(String a_zookeeper,

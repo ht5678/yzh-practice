@@ -18,7 +18,7 @@ public class ZnodeSetData {
 	
 	public static void main(String[] args) throws IOException, KeeperException, InterruptedException {
 //		String znode = "/test";
-		String znode = "/consumers/grouptest/offsets/test/2";
+		String znode = "/consumers/grouptest/offsets/test/0";
 		
 		ZooKeeper zk = new ZooKeeper("10.99.205.17:2281", 1000*10, null);
 		
