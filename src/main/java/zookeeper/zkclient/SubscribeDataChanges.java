@@ -32,8 +32,6 @@ public class SubscribeDataChanges {
 		ZkClient zc = new ZkClient("192.168.1.105:2181",10000,10000,new BytesPushThroughSerializer());
 		System.out.println("conneted ok!");
 		
-		zc.create
-		
 		zc.subscribeDataChanges("/jike20", new ZkDataListener());
 		Thread.sleep(Integer.MAX_VALUE);
 		
