@@ -10,6 +10,8 @@ public class CreateNode {
 		ZkClient zc = new ZkClient("192.168.1.105:2181",10000,10000,new SerializableSerializer());
 		System.out.println("conneted ok!");
 		
+		//带有acl信息的创建子节点
+//		zc.create(path, data, acl, mode)
 		
 		User u = new User();
 		u.setId(1);

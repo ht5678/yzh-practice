@@ -10,6 +10,9 @@ public class GetData {
 	public static void main(String[] args) {
 		ZkClient zc = new ZkClient("192.168.1.105:2181",10000,10000,new SerializableSerializer());
 		System.out.println("conneted ok!");
+
+		//添加验证信息
+//		zc.addAuthInfo(scheme, auth);
 		
 		Stat stat = new Stat();
 		User u = zc.readData("/jike5",stat);
