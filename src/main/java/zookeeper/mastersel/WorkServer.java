@@ -45,7 +45,7 @@ public class WorkServer {
 			@Override
 			public void handleDataDeleted(String arg0) throws Exception {
 				// TODO Auto-generated method stub
-				takeMaster();
+//				takeMaster();
 				if(masterData != null && masterData.getName().equals(serverData.getName())){
 					takeMaster();
 				}else{
@@ -66,12 +66,24 @@ public class WorkServer {
 	}
 	
 	
+
+	public ZkClient getZkClient() {
+		return zkClient;
+	}
+
+	public void setZkClient(ZkClient zkClient) {
+		this.zkClient = zkClient;
+	}
+
+	
+	
 	public void start() throws Exception{
 		if(running){
 			throw new Exception("server has startup ... ");
 		}
 		running = true;
 		zkClient.subscribeDataChanges(MATER_PATH, dataListener);
+		takeMaster();
 	}
 	
 	
@@ -91,7 +103,7 @@ public class WorkServer {
 		try{
 			zkClient.create(MATER_PATH, serverData, CreateMode.EPHEMERAL);
 			masterData = serverData;
-			
+			System.out.println(serverData.getName()+" is master");
 			//作为演示,每隔5s钟释放一次master
 			delayExcutor.schedule(new Runnable() {
 				public void run() {
