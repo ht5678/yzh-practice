@@ -140,6 +140,11 @@ public class WorkServer {
 			return false;
 		}
 	}
+
+
+	public void setZkClient(ZkClient client) {
+		
+	}
 	
 	
 	
