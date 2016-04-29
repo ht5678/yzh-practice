@@ -3,6 +3,8 @@ package zookeeper.lock;
 import org.apache.zookeeper.KeeperException;
 import org.junit.Test;
 
+import zookeeper.apache.lock.DistributedSharedLock;
+
 /**
  * 
  * @author yuezh2   2016年1月4日 下午8:07:58
