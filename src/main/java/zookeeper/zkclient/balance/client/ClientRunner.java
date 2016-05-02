@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import zookeeper.zkclient.balance.server.Server;
 import zookeeper.zkclient.balance.server.ServerData;
 
 /**
@@ -17,7 +16,7 @@ public class ClientRunner {
 
 	private static final int CLIENT_QTY =3;
 	
-	private static final String ZOOKEEPER_SERVER="10.99.205.17:12181";
+	private static final String ZOOKEEPER_SERVER="10.99.205.22:12181";
 	
 	private static final String SERVERS_PATH="/servers";
 	
