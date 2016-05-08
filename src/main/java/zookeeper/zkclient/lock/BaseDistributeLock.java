@@ -1,6 +1,5 @@
 package zookeeper.zkclient.lock;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -29,6 +28,13 @@ public class BaseDistributeLock {
 	private static final Integer MAX_RETRY_COUNT = 10;
 	
 	
+	
+	/**
+	 * 构造函数，初始化
+	 * @param client
+	 * @param path
+	 * @param lockName
+	 */
 	public BaseDistributeLock(ZkClientExt client , String path , String lockName){
 		this.client = client;
 		this.basePath = path;
@@ -54,14 +60,16 @@ public class BaseDistributeLock {
 		
 		try {
 			while(!haveTheLock){
-				List<String> children = new ArrayList<>();
+				//获取basePath下排序后的临时顺序节点
+				List<String> children = getSortedChildren();
+				//截取当前临时顺序节点的节点名称
 				String sequenceNodeName = ourPath.substring(basePath.length()+1);
-				
+				//查找当前的节点在子节点列表中的位置，没有就报错
 				int ourIndex = children.indexOf(sequenceNodeName);
 				if(ourIndex<0){
 					throw new ZkNoNodeException("节点没有找到"+sequenceNodeName);
 				}
-				
+				//
 				boolean isGetTheLock = ourIndex ==0;
 				String pathToWatch = isGetTheLock?null : children.get(ourIndex-1);
 				
@@ -127,7 +135,12 @@ public class BaseDistributeLock {
 	
 	
 	
-	
+	/**
+	 * 根据临时顺序节点的名称截取顺序数字
+	 * @param str
+	 * @param lockName
+	 * @return
+	 */
 	private String getLockNodeNumber(String str , String lockName){
 		int index = str.lastIndexOf(lockName);
 		if(index>=0){
@@ -139,6 +152,12 @@ public class BaseDistributeLock {
 	
 	
 	
+	/**
+	 * 
+	 * 获取 basePath 下的所有子节点（临时顺序），并且根据生成的顺序数字进行排序返回
+	 * @return
+	 * @throws Exception
+	 */
 	List<String> getSortedChildren()throws Exception{
 		try{
 			List<String> children = client.getChildren(basePath);
@@ -154,7 +173,7 @@ public class BaseDistributeLock {
 					}
 				);
 			return children;
-		}catch(ZkNoNodeException e){
+		}catch(ZkNoNodeException e){//没有父节点的情况
 			client.createPersistent(basePath,true);
 			return getSortedChildren();
 		}
