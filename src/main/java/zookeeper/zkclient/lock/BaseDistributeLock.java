@@ -49,11 +49,26 @@ public class BaseDistributeLock {
 	}
 	
 	
+	/**
+	 * 创建临时顺序节点
+	 * @param client
+	 * @param path
+	 * @return
+	 * @throws Exception
+	 */
 	private String createLockNode(ZkClient client , String path)throws Exception{
 		return client.createEphemeralSequential(path, null);
 	}
 	
 	
+	/**
+	 * 等待获取锁
+	 * @param startMills
+	 * @param millsToWait
+	 * @param ourPath
+	 * @return
+	 * @throws Exception
+	 */
 	private boolean waitToLock(long startMills , Long millsToWait , String ourPath)throws Exception{
 		boolean haveTheLock = false;
 		boolean doDelete = false;
@@ -69,11 +84,11 @@ public class BaseDistributeLock {
 				if(ourIndex<0){
 					throw new ZkNoNodeException("节点没有找到"+sequenceNodeName);
 				}
-				//
+				//如果是第一个节点表示获取到锁了
 				boolean isGetTheLock = ourIndex ==0;
 				String pathToWatch = isGetTheLock?null : children.get(ourIndex-1);
 				
-				if(isGetTheLock){
+				if(isGetTheLock){//成功
 					haveTheLock = true;
 				}else{
 					String previousSequencePath = basePath.concat("/").concat(pathToWatch);
@@ -95,7 +110,7 @@ public class BaseDistributeLock {
 					
 					try {
 						//如果节点不存在会出现异常
-						client.unsubscribeDataChanges(previousSequencePath, previousListener);
+						client.subscribeDataChanges(previousSequencePath, previousListener);
 						
 						if(millsToWait!=null){
 							millsToWait = millsToWait-(System.currentTimeMillis()-startMills);
@@ -187,6 +202,13 @@ public class BaseDistributeLock {
 	
 	
 	
+	/**
+	 * 尝试获取锁
+	 * @param time
+	 * @param unit
+	 * @return
+	 * @throws Exception
+	 */
 	protected String attemptLock(long time,TimeUnit unit)throws Exception {
 		final long startMills = System.currentTimeMillis();
 		final Long millsToWait = (unit!=null)?unit.toMillis(time):null;
@@ -200,10 +222,12 @@ public class BaseDistributeLock {
 		while(!isDone){
 			isDone = true;
 			try {
+				//创建临时顺序节点,并且返回顺序节点的名称
 				ourPath = createLockNode(client, path);
+				//获取锁
 				hasTheLock = waitToLock(startMills, millsToWait, ourPath);
 			} catch (ZkNoNodeException e) {
-				if(retryCount++<MAX_RETRY_COUNT){
+				if(retryCount++<MAX_RETRY_COUNT){//重试次数
 					isDone = false;
 				}else{
 					throw e;
