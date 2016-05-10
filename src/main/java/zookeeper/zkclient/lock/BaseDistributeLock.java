@@ -57,7 +57,15 @@ public class BaseDistributeLock {
 	 * @throws Exception
 	 */
 	private String createLockNode(ZkClient client , String path)throws Exception{
-		return client.createEphemeralSequential(path, null);
+		String nodePath = "";
+		try{
+			nodePath = client.createEphemeralSequential(path, null);
+		}catch(ZkNoNodeException e){
+			String parentDir = path.substring(0, path.lastIndexOf('/'));
+			client.createPersistent(parentDir,true);
+			return this.createLockNode(client, path);
+		}
+		return nodePath;
 	}
 	
 	

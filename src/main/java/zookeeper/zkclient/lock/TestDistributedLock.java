@@ -10,10 +10,13 @@ import org.I0Itec.zkclient.serialize.BytesPushThroughSerializer;
 public class TestDistributedLock {
 	
 	public static void main(String[] args) {
-		final ZkClientExt zkClientExt1 = new ZkClientExt("10.99.205.22:12181", 5000, 5000, new BytesPushThroughSerializer());
+		
+		String zkServer = "10.99.205.22:12181";
+		
+		final ZkClientExt zkClientExt1 = new ZkClientExt(zkServer, 5000, 5000, new BytesPushThroughSerializer());
 		final SimpleDistributedLockMutex mutex1 = new SimpleDistributedLockMutex(zkClientExt1, "/Mutex");
 		
-		final ZkClientExt zkClientExt2 = new ZkClientExt("10.99.205.22:12181", 5000, 5000, new BytesPushThroughSerializer());
+		final ZkClientExt zkClientExt2 = new ZkClientExt(zkServer, 5000, 5000, new BytesPushThroughSerializer());
 		final SimpleDistributedLockMutex mutex2 = new SimpleDistributedLockMutex(zkClientExt2, "/Mutex");
 		
 		
