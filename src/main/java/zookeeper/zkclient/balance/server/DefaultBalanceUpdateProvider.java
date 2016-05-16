@@ -10,18 +10,26 @@ import org.apache.zookeeper.data.Stat;
  *
  */
 public class DefaultBalanceUpdateProvider implements BalanceUpdateProvider {
-	
+	//服务器详细配置信息的zk位置
 	private String serverPath;
-	
+	//zk连接
 	private ZkClient zc;
 	
 	
+	/**
+	 * 构造函数
+	 * @param serverPath
+	 * @param zc
+	 */
 	public DefaultBalanceUpdateProvider(String serverPath,ZkClient zc){
 		this.serverPath = serverPath;
 		this.zc = zc;
 	}
 	
 	
+	/**
+	 * 负载+step
+	 */
 	@Override
 	public boolean addBalance(Integer step) {
 		Stat stat = new Stat();
@@ -40,6 +48,9 @@ public class DefaultBalanceUpdateProvider implements BalanceUpdateProvider {
 		}
 	}
 
+	/**
+	 * 负载-step
+	 */
 	@Override
 	public boolean reduceBalance(Integer step) {
 		Stat stat = new Stat();

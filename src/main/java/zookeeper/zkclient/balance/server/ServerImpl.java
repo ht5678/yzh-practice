@@ -69,7 +69,12 @@ public class ServerImpl implements Server {
 	
 	
 	
-	
+	/**
+	 * 构造函数,初始化数据
+	 * @param zkAddress
+	 * @param serversPath
+	 * @param sd
+	 */
 	public ServerImpl(String zkAddress , String serversPath , ServerData sd) {
 		this.zkAddress = zkAddress;
 		this.serversPath = serversPath;
@@ -81,10 +86,11 @@ public class ServerImpl implements Server {
 	
 	
 	/**
-	 * 初始化服务器
+	 * 初始化服务器,在zk上创建临时节点
 	 * @throws Exception
 	 */
 	private void initRunning()throws Exception{
+		//组装节点路径
 		String mePath = serversPath.concat("/").concat(sd.getPort().toString());
 		//注册到zk
 		registProvider.regist(new ZooKeeperRegistContext(mePath, zc, sd));
@@ -104,12 +110,14 @@ public class ServerImpl implements Server {
 		
 		System.out.println(sd.getPort()+":binding....");
 		
+		//在zk中创建服务器节点信息
 		try {
 			initRunning();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return;
 		}
+		
 		
 		bootStrap.group(bossGroup,workGroup)
 			.channel(NioServerSocketChannel.class)

@@ -3,7 +3,7 @@ package zookeeper.zkclient.balance.server;
 import org.I0Itec.zkclient.ZkClient;
 
 /**
- * 
+ * zk服务器节点的配置信息
  * @author yuezh2   2016年4月29日 下午7:55:53
  *
  */
