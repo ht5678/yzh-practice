@@ -1,13 +1,18 @@
 package zookeeper.zkclient.queue;
 
-
+import java.io.Serializable;
 
 /**
  * 
  * @author yuezh2   2016年5月17日 下午8:21:52
  *
  */
-public class User {
+public class User implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8125074243886278880L;
 
 	private String name;
 	
