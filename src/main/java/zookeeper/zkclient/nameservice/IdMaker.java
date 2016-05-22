@@ -2,6 +2,7 @@ package zookeeper.zkclient.nameservice;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.I0Itec.zkclient.ZkClient;
 import org.I0Itec.zkclient.exception.ZkNodeExistsException;
@@ -106,6 +107,16 @@ public class IdMaker {
 			zkClient.close();
 			zkClient = null;
 		}
+		
+		cleanExector.shutdown();
+		
+		try{
+			cleanExector.awaitTermination(2, TimeUnit.SECONDS);
+		}catch(InterruptedException e){
+			e.printStackTrace();
+		}finally {
+			cleanExector = null;
+		}
 	}
 	
 	
@@ -124,7 +135,7 @@ public class IdMaker {
 	 * @return
 	 * @throws Exception
 	 */
-	public String generateId()throws Exception{
+	public String generateId(RemoveMethod removeMethod)throws Exception{
 		
 		checkRunning();
 		
@@ -134,9 +145,17 @@ public class IdMaker {
 		
 		//为了避免资源浪费,删除掉节点
 		//方式一:立即删除
-		zkClient.delete(ourPath);
+		if(removeMethod.equals(RemoveMethod.IMMEDIATELY)){
+			zkClient.delete(ourPath);
+		}
 		//方式二:延迟删除,线程池
-		
+		else if(removeMethod.equals(RemoveMethod.DELAY)){
+			cleanExector.execute(new Runnable() {
+				public void run() {
+					zkClient.delete(ourPath);
+				}
+			});
+		}
 		//node-00000000 , node-00000001 
 		return ExtractId(ourPath);
 	}
