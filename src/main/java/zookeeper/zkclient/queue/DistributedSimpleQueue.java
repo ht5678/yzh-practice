@@ -98,7 +98,7 @@ public class DistributedSimpleQueue<T> {
 			});
 			
 			//消费消息顺序
-			//读取节点的消息,删除节点,返回消费的消息内容
+			//读取节点的消息(如果读取不到,可能被其他消费,会循环读取下一条消息),删除节点,返回消费的消息内容
 			for(String nodeName : list){
 				String nodeFullPath = root.concat("/").concat(nodeName);
 				try{
