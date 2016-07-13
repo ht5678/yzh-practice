@@ -15,7 +15,7 @@ import guice.demo.base.TransactionLog;
  * @author yuezh2   2016年7月13日 下午5:18:35
  *
  */
-public class BillingModule extends AbstractModule {
+public class SimpleBillingModule extends AbstractModule {
 
 	
 	
