@@ -12,6 +12,8 @@ public class DatabaseTransactionLog implements TransactionLog {
 	private String jdbcUrl;
 	
 	private Integer threadPoolSize;
+	
+	private Connection connection;
 
 	
 	public String getJdbcUrl() {
@@ -28,6 +30,14 @@ public class DatabaseTransactionLog implements TransactionLog {
 
 	public void setThreadPoolSize(Integer threadPoolSize) {
 		this.threadPoolSize = threadPoolSize;
+	}
+
+	public Connection getConnection() {
+		return connection;
+	}
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
 	}
 
 
