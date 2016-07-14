@@ -14,6 +14,27 @@ public class DatabaseTransactionLog implements TransactionLog {
 	private Integer threadPoolSize;
 	
 	private Connection connection;
+	
+	
+	
+	/**
+	 * 
+	 */
+	public DatabaseTransactionLog(){
+		
+	}
+	
+	
+	
+	
+	/**
+	 * 
+	 */
+	public DatabaseTransactionLog(Connection connection){
+		System.out.println("DatabaseTransactionLog constructor");
+	}
+	
+	
 
 	
 	public String getJdbcUrl() {
