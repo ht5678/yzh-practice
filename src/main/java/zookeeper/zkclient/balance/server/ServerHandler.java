@@ -30,21 +30,21 @@ public class ServerHandler extends ChannelHandlerAdapter {
 	}
 
 
-
-	@Override
-	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		// TODO Auto-generated method stub
-		System.out.println("one client connect...");
-		balanceUpdater.addBalance(BALANCE_STEP);
-	}
-
-
-
-	@Override
-	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		// TODO Auto-generated method stub
-		balanceUpdater.reduceBalance(BALANCE_STEP);
-	}
+//TODO:因为使用了4.1.3Final版本,所以替换掉了  5.0Alpha版本
+//	@Override
+//	public void channelActive(ChannelHandlerContext ctx) throws Exception {
+//		// TODO Auto-generated method stub
+//		System.out.println("one client connect...");
+//		balanceUpdater.addBalance(BALANCE_STEP);
+//	}
+//
+//
+//
+//	@Override
+//	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+//		// TODO Auto-generated method stub
+//		balanceUpdater.reduceBalance(BALANCE_STEP);
+//	}
 
 
 
