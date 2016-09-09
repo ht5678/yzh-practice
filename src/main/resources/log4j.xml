@@ -5,7 +5,7 @@
 
   <!-- #####################打印到控制台########################### -->
   <appender name="Console" class="org.apache.log4j.ConsoleAppender">
-    <param name="Threshold" value="INFO" />
+    <param name="Threshold" value="debug" />
     <layout class="org.apache.log4j.PatternLayout">
       <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %p $r [%t] %C.%M(%L) | %m%n" />
     </layout>
@@ -25,7 +25,7 @@
 
   <root>
     <appender-ref ref="Console" />
-    <appender-ref ref="socketAppender" />
+    <!-- <appender-ref ref="socketAppender" /> -->
   </root>
   
 </log4j:configuration>
