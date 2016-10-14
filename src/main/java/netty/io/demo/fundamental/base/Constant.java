@@ -1,4 +1,4 @@
-package netty.io.demo.base;
+package netty.io.demo.fundamental.base;
 
 
 /**

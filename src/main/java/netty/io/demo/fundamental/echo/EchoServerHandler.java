@@ -1,4 +1,4 @@
-package netty.io.demo.echo;
+package netty.io.demo.fundamental.echo;
 
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;

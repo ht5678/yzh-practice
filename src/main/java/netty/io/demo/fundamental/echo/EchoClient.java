@@ -1,4 +1,4 @@
-package netty.io.demo.echo;
+package netty.io.demo.fundamental.echo;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
