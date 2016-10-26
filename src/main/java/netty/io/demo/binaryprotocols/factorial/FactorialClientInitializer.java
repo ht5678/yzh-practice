@@ -1,6 +1,4 @@
-package netty.io.demo.factorial;
-
-import com.alibaba.fastjson.serializer.BigIntegerCodec;
+package netty.io.demo.binaryprotocols.factorial;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -8,26 +6,28 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.compression.ZlibCodecFactory;
 import io.netty.handler.codec.compression.ZlibWrapper;
 import io.netty.handler.ssl.SslContext;
-import scala.sys.process.ProcessImpl.PipedProcesses;
+
+
+
+
 
 /**
  * 
- * @author yuezh2   2016年7月21日 下午3:50:24
+ * Creates a newly configured {@link ChannelPipeline} for a client-side channel.
+ * 
+ * @author yuezh2   2016年10月26日 下午2:54:21
  *
  */
-public class FactorialServerInitializer extends ChannelInitializer<SocketChannel>{
+public class FactorialClientInitializer extends ChannelInitializer<SocketChannel>{
+	
 	
 	private final SslContext sslCtx;
 	
 	
 	
-	public FactorialServerInitializer(SslContext sslCtx){
+	public FactorialClientInitializer(SslContext sslCtx){
 		this.sslCtx = sslCtx;
 	}
-
-
-	
-	
 	
 	
 	
@@ -35,31 +35,21 @@ public class FactorialServerInitializer extends ChannelInitializer<SocketChannel
 	@Override
 	protected void initChannel(SocketChannel ch) throws Exception {
 		ChannelPipeline pipeline = ch.pipeline();
-		
-		if(sslCtx != null){
-			pipeline.addLast(sslCtx.newHandler(ch.alloc()));
+		if(sslCtx!=null){
+			pipeline.addLast(sslCtx.newHandler(ch.alloc(),FactorialClient.HOST,FactorialClient.PORT));
 		}
 		
-		
-		//enable stream compression (you can remove these two if unnecessary)
-		pipeline.addLast(ZlibCodecFactory.newZlibEncoder(ZlibWrapper.GZIP));
+		//enable stream compression (you can remove these two if necessary)
 		pipeline.addLast(ZlibCodecFactory.newZlibDecoder(ZlibWrapper.GZIP));
-		
+		pipeline.addLast(ZlibCodecFactory.newZlibEncoder(ZlibWrapper.GZIP));
 		
 		//add the number codec first
 		pipeline.addLast(new BigIntegerDecoder());
 		pipeline.addLast(new NumberEncoder());
 		
 		//and then business logic
-		//please note we create a handler for every new channel
-		//because it has stateful properties
-//		pipeline.addLast(new fa)
+		pipeline.addLast(new FactorialClientHandler());
 		
 	}
-	
-	
-	
-	
-	
 
 }

@@ -1,4 +1,4 @@
-package netty.io.demo.factorial;
+package netty.io.demo.binaryprotocols.factorial;
 
 import java.math.BigInteger;
 
@@ -8,22 +8,23 @@ import io.netty.handler.codec.MessageToByteEncoder;
 
 /**
  * 
- *  * Encodes a {@link Number} into the binary representation prepended with
+ * Encodes a {@link Number} into the binary representation prepended with
  * a magic number ('F' or 0x46) and a 32-bit length prefix.  For example, 42
- * will be encoded to { 'F', 0, 0, 0, 1, 42 }.
+ * will be encoded to { 'F', 0, 0, 0, 1, 42 }. 
  * 
- * @author yuezh2   2016年7月21日 下午3:59:43
+ * 
+ * @author yuezh2   2016年10月25日 下午4:46:55
  *
  */
 public class NumberEncoder extends MessageToByteEncoder<Number>{
 
 	
 	
-	
 	@Override
 	protected void encode(ChannelHandlerContext ctx, Number msg, ByteBuf out) throws Exception {
-		//convert to a biginteger first for easier implementation
+		// convert to a bigInteger first for easier implementation
 		BigInteger v ;
+		
 		if(msg instanceof BigInteger){
 			v = (BigInteger)msg;
 		}else{
@@ -36,12 +37,10 @@ public class NumberEncoder extends MessageToByteEncoder<Number>{
 		int dataLength = data.length;
 		
 		//write a message
-		out.writeByte((byte) 'F');
-		out.writeInt(dataLength);
-		out.writeBytes(data);
+		out.writeByte((byte)'F');	//magic number
+		out.writeInt(dataLength);	//data length
+		out.writeBytes(data);			//data
 		
 	}
 
-	
-	
 }
