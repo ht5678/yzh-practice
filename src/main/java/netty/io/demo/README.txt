@@ -14,6 +14,10 @@ Binary protocols
 * ObjectEcho ‐ exchange serializable Java objects
 * Factorial ‐ write a stateful client and server with a custom binary protocol
 * WorldClock ‐ rapid protocol protyping with Google Protocol Buffers integration
+	-protobuf  compile  proto file :
+		protoc -I=/home/yuezh2/ --java_out=/home/yuezh2/ /home/yuezh2/WorldClockProtocol.proto
+
+
 
 
 HTTP
