@@ -1,4 +1,4 @@
-package netty.io.demo.http.snoop2;
+package netty.io.demo.http.snoop;
 
 import java.net.URI;
 

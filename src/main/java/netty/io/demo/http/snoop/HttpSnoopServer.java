@@ -1,4 +1,4 @@
-package netty.io.demo.http.snoop2;
+package netty.io.demo.http.snoop;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
