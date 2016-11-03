@@ -70,7 +70,7 @@ public class FileMd5 {
   public static void main(String[] args) throws Exception {
 	
 	  FileMd5 fm = new FileMd5();
-	  String md5 = fm.getFileMD5(new File("d://main.js"));
+	  String md5 = fm.getFileMD5(new File("d://LenovoClubJspath_20161102.js"));
 	  System.out.println(md5);
 	  
   }
