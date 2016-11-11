@@ -23,7 +23,7 @@ Binary protocols
 HTTP
 * Snoop ‐ build your own extremely light-weight HTTP client and server
 * File server ‐ asynchronous large file streaming in HTTP
-* Web Sockets (Client & Server) ‐ add a two-way full-duplex communication channel to HTTP using Web Sockets
+* Web Sockets (Client & Server) ‐ add a two-way full-duplex communication channel to HTTP using Web Sockets(html5 新特性 , websocket)
 * SPDY (Client & Server) ‐ implement SPDY protocol
 * CORS demo ‐ implement cross-origin resource sharing
 
