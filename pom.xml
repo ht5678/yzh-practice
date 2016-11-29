@@ -19,6 +19,7 @@
        <springframework.version>4.1.6.RELEASE</springframework.version>
        <JAVA_HOME>C:\Program Files\Java\jdk1.8.0_51</JAVA_HOME>
        <slf4j.version>1.7.5</slf4j.version>
+       <smack.version>4.1.8</smack.version>
     </properties>
     
     
@@ -64,6 +65,75 @@
          <artifactId>freemarker-gae</artifactId>
          <version>2.3.20</version>
      </dependency>
+     
+     
+     <!-- openfire  -  smack -->
+     
+     <dependency>
+	    <groupId>org.igniterealtime.smack</groupId>
+	    <artifactId>smack-core</artifactId>
+	    <version>${smack.version}</version>
+	</dependency>
+     
+     <dependency>
+	    <groupId>org.igniterealtime.smack</groupId>
+	    <artifactId>smack-im</artifactId>
+	    <version>${smack.version}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.igniterealtime.smack</groupId>
+	    <artifactId>smack-tcp</artifactId>
+	    <version>${smack.version}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.igniterealtime.smack</groupId>
+	    <artifactId>smack-extensions</artifactId>
+	    <version>${smack.version}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.igniterealtime.smack</groupId>
+	    <artifactId>smack-experimental</artifactId>
+	    <version>${smack.version}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.igniterealtime.smack</groupId>
+	    <artifactId>smack-java7</artifactId>
+	    <version>${smack.version}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.igniterealtime.smack</groupId>
+	    <artifactId>smack-legacy</artifactId>
+	    <version>${smack.version}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.igniterealtime.smack</groupId>
+	    <artifactId>smack-bosh</artifactId>
+	    <version>${smack.version}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.igniterealtime.smack</groupId>
+	    <artifactId>smack-resolver-dnsjava</artifactId>
+	    <version>${smack.version}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.igniterealtime.smack</groupId>
+	    <artifactId>smack-resolver-javax</artifactId>
+	    <version>${smack.version}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.igniterealtime.smack</groupId>
+	    <artifactId>smack-debug</artifactId>
+	    <version>${smack.version}</version>
+	</dependency>
      
      
      <!-- barchart -->
