@@ -1,13 +1,17 @@
 package openfire.smack.basic;
 
+import java.util.Collection;
+
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
 import org.jivesoftware.smack.SmackException.NotConnectedException;
 import org.jivesoftware.smack.chat.Chat;
 import org.jivesoftware.smack.chat.ChatManager;
 import org.jivesoftware.smack.chat.ChatManagerListener;
-import org.jivesoftware.smack.chat.ChatMessageListener;
-import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.roster.Roster;
+import org.jivesoftware.smack.roster.RosterEntry;
+import org.jivesoftware.smack.roster.RosterListener;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.slf4j.Logger;
@@ -59,9 +63,10 @@ public class BasicDemo {
 			conn2.login();
 			
 			
+			// 1 . 发送消息
 			
 			// Assume we've created an XMPPConnection name "connection"._
-			ChatManager chatmanager = ChatManager.getInstanceFor(conn2);
+			ChatManager chatmanager = ChatManager.getInstanceFor(conn2);//取得聊天管理器
 //			Chat newChat = chatmanager.createChat("test", new ChatMessageListener() {
 //				
 //				@Override
@@ -86,6 +91,14 @@ public class BasicDemo {
 				e.printStackTrace();
 			}
 			
+			
+			
+			
+			
+			
+			
+			//--------------------------------------------------------------------------------
+			// 2 . 接受消息
 			chatmanager.addChatListener(new ChatManagerListener() {
 				
 				@Override
@@ -95,7 +108,61 @@ public class BasicDemo {
 					}
 				}
 			});
+			
+			
+			
+			
+			
+			//3 . roster    发送状态相关
+			// Create a new presence. Pass in false to indicate we're unavailable._
+//			Presence presence = new Presence(Presence.Type.unavailable);
+//			presence.setStatus("Gone fishing");
+//			// Send the packet (assume we have an XMPPConnection instance called "con").
+//			conn2.sendStanza(presence);
+			
+			
+			
+			//4 roster  获取所有好友的状态
+			Roster roster = Roster.getInstanceFor(conn2);
+			roster.addRosterListener(new RosterListener() {
 				
+				@Override
+				public void presenceChanged(Presence presence) {
+					// TODO Auto-generated method stub
+					System.out.println(presence.getFrom() + " ,,  "+presence.getTo() + "  ,,  "+ presence.getStatus());
+				}
+				
+				@Override
+				public void entriesUpdated(Collection<String> addresses) {
+					// TODO Auto-generated method stub
+					for(String address : addresses){
+						System.out.println(" update: "+address);
+					}
+				}
+				
+				@Override
+				public void entriesDeleted(Collection<String> addresses) {
+					// TODO Auto-generated method stub
+					for(String address : addresses){
+						System.out.println(" delete : "+address);
+					}
+				}
+				
+				@Override
+				public void entriesAdded(Collection<String> addresses) {
+					// TODO Auto-generated method stub
+					for(String address : addresses){
+						System.out.println("add : "+address);
+					}
+				}
+			});
+			Collection<RosterEntry> entries = roster.getEntries();
+			for (RosterEntry entry : entries) {
+				System.out.println(entry.getName());
+//				System.out.println(entry.getStatus().toString());
+			}
+			
+			
 			while(true);
 				
 		}catch(Exception e){
