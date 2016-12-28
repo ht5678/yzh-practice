@@ -28,27 +28,27 @@ public class ClientTestDemo {
 //		}
 		
 		
-		for( int i = 0 ; i < 10 ;i++){
+		for( int i = 0 ; i < 1 ;i++){
 //			MqttClient2Test test = new MqttClient2Test();
 //			test.test();
 			
-//			new Thread(new Runnable() {
-//				public void run() {
-//					MqttClient client = new MqttClient();
-//					try {
-//						client.test();
-//					} catch (Exception e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}
-//			});
+			new Thread(new Runnable() {
+				public void run() {
+					MqttClient2Test client = new MqttClient2Test();
+					try {
+						client.test();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}).start();
 			
 		}
 		
 //		MqttClient2Test test2 = new MqttClient2Test();
 //		test2.test();
-		Thread.sleep(1000 * 60 * 60);
+		Thread.sleep(1000 * 60);
 		
 	}
 	

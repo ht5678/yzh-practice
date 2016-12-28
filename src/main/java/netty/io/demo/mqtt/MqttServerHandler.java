@@ -68,17 +68,21 @@ public class MqttServerHandler extends SimpleChannelInboundHandler<ByteBuf>{
 		
 		CharBuffer charBuffer = decoder.decode(decodedMessage.payload().nioBuffer().asReadOnlyBuffer());
 		
-//		System.out.println(charBuffer.toString());
+		System.out.println(charBuffer.toString());
 		count++;
 		
 		if(list.size()>0){
 			for(Channel c : list){
-				c.writeAndFlush(msg);
+				if(c!=null && c.isActive() && c.isWritable()){
+					c.writeAndFlush(msg);
+				}
 			}
 		}
 		
+		msg.release();
+		
 		// Close the connection if the client has sent 'bye'.
-		if("bye".equals(charBuffer.toString())){
+		if("bye".equals(charBuffer.toString()) && ctx.channel().isActive()){
 			ctx.close();
 		}
 		

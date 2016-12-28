@@ -27,9 +27,11 @@ public class MqttClientHandler extends SimpleChannelInboundHandler<ByteBuf>{
 		final List<Object> out = new LinkedList<Object>();
         mqttDecoder.decode(ctx, msg, out);
 
-        final MqttPublishMessage decodedMessage = (MqttPublishMessage) out.get(0);
-		
-		System.out.println(decodedMessage.variableHeader().toString());
+//        if(out.size()>0){
+	        final MqttPublishMessage decodedMessage = (MqttPublishMessage) out.get(0);
+			
+			System.out.println(decodedMessage.variableHeader().toString());
+//        }
 	}
 	
 	

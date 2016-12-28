@@ -1,5 +1,6 @@
 package netty.io.demo.mqtt;
 
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -51,7 +52,7 @@ public class MqttServerInitializer  extends ChannelInitializer<SocketChannel> {
 		//please note we create a handler for every new channel
 		//because it has stateful properties
 		p.addLast(new MqttServerHandler());
-		
+		p.addLast(new ChannelInboundHandlerAdapter());
 	}
 	
 	
