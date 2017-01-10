@@ -15,6 +15,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.mqtt.MqttDecoder;
+import io.netty.handler.codec.mqtt.MqttMessage;
 import io.netty.handler.codec.mqtt.MqttPublishMessage;
 import io.netty.handler.ssl.SslHandler;
 import io.netty.util.concurrent.Future;
@@ -26,7 +27,7 @@ import io.netty.util.concurrent.GlobalEventExecutor;
  * @author yuezh2   2016年12月21日 下午5:45:25
  *
  */
-public class MqttServerHandler extends SimpleChannelInboundHandler<ByteBuf>{
+public class MqttServerHandler extends SimpleChannelInboundHandler<MqttMessage>{
 
 	private final MqttDecoder mqttDecoder = new MqttDecoder();
 	
@@ -56,17 +57,19 @@ public class MqttServerHandler extends SimpleChannelInboundHandler<ByteBuf>{
 	
 	
 	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
+	protected void channelRead0(ChannelHandlerContext ctx, MqttMessage msg) throws Exception {
 		
 		
-		final List<Object> out = new LinkedList<Object>();
-        mqttDecoder.decode(ctx, msg, out);
-        final MqttPublishMessage decodedMessage = (MqttPublishMessage) out.get(0);
+//		final List<Object> out = new LinkedList<Object>();
+//        mqttDecoder.decode(ctx, msg, out);
+//        final MqttPublishMessage decodedMessage = (MqttPublishMessage) out.get(0);
         
 //		System.out.println(decodedMessage.variableHeader().toString());
 //		System.out.println(decodedMessage.fixedHeader().toString());
 		
-		CharBuffer charBuffer = decoder.decode(decodedMessage.payload().nioBuffer().asReadOnlyBuffer());
+//		CharBuffer charBuffer = decoder.decode(decodedMessage.payload().nioBuffer().asReadOnlyBuffer());
+		
+		CharBuffer charBuffer = decoder.decode(((MqttPublishMessage)msg).payload().nioBuffer().asReadOnlyBuffer());
 		
 		System.out.println(charBuffer.toString());
 		count++;
@@ -79,7 +82,7 @@ public class MqttServerHandler extends SimpleChannelInboundHandler<ByteBuf>{
 			}
 		}
 		
-		msg.release();
+//		msg.release();
 		
 		// Close the connection if the client has sent 'bye'.
 		if("bye".equals(charBuffer.toString()) && ctx.channel().isActive()){

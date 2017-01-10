@@ -40,8 +40,8 @@ public class MqttClientInitializer  extends ChannelInitializer<SocketChannel>{
 		pipeline.addLast(ZlibCodecFactory.newZlibEncoder(ZlibWrapper.GZIP));
 		
 		//add the number codec first
-//		pipeline.addLast(MqttEncoder.INSTANCE);
-//		pipeline.addLast(new MqttDecoder());
+		pipeline.addLast(MqttEncoder.INSTANCE);
+		pipeline.addLast(new MqttDecoder());
 		
 		//and then business logic
 		pipeline.addLast(new MqttClientHandler());

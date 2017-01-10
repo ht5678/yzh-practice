@@ -45,14 +45,14 @@ public class MqttServerInitializer  extends ChannelInitializer<SocketChannel> {
 		p.addLast(ZlibCodecFactory.newZlibDecoder(ZlibWrapper.GZIP));
 		
 		//add the number codec first
-//		p.addLast(MqttEncoder.INSTANCE);
-//		p.addLast(new MqttDecoder());
+		p.addLast(MqttEncoder.INSTANCE);
+		p.addLast(new MqttDecoder());
 		
 		//and then business logic
 		//please note we create a handler for every new channel
 		//because it has stateful properties
 		p.addLast(new MqttServerHandler());
-		p.addLast(new ChannelInboundHandlerAdapter());
+//		p.addLast(new ChannelInboundHandlerAdapter());
 	}
 	
 	

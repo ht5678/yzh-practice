@@ -79,12 +79,10 @@ public class MqttClient {
     			
     			Thread.sleep(1000);
     			
-    			System.out.println("test");
-    			
-    			ByteBuf byteBuf = MqttEncoder.INSTANCE.doEncode(ALLOCATOR, createPublishMessage(line));
+//    			ByteBuf byteBuf = MqttEncoder.INSTANCE.doEncode(ALLOCATOR, createPublishMessage(line));
     			
     			// Sends the received line to the server.
-    			lastWriteFuture = ch.writeAndFlush(byteBuf);
+    			lastWriteFuture = ch.writeAndFlush(createPublishMessage(line));
     			
     			// If user typed the 'bye' command, wait until the server closes
                 // the connection.
