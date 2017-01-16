@@ -8,7 +8,7 @@ import java.io.InputStream;
  * @author yuezh2   2017年1月10日 上午1:27:52
  *
  */
-public class Request {
+public class HttpRequest {
 
 	private String uri;
 	
@@ -19,7 +19,7 @@ public class Request {
 	 * @param is
 	 * @throws Exception
 	 */
-	public Request(InputStream is ) throws IOException{
+	public HttpRequest(InputStream is ) throws IOException{
 		byte[] bytes = new byte[1024];
 		int len = is.read(bytes);
 		if(len>0){

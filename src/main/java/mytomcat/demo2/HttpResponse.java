@@ -12,7 +12,7 @@ import org.apache.commons.io.FileUtils;
  * @author yuezh2   2017年1月10日 上午1:39:12
  *
  */
-public class Response {
+public class HttpResponse {
 
 	private OutputStream os = null;
 	private static final String ENTER = "\r\n";
@@ -20,7 +20,7 @@ public class Response {
 	
 	
 	
-	public Response(OutputStream os){
+	public HttpResponse(OutputStream os){
 		this.os = os;
 	}
 	

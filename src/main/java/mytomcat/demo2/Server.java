@@ -43,12 +43,12 @@ public class Server {
 				//--------------------------------------拿到请求信息-------------------------------------------------
 				//获取输入流 , 获得用户的请求信息
 				InputStream is = socket.getInputStream();
-				Request request = new Request(is);
+				HttpRequest request = new HttpRequest(is);
 				
 				
 				//--------------------------------------发送请求信息-------------------------------------------------
 				OutputStream os = socket.getOutputStream();
-				Response response = new Response(os);
+				HttpResponse response = new HttpResponse(os);
 				
 				
 				//--------------------------------------业务逻辑-------------------------------------------------
