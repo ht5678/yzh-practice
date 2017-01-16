@@ -25,7 +25,7 @@ public class HttpRequest {
 		if(len>0){
 			String msg = new String(bytes,0,len);
 			uri = msg.split(" ")[1];
-			System.out.println(uri);
+			System.out.println(msg);
 		}else{
 			System.out.println("bad request");
 		}
