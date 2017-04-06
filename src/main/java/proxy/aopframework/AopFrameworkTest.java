@@ -6,4 +6,5 @@ public class AopFrameworkTest {
 		BeanFactory factory = new BeanFactory();
 		System.out.println(factory.getBean("xxx"));
 	}
+	
 }
