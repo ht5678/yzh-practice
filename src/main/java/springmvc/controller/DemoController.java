@@ -3,10 +3,9 @@ package springmvc.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
 import springmvc.annotation.Controller;
 import springmvc.annotation.Qualifier;
+import springmvc.annotation.RequestMapping;
 import springmvc.service.DemoService;
 
 /**
@@ -14,7 +13,7 @@ import springmvc.service.DemoService;
  * @author yuezh2   2017年4月7日 下午3:38:38
  *
  */
-@Controller
+@Controller("demo")
 public class DemoController {
 
 	@Qualifier("demoService")
@@ -28,7 +27,7 @@ public class DemoController {
 	 * @param param
 	 * @return
 	 */
-	@RequestMapping(value="update")
+	@RequestMapping("update")
 	public String update(HttpServletRequest request , HttpServletResponse response , String param){
 		service.update(null);
 		return null;
