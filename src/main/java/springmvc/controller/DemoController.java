@@ -2,6 +2,7 @@ package springmvc.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import springmvc.annotation.Controller;
 import springmvc.annotation.Qualifier;
@@ -9,6 +10,8 @@ import springmvc.annotation.RequestMapping;
 import springmvc.service.DemoService;
 
 /**
+ * 
+ * http://localhost:8081/yzh-practice/demo/query?username=zhangsan
  * 
  * @author yuezh2   2017年4月7日 下午3:38:38
  *
@@ -56,7 +59,8 @@ public class DemoController {
 	 * @return
 	 */
 	@RequestMapping(value="query")
-	public String query(HttpServletRequest request , HttpServletResponse response , String param){
+	public String query(HttpServletRequest request , HttpServletResponse response , HttpSession session){
+		System.out.println(request.getParameter("username"));
 		service.query(null);
 		return null;
 	}

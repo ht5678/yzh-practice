@@ -2,6 +2,7 @@ package springmvc.servlet;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,6 +26,7 @@ import springmvc.annotation.Qualifier;
 import springmvc.annotation.RequestMapping;
 import springmvc.annotation.Service;
 import springmvc.controller.DemoController;
+import springmvc.handler.HandlerAdapter;
 import springmvc.utils.ConfigUtils;
 
 /**
@@ -45,6 +48,13 @@ public class DispatcherServlet extends HttpServlet{
 	
 	//url - 方法  对应handler的map集合
 	private Map<String, Method> handlerMap = new HashMap<>();
+	
+	
+	private Properties props = new Properties();
+	
+	
+	private static final String HANDLERADAPTER = "springmvc.handler.ParamHandlerAdapter";
+	
 	
 	/**
 	 * 初始化
@@ -69,6 +79,12 @@ public class DispatcherServlet extends HttpServlet{
 			springIoc();
 			//通过请求url获取相应的处理类,方法连
 			handlerMaps();
+			//
+			InputStream is = 
+					this.getClass().getResourceAsStream("/springmvc/properties/spring.property");
+			props.load(is);
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -238,8 +254,12 @@ public class DispatcherServlet extends HttpServlet{
 		String annotationName = url.split("/")[2];
 		DemoController controller = (DemoController)instanceMaps.get(annotationName);
 		
+		//参数解析
+		HandlerAdapter ha = (HandlerAdapter)instanceMaps.get(props.get(HANDLERADAPTER));
+		Object[] params = ha.handle(req, resp, method,instanceMaps);
+		
 		try {
-			method.invoke(controller, new Object[]{req , resp,null});
+			method.invoke(controller, params);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
