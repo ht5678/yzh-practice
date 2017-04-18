@@ -1,5 +1,7 @@
 package springmvc.controller;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -7,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import springmvc.annotation.Controller;
 import springmvc.annotation.Qualifier;
 import springmvc.annotation.RequestMapping;
+import springmvc.annotation.RequestParam;
 import springmvc.service.DemoService;
 
 /**
@@ -59,8 +62,8 @@ public class DemoController {
 	 * @return
 	 */
 	@RequestMapping(value="query")
-	public String query(HttpServletRequest request , HttpServletResponse response , HttpSession session){
-		System.out.println(request.getParameter("username"));
+	public String query(HttpServletRequest request , HttpServletResponse response , HttpSession session
+			,@RequestParam("username")String uname , @RequestParam("password")String password,Map map){
 		service.query(null);
 		return null;
 	}
