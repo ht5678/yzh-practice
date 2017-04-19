@@ -22,6 +22,10 @@
     </appender>
   
   
+  <logger name="org.springframework.jdbc">
+  	<level value="DEBUG"></level>
+  </logger>
+  
 
   <root>
     <appender-ref ref="Console" />

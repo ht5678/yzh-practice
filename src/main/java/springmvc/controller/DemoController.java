@@ -16,6 +16,11 @@ import springmvc.service.DemoService;
  * 
  * http://localhost:8081/yzh-practice/demo/query?username=zhangsan
  * 
+ * 
+ * localhost:8081/yzh-practice/pages/springmvc/login.jsp
+ * 
+ * 
+ * 
  * @author yuezh2   2017年4月7日 下午3:38:38
  *
  */
