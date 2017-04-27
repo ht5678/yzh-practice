@@ -47,6 +47,8 @@ public class TransactionTemplateTest {
 			@Override
 			public Integer doInTransaction(TransactionStatus status) {
 				int result = t.update(sql, paramMap);
+				
+				//事务回滚 --- 编程式事务
 				status.setRollbackOnly();
 				return result;
 			}
@@ -54,6 +56,18 @@ public class TransactionTemplateTest {
 		});
 		
 	}
+	
+	
+	
+	
+	/**
+	 * 干掉存储过程
+	 * @throws Exception
+	 */
+	public void test2()throws Exception{
+		
+	}
+	
 	
 	
 	
