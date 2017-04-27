@@ -88,7 +88,7 @@ public class MyPoolImpl implements IMypool {
 		PooledConnection conn = getRealConnection();
 		while(conn == null){
 			createConnections(stepSize);
-			conn = getRealConnection();
+			
 			//通过经验 , 避免我们拿到的再次为空
 			//休息一下,避免竞争
 			try {
@@ -96,6 +96,8 @@ public class MyPoolImpl implements IMypool {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			//TODO:位置问题
+			conn = getRealConnection();
 		}
 		return conn;
 	}
