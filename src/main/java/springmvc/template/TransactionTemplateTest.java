@@ -12,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -23,6 +26,8 @@ import org.springframework.transaction.support.TransactionTemplate;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:/springmvc/template.xml"})
+//@TransactionConfiguration(defaultRollback=true)
+//@Transactional
 public class TransactionTemplateTest {
 
 	
@@ -64,11 +69,54 @@ public class TransactionTemplateTest {
 	 * 干掉存储过程
 	 * @throws Exception
 	 */
+	@Test
+//	@Transactional
 	public void test2()throws Exception{
+		final NamedParameterJdbcTemplate t = new NamedParameterJdbcTemplate(datasource);
+		final String sql = "insert into test.test(uname,passwd) values (:uname,:passwd)";
+		final Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("uname", "zhangsan2");
+		paramMap.put("passwd", "zhangsan2");
 		
+		
+		template.execute(new TransactionCallback<Integer>() {
+
+			@Override
+			public Integer doInTransaction(TransactionStatus status) {
+				int result = t.update(sql, paramMap);
+				return result;
+			}
+			
+		});
 	}
 	
 	
+	
+	
+	/**
+	 * 干掉存储过程
+	 * @throws Exception
+	 */
+	@Test
+	@Transactional(propagation=Propagation.REQUIRES_NEW)
+	public void test3()throws Exception{
+		final NamedParameterJdbcTemplate t = new NamedParameterJdbcTemplate(datasource);
+		final String sql = "insert into test.test(uname,passwd) values (:uname,:passwd)";
+		final Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("uname", "zhangsan3");
+		paramMap.put("passwd", "zhangsan3");
+		
+		
+		template.execute(new TransactionCallback<Integer>() {
+
+			@Override
+			public Integer doInTransaction(TransactionStatus status) {
+				int result = t.update(sql, paramMap);
+				return result;
+			}
+			
+		});
+	}
 	
 	
 }
