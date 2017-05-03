@@ -26,7 +26,7 @@ import org.springframework.transaction.support.TransactionTemplate;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:/springmvc/template.xml"})
-//@TransactionConfiguration(defaultRollback=true)
+@TransactionConfiguration(defaultRollback=false)		//没有这个配置的话 , 默认的是 defaultRollback=true
 //@Transactional
 public class TransactionTemplateTest {
 
@@ -70,7 +70,7 @@ public class TransactionTemplateTest {
 	 * @throws Exception
 	 */
 	@Test
-//	@Transactional
+	@Transactional
 	public void test2()throws Exception{
 		final NamedParameterJdbcTemplate t = new NamedParameterJdbcTemplate(datasource);
 		final String sql = "insert into test.test(uname,passwd) values (:uname,:passwd)";
