@@ -26,7 +26,7 @@ public interface MiaoshaMCService {
 	 * @param amount		库存
 	 * @return		扣减产品库存是否成功
 	 */
-	public boolean modifyAmount(String code , BigDecimal amount);
+	public boolean modifyAmount(String code , BigDecimal amount , Long total);
 	
 	
 }

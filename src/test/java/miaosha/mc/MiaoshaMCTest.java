@@ -33,9 +33,12 @@ public class MiaoshaMCTest {
 	@Test
 	public void test1()throws Exception{
 		for(int i =0 ; i < 100 ; i++){
-//			Thread t = new Thread(new ExecuteThread(7L));
+			//购买数量从小到大,是没有问题的
+			Thread t = new Thread(new ExecuteThread(7L));
 			//如果参数是动态的, 就会出现问题
-			Thread t = new Thread(new ExecuteThread(Long.valueOf(100-i)));
+//			Thread t = new Thread(new ExecuteThread(Long.valueOf(100-i)));
+			//每次购买人数不同 ,
+//			Thread t = new Thread(new ExecuteThread(Long.valueOf(i%9==0?1000L:3)));
 			t.start();
 			latch.countDown();
 		}
@@ -69,7 +72,7 @@ public class MiaoshaMCTest {
 				e.printStackTrace();
 			}
 			
-			boolean result = service.modifyAmount("demo", new BigDecimal(amount));
+			boolean result = service.modifyAmount("demo", new BigDecimal(amount), 100L);
 			if(result){
 				synchronized (total) {
 					total += amount;
