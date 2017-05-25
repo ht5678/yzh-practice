@@ -85,6 +85,8 @@ public class MiaoshaMCServiceImpl implements MiaoshaMCService {
 			//}
 			
 			//如果是秒杀 , 每次只能秒杀一个 , 就不存在这个问题 , 但是还是要注意  库存数量要比实际+1
+			
+			//mc的cas方式 , 没有具体研究过 , 这里做一个标记
 		}catch(Exception e){
 			e.printStackTrace();
 		}
