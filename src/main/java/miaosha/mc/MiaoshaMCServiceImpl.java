@@ -72,6 +72,19 @@ public class MiaoshaMCServiceImpl implements MiaoshaMCService {
 				cache.set(code, total - totalAmount , DateUtils.addSeconds(new Date(), 10));
 				return false;
 			}
+			
+			
+			//解决方案:
+			//用于解决mc的多卖少卖问题 , 在decr的时候 ,如果每次减少库存的数量是随机的 , 这个时候      原有<amount 			    返回0,不正常 
+			//
+			//每次只减少一个库存 , 最后如果全部减少成功 , 就证明可以生成订单了 , 需要注意的一点是 , 库存数量要比实际+1  , 但是显示的时候是  实际数 ,
+			//这样保证不会多出库存
+			//for(int i = 0 ; i < 5 ;i++){
+			//		int result = mc.decr("xxx");
+			//		if(result>=1)		flag = true			else flag= false
+			//}
+			
+			//如果是秒杀 , 每次只能秒杀一个 , 就不存在这个问题 , 但是还是要注意  库存数量要比实际+1
 		}catch(Exception e){
 			e.printStackTrace();
 		}
