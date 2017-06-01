@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 
 
 /**
@@ -26,14 +28,22 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<RemoteReques
 			Class<?> interfaceType = serviceImpl.getClass();
 			Method method = interfaceType.getMethod(arg1.getMethodName(), arg1.getParameterTypes());
 			
-			Object result = method.invoke(serviceImpl, arg1.getArguments())
+			Object result = method.invoke(serviceImpl, arg1.getArguments());
 			Thread.sleep(3000);
 			//构造response对象
 			RemoteResponse remoteResponse = new RemoteResponse();
 			remoteResponse.setRequestId(arg1.getRequestId());
 			remoteResponse.setResponseValue(result);
 			
-			arg0.writeAndFlush(remoteResponse).addListener(ChannelFutureListener.CLOSE).addListener(arg0)
+			arg0.writeAndFlush(remoteResponse).addListener(ChannelFutureListener.CLOSE).addListener(new GenericFutureListener<Future<? super Void>>() {
+
+				@Override
+				public void operationComplete(Future<? super Void> arg0) throws Exception {
+					if(arg0.isSuccess()){
+						System.out.println("服务端响应完毕...");
+					}
+				}
+			});
 		}
 		
 	}

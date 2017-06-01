@@ -82,6 +82,14 @@
 	</dependency>
     
     
+    <!-- 反序列化 -->
+    <!-- https://mvnrepository.com/artifact/com.caucho/hessian -->
+	<dependency>
+	    <groupId>com.caucho</groupId>
+	    <artifactId>hessian</artifactId>
+	    <version>4.0.28</version>
+	</dependency>
+    
     
     <!-- freemarker -->
     
