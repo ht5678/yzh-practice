@@ -14,8 +14,10 @@ public class NettyEncoder extends MessageToByteEncoder<Object>{
 	
 	
 	@Override
-	protected void encode(ChannelHandlerContext arg0, Object arg1, ByteBuf arg2) throws Exception {
-//		byte[] bytes = Serialize
+	protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) throws Exception {
+		byte[] bytes = Serialize.serialize(msg);
+		out.writeInt(bytes.length);
+		out.writeBytes(bytes);
 	}
 
 	
