@@ -21,7 +21,8 @@ public class Serialize {
 	 */
 	public static byte[] serialize(Object obj)throws IOException{
 		ByteArrayOutputStream byteArrayOutputStream = null;
-		Hessian2
+//		Hessian2
+		return null;
 	} 
 	
 	

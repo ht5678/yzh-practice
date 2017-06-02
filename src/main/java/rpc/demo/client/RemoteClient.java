@@ -23,7 +23,7 @@ public class RemoteClient {
 	
 	public RemoteResponse send(RemoteRequest request)throws Exception{
 		final SettableFuture<RemoteResponse> future = SettableFuture.create();
-		
+		return null;
 	}
 	
 }
