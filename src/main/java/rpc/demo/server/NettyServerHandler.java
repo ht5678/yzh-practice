@@ -2,6 +2,7 @@ package rpc.demo.server;
 
 import java.lang.reflect.Method;
 
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -35,15 +36,16 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<RemoteReques
 			remoteResponse.setRequestId(arg1.getRequestId());
 			remoteResponse.setResponseValue(result);
 			
-			arg0.writeAndFlush(remoteResponse).addListener(ChannelFutureListener.CLOSE).addListener(new GenericFutureListener<Future<? super Void>>() {
-
+			arg0.writeAndFlush(remoteResponse).addListener(ChannelFutureListener.CLOSE).addListener(new ChannelFutureListener() {
+				
 				@Override
-				public void operationComplete(Future<? super Void> arg0) throws Exception {
+				public void operationComplete(ChannelFuture arg0) throws Exception {
 					if(arg0.isSuccess()){
 						System.out.println("服务端响应完毕...");
 					}
 				}
 			});
+			
 		}
 		
 	}

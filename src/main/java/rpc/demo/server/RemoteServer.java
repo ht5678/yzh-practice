@@ -35,9 +35,9 @@ public class RemoteServer {
 	
 	
 	
-	static{
-		bootStrap();
-	}
+//	static{
+//		bootStrap();
+//	}
 	
 	
 	

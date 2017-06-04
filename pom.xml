@@ -58,6 +58,7 @@
       </dependency>
     
     
+    
     <!-- mqtt -->
     <dependency>
         <groupId>org.eclipse.paho</groupId>
@@ -89,6 +90,7 @@
 	    <artifactId>hessian</artifactId>
 	    <version>4.0.38</version>
 	</dependency>
+
     
     
     <!-- freemarker -->
