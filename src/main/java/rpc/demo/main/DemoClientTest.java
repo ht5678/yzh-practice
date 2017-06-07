@@ -25,8 +25,9 @@ public class DemoClientTest extends TestCase{
 	}
 	
 	
+	@org.junit.Test
 	public void testApp(){
-		ApplicationContext context = new ClassPathXmlApplicationContext("classpath*:rpc/demo/applicationContext-server.xml");
+		ApplicationContext context = new ClassPathXmlApplicationContext("classpath*:rpc/demo/applicationContext-client.xml");
 		DemoService demoService = (DemoService)context.getBean("demoService");
 		System.out.println(demoService.sayHi("张三"));
 	}

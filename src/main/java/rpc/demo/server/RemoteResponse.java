@@ -32,4 +32,11 @@ public class RemoteResponse {
 
 	
 	
+	@Override
+	public String toString() {
+		return "RemoteResponse [requestId=" + requestId + ", responseValue=" + responseValue + "]";
+	}
+
+	
+	
 }

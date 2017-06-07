@@ -26,7 +26,7 @@
     
     <bean class="rpc.demo.server.RemoteServiceBean" init-method="init">
     	<property name="serviceName" value="rpc.demo.main.DemoService"></property>
-    	<property name="serviceImpl" ref="serviceName"></property>
+    	<property name="serviceImpl" ref="demoService"></property>
     </bean>
     
 

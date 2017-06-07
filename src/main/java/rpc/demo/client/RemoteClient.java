@@ -46,7 +46,7 @@ public class RemoteClient {
 
 				@Override
 				protected void initChannel(SocketChannel arg0) throws Exception {
-					arg0.pipeline().addLast(new NettyDecoder(), new NettyEncoder() , new nettyclienthandler)
+					arg0.pipeline().addLast(new NettyDecoder(), new NettyEncoder() , new NettyClientHandler());
 				}
 				
 			});//保持长连接
