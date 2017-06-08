@@ -12,6 +12,8 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import rpc.demo.common.NettyDecoder;
+import rpc.demo.common.NettyEncoder;
 
 /**
  * 
@@ -69,7 +71,7 @@ public class RemoteServer {
 			@Override
 			protected void initChannel(SocketChannel arg0) throws Exception {
 				//pipeline处理请求
-				arg0.pipeline().addLast(new StringEncoder(), new StringDecoder() , new NettyServerHandler());
+				arg0.pipeline().addLast(new NettyEncoder(), new NettyDecoder() , new NettyServerHandler());
 			}
 			
 		})

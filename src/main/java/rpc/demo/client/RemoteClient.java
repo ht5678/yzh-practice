@@ -1,5 +1,7 @@
 package rpc.demo.client;
 
+import java.util.concurrent.TimeUnit;
+
 import com.google.common.util.concurrent.SettableFuture;
 
 import io.netty.bootstrap.Bootstrap;
@@ -16,7 +18,6 @@ import rpc.demo.common.NettyEncoder;
 import rpc.demo.common.ProviderInfo;
 import rpc.demo.server.RemoteRequest;
 import rpc.demo.server.RemoteResponse;
-import scala.remote;
 
 /**
  * 
@@ -35,6 +36,7 @@ public class RemoteClient {
 	
 	//客户端发送一个远程request请求
 	public RemoteResponse send(RemoteRequest remoteRequest)throws Exception{
+		RemoteResponse response = new RemoteResponse();
 		final SettableFuture<RemoteResponse> future = SettableFuture.create();
 		EventLoopGroup workGroup = new NioEventLoopGroup();
 		try{
@@ -46,7 +48,7 @@ public class RemoteClient {
 
 				@Override
 				protected void initChannel(SocketChannel arg0) throws Exception {
-					arg0.pipeline().addLast(new NettyDecoder(), new NettyEncoder() , new NettyClientHandler());
+					arg0.pipeline().addLast(new NettyDecoder(), new NettyEncoder() , new NettyClientHandler(future));
 				}
 				
 			});//保持长连接
@@ -63,21 +65,28 @@ public class RemoteClient {
 			});
 			
 			//客户端需要向服务端发送一个request请求
-			ChannelFuture writeRequest = f.channel().writeAndFlush(remoteRequest);
+			ChannelFuture writeRequest = f.channel().writeAndFlush(remoteRequest).sync();
 			writeRequest.addListener(new ChannelFutureListener() {
 				
 				@Override
 				public void operationComplete(ChannelFuture arg0) throws Exception {
 					if(arg0.isSuccess()){
-						
+						System.out.println("发送成功");
 					}
 				}
 			});
 			
-		}catch(Exception e){
 			
+			
+			response = future.get(10, TimeUnit.SECONDS);
+			
+			f.channel().closeFuture();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally {
+			workGroup.shutdownGracefully();
 		}
-		return null;
+		return response;
 	}
 	
 	

@@ -1,5 +1,7 @@
 package rpc.demo.client;
 
+import com.google.common.util.concurrent.SettableFuture;
+
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import rpc.demo.server.RemoteResponse;
@@ -11,10 +13,16 @@ import rpc.demo.server.RemoteResponse;
  */
 public class NettyClientHandler extends SimpleChannelInboundHandler<RemoteResponse>{
 
+	SettableFuture<RemoteResponse> future = SettableFuture.create(); 
+	
+	public NettyClientHandler(SettableFuture<RemoteResponse> future){
+		this.future=future;
+	}
+	
 	
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, RemoteResponse msg) throws Exception {
-		System.out.println(msg.toString());
+		future.set(msg);
 	}
 
 }

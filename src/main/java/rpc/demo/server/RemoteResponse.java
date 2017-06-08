@@ -1,12 +1,20 @@
 package rpc.demo.server;
 
+import java.io.Serializable;
 
 /**
  * 
  * @author sdwhy
  *
  */
-public class RemoteResponse {
+public class RemoteResponse implements Serializable{
+	
+	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2063069330018023076L;
 
 	private String requestId;
 	
