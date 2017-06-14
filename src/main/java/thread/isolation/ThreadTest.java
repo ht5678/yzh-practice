@@ -17,23 +17,22 @@ public class ThreadTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
+		final BusinessDemo b = new BusinessDemo();
+		
 		//子线程部分要求: 是50轮换每个轮换循环跑30次
 		new Thread(new Runnable() {
 			public void run() {
 				for(int i =1;i<=50;i++){
 					//子线程跑30次
-					for(int j = 1;j<=30;j++){
-						System.out.println("==============================子线程运行第:"+i+"轮, 第:"+j+"次!");
-					}
+					b.sonBusiness(i);
 				}
 			}
 		}).start();
 		
 		//50轮回主线程部分
 		for(int i =1;i<=50;i++){
-			for(int j =1;j<=40;j++){
-				System.out.println("主线程运行第:"+i+",第:"+j+"次!");
-			}
+			b.mainBusiness(i);
 		}
 	}
 	
