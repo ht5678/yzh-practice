@@ -28,7 +28,7 @@ public class ThreadScopeData3 {
 					//B模块处理
 					new B().get();
 				}
-			}).start();;
+			}).start();
 		}
 		
 	}
