@@ -13,7 +13,8 @@
   </jsp-config>
   
   
-  <servlet>
+  <!-- springmvc -->
+<!--   <servlet>
   	<servlet-name>springmvc</servlet-name>
   	<servlet-class>springmvc.servlet.DispatcherServlet</servlet-class>
   	<load-on-startup>2</load-on-startup>
@@ -22,7 +23,49 @@
   <servlet-mapping>
   	<servlet-name>springmvc</servlet-name>
   	<url-pattern>/</url-pattern>
-  </servlet-mapping>
+  </servlet-mapping> -->
   
+  
+  
+  
+  
+  <!-- oauth2.oltu -->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath*:application*.xml</param-value>
+  </context-param>
+  <context-param>
+    <param-name>log4jConfigLocation</param-name>
+    <param-value>classpath:log4j.xml</param-value>
+  </context-param>
+  <servlet>
+    <servlet-name>springmvc</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:oauth2/springmvc.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>springmvc</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+  <listener>
+    <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+  </listener>
+
+  <listener>
+    <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+  </listener>
+  <session-config>
+    <session-timeout>100</session-timeout>
+  </session-config>
   
 </web-app>
