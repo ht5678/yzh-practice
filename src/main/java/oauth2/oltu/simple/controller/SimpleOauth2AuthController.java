@@ -62,7 +62,7 @@ public class SimpleOauth2AuthController {
 		           
 		           
 		 
-		           // some code
+		           // some code , 这些应该都要存到数据库的
 		           String accessToken = oAuthIssuer.accessToken();
 		           String refreshToken = oAuthIssuer.refreshToken();
 		 
