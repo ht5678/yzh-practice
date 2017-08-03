@@ -1,5 +1,8 @@
 package oauth2.oltu.custom.dao;
 
+import oauth2.oltu.custom.model.AccessToken;
+import oauth2.oltu.custom.model.ClientDetails;
+import oauth2.oltu.custom.model.OauthCode;
 import oauth2.oltu.simple.model.ClientModel;
 
 /**
@@ -8,6 +11,30 @@ import oauth2.oltu.simple.model.ClientModel;
  *
  */
 public interface CustomOauth2AuthDao {
+	
+	
+	/**
+	 * 查询token
+	 * @param token
+	 * @param clientId
+	 * @return
+	 */
+	public AccessToken loadAccessTokenByRefreshToken(String token  , String clientId);
+	
+	/**
+	 * 查询code
+	 * @param code
+	 * @param clientId
+	 * @return
+	 */
+	public OauthCode loadOauthCode(String code , String clientId);
+	
+	/**
+	 * 
+	 * @param clientId
+	 * @return
+	 */
+	public ClientDetails loadClientDetails(String clientId) ;
 	
 	
 	/**

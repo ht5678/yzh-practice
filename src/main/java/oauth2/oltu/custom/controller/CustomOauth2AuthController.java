@@ -12,14 +12,18 @@ import org.apache.oltu.oauth2.as.request.OAuthTokenRequest;
 import org.apache.oltu.oauth2.as.response.OAuthASResponse;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.message.OAuthResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import oauth2.oltu.custom.common.oauth.CodeAuthorizeHandler;
+import oauth2.oltu.custom.common.oauth.OAuthAuthxRequest;
 import oauth2.oltu.simple.common.Constants;
 import oauth2.oltu.simple.model.ClientModel;
-import oauth2.oltu.simple.service.SimpleOauth2AuthService;
+import oauth2.oltu.simple.service.CustomOauth2AuthService;
 
 /**
  * 
@@ -27,14 +31,16 @@ import oauth2.oltu.simple.service.SimpleOauth2AuthService;
  *
  */
 @Controller
-@RequestMapping(value="simple/oauth")
+@RequestMapping(value="custom/oauth")
 public class CustomOauth2AuthController {
 
+	private static final Logger LOG = LoggerFactory.getLogger(CustomOauth2AuthController.class);
+	
 	@Autowired
 	private OAuthIssuer oAuthIssuer;
 	
 	@Autowired
-	private SimpleOauth2AuthService service;
+	private CustomOauth2AuthService service;
 	
 	
 	
@@ -118,6 +124,16 @@ public class CustomOauth2AuthController {
 	@RequestMapping(value="authorize")
 	public void authorize(Model model , HttpServletRequest request , HttpServletResponse response) {
 		try {
+			
+			
+			OAuthAuthxRequest oauthRequest = new OAuthAuthxRequest(request);
+			if (oauthRequest.isCode()) {
+                CodeAuthorizeHandler codeAuthorizeHandler = new CodeAuthorizeHandler(oauthRequest, response);
+                LOG.debug("Go to  response_type = 'code' handler: {}", codeAuthorizeHandler);
+                codeAuthorizeHandler.handle();
+            }
+			
+			
 	         //dynamically recognize an OAuth profile based on request characteristic (params,
 	         // method, content type etc.), perform validation
 	         OAuthAuthzRequest oauthRequest = new OAuthAuthzRequest(request);

@@ -1,4 +1,4 @@
-package oauth2.oltu.custom.common;
+package oauth2.oltu.custom.common.constants;
 
 
 /**

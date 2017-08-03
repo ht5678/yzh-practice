@@ -12,6 +12,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
 
+import oauth2.oltu.custom.model.AccessToken;
+import oauth2.oltu.custom.model.ClientDetails;
+import oauth2.oltu.custom.model.OauthCode;
 import oauth2.oltu.simple.model.ClientModel;
 
 /**
@@ -30,6 +33,126 @@ public class CustomOauth2AuthDaoImpl implements CustomOauth2AuthDao {
 	
 	/** 通过clientId查询设备信息 */
 	private static final String QUERY_CLIENT_BY_ID = "select * from oauth_simple.oauth_client_details where client_id=?";
+	/** 查询code */
+	private static final String QUERY_CODE = "select * from oauth_simple.oauth_code where code = ? and client_id = ?";
+	/** 查询refreshtoken */
+	private static final String LOAD_ACCESSTOKEN_BY_REFRESHTOKEN = "select * from oauth_simple.oauth_code where code = ? and client_id = ?";
+	
+	
+	/**
+	 * 查询token
+	 * @param token
+	 * @param clientId
+	 * @return
+	 */
+	public AccessToken loadAccessTokenByRefreshToken(String token  , String clientId){
+		final AccessToken retVal = new AccessToken();
+		try{
+			template.query(LOAD_ACCESSTOKEN_BY_REFRESHTOKEN, new Object[]{token,clientId}, new ResultSetExtractor<Integer>(){
+
+				@Override
+				public Integer extractData(ResultSet rs) throws SQLException, DataAccessException {
+					while(rs.next()){
+						retVal.tokenId(rs.getString("token_id"))
+				                .tokenExpiredSeconds(rs.getInt("token_expired_seconds"))
+				                .authenticationId(rs.getString("authentication_id"))
+
+				                .username(rs.getString("username"))
+				                .clientId(rs.getString("client_id"))
+				                .tokenType(rs.getString("token_type"))
+
+				                .refreshTokenExpiredSeconds(rs.getInt("refresh_token_expired_seconds"))
+				                .refreshToken(rs.getString("refresh_token"));
+
+				        retVal.setCreateTime(rs.getTimestamp("create_time"));
+					}
+					return null;
+				}
+				
+			});
+		}catch(Exception e){
+			LOGGER.error(String.format("the error occured:%s", e.getMessage()), e);
+		}
+		return retVal;
+	}
+	
+	
+	
+	/**
+	 * 查询code
+	 * @param code
+	 * @param clientId
+	 * @return
+	 */
+	public OauthCode loadOauthCode(String code , String clientId){
+		final OauthCode retVal = new OauthCode();
+		try{
+			template.query(QUERY_CODE, new Object[]{code,clientId}, new ResultSetExtractor<Integer>(){
+
+				@Override
+				public Integer extractData(ResultSet rs) throws SQLException, DataAccessException {
+					while(rs.next()){
+						retVal.clientId(rs.getString("client_id"))
+				                .username(rs.getString("username"))
+				                .code(rs.getString("code"));
+					}
+					return null;
+				}
+				
+			});
+		}catch(Exception e){
+			LOGGER.error(String.format("the error occured:%s", e.getMessage()), e);
+		}
+		return retVal;
+	}
+	
+	
+	
+	
+	/**
+	 * 
+	 * @param clientId
+	 * @return
+	 */
+	public ClientDetails loadClientDetails(String clientId) {
+		final ClientDetails details = new ClientDetails();
+		try{
+			template.query(QUERY_CLIENT_BY_ID, new Object[]{clientId}, new ResultSetExtractor<Integer>(){
+
+				@Override
+				public Integer extractData(ResultSet rs) throws SQLException, DataAccessException {
+					while(rs.next()){
+				        details.setClientId(rs.getString("client_id"));
+				        details.setClientSecret(rs.getString("client_secret"));
+
+				        details.setName(rs.getString("client_name"));
+				        details.setClientUri(rs.getString("client_uri"));
+//				        details.setIconUri(rs.getString("client_icon_uri"));
+
+//				        details.resourceIds(rs.getString("resource_ids"));
+//				        details.scope(rs.getString("scope"));
+//				        details.grantTypes(rs.getString("grant_types"));
+
+				        details.setRedirectUri(rs.getString("redirect_uri"));
+//				        details.roles(rs.getString("roles"));
+				        details.accessTokenValidity(rs.getInt("access_token_validity"));
+
+				        details.refreshTokenValidity(rs.getInt("refresh_token_validity"));
+				        details.setDescription(rs.getString("description"));
+				        details.createTime(rs.getTimestamp("create_time"));
+
+				        details.archived(rs.getBoolean("archived"));
+				        details.trusted(rs.getBoolean("trusted"));
+					}
+					return null;
+				}
+				
+			});
+		}catch(Exception e){
+			LOGGER.error(String.format("the error occured:%s", e.getMessage()), e);
+		}
+		return details;
+	}
 
 	
 	/**
