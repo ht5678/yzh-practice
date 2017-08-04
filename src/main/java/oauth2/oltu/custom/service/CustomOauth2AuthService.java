@@ -1,5 +1,7 @@
 package oauth2.oltu.custom.service;
 
+import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
+
 import oauth2.oltu.custom.model.AccessToken;
 import oauth2.oltu.custom.model.ClientDetails;
 import oauth2.oltu.custom.model.OauthCode;
@@ -11,6 +13,32 @@ import oauth2.oltu.simple.model.ClientModel;
  *
  */
 public interface CustomOauth2AuthService {
+	
+	/**
+	 * 获取token
+	 * @param clientDetails
+	 * @param code
+	 * @return
+	 * @throws OAuthSystemException
+	 */
+	public AccessToken retrieveAuthorizationCodeAccessToken(ClientDetails clientDetails, String code) throws OAuthSystemException;
+	
+	
+	/**
+	 * 删除code
+	 * @param code
+	 * @return
+	 */
+	public boolean removeOauthCode(String code);
+	
+	
+	/**
+	 * 生成code
+	 * @param client
+	 * @return
+	 */
+	public String retrieveAuthCode(ClientDetails clientDetails);
+	
 	
 	/**
 	 * 查询token

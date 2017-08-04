@@ -1,5 +1,7 @@
 package oauth2.oltu.custom.model;
 
+import java.util.Date;
+
 /**
  * 
  * @author yuezh2   2017年8月3日 下午2:58:53
@@ -13,6 +15,8 @@ public class OauthCode {
     private String username;
 
     private String clientId;
+    
+    private Date createTime;
 
     public OauthCode() {
     }
@@ -44,5 +48,13 @@ public class OauthCode {
         this.clientId = clientId;
         return this;
     }
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 
 }

@@ -2,7 +2,6 @@ package oauth2.oltu.custom.common.oauth;
 
 import java.io.IOException;
 
-import javax.security.auth.Subject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,10 +10,14 @@ import org.apache.oltu.oauth2.as.response.OAuthASResponse;
 import org.apache.oltu.oauth2.common.error.OAuthError;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.OAuthResponse;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import oauth2.oltu.custom.common.constants.CustomConstants;
 import oauth2.oltu.custom.common.oauth.validate.AbstractClientDetailsValidator;
 import oauth2.oltu.custom.common.utils.WebUtils;
 
@@ -79,7 +82,7 @@ public abstract class AbstractAuthorizeHandler extends OAuthHandler {
             //go to approval
             LOG.debug("Go to oauth_approval, clientId: '{}'", clientDetails().getClientId());
             final HttpServletRequest request = oauthRequest.request();
-            request.getRequestDispatcher(OAUTH_APPROVAL_VIEW)
+            request.getRequestDispatcher(CustomConstants.OAUTH_APPROVAL_VIEW)
                     .forward(request, response);
             return true;
         }
@@ -91,7 +94,7 @@ public abstract class AbstractAuthorizeHandler extends OAuthHandler {
         if (isPost() && !clientDetails().trusted()) {
             //submit approval
             final HttpServletRequest request = oauthRequest.request();
-            final String oauthApproval = request.getParameter(REQUEST_USER_OAUTH_APPROVAL);
+            final String oauthApproval = request.getParameter(CustomConstants.REQUEST_USER_OAUTH_APPROVAL);
             if (!"true".equalsIgnoreCase(oauthApproval)) {
                 //Deny action
                 LOG.debug("User '{}' deny access", SecurityUtils.getSubject().getPrincipal());
@@ -129,7 +132,7 @@ public abstract class AbstractAuthorizeHandler extends OAuthHandler {
             //go to login
             LOG.debug("Forward to Oauth login by client_id '{}'", oauthRequest.getClientId());
             final HttpServletRequest request = oauthRequest.request();
-            request.getRequestDispatcher(OAUTH_LOGIN_VIEW)
+            request.getRequestDispatcher(CustomConstants.OAUTH_LOGIN_VIEW)
                     .forward(request, response);
             return true;
         }
@@ -154,7 +157,7 @@ public abstract class AbstractAuthorizeHandler extends OAuthHandler {
 
                 final HttpServletRequest request = oauthRequest.request();
                 request.setAttribute("oauth_login_error", true);
-                request.getRequestDispatcher(OAUTH_LOGIN_VIEW)
+                request.getRequestDispatcher(CustomConstants.OAUTH_LOGIN_VIEW)
                         .forward(request, response);
                 return true;
             }
@@ -164,8 +167,8 @@ public abstract class AbstractAuthorizeHandler extends OAuthHandler {
 
     private UsernamePasswordToken createUsernamePasswordToken() {
         final HttpServletRequest request = oauthRequest.request();
-        final String username = request.getParameter(REQUEST_USERNAME);
-        final String password = request.getParameter(REQUEST_PASSWORD);
+        final String username = request.getParameter(CustomConstants.REQUEST_USERNAME);
+        final String password = request.getParameter(CustomConstants.REQUEST_PASSWORD);
         return new UsernamePasswordToken(username, password);
     }
 

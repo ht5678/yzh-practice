@@ -12,6 +12,65 @@ import oauth2.oltu.simple.model.ClientModel;
  */
 public interface CustomOauth2AuthDao {
 	
+	/**
+	 * 新增accesstoken
+	 * @param accessToken
+	 * @return
+	 */
+	public int saveAccessToken(final AccessToken accessToken);
+	
+	
+	/**
+	 * 删除accesstoken
+	 * @param accessToken
+	 * @return
+	 */
+	public int deleteAccessToken(final AccessToken accessToken);
+	
+	
+	
+	/**
+	 * 查询accesstoken
+	 * @param clientId
+	 * @param username
+	 * @param authenticationId
+	 * @return
+	 */
+	public AccessToken findAccessToken(String clientId, String username, String authenticationId);
+	
+	
+	/**
+	 * 删除code
+	 * @param code
+	 * @return
+	 */
+	public int removeOauthCode(String code);
+	
+	
+	/**
+	 * 生成oauthcode
+	 * @param oauthCode
+	 * @return
+	 */
+	public int saveOauthCode(final OauthCode oauthCode);
+	
+	
+	/**
+	 * 删除oauthcode
+	 * @param oauthCode
+	 * @return
+	 */
+	public int deleteOauthCode(final OauthCode oauthCode);
+	
+	
+	/**
+	 * 通过用户名和clientid查找code
+	 * @param username
+	 * @param clientId
+	 * @return
+	 */
+	public OauthCode findOauthCodeByUsernameClientId(String username , String clientId);
+	
 	
 	/**
 	 * 查询token
