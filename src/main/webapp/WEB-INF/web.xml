@@ -26,7 +26,12 @@
   </servlet-mapping> -->
   
   
-  
+  <!--
+       Spring context listener
+   -->
+   <listener>
+       <listener-class>oauth2.oltu.custom.common.context.BeanContextLoaderListener</listener-class>
+   </listener>
   
   
   <!-- oauth2.oltu -->

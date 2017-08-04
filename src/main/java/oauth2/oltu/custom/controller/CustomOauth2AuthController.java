@@ -6,7 +6,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.oltu.oauth2.as.issuer.OAuthIssuer;
 import org.apache.oltu.oauth2.as.response.OAuthASResponse;
 import org.apache.oltu.oauth2.common.error.OAuthError;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
@@ -14,7 +13,6 @@ import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.OAuthResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +22,6 @@ import oauth2.oltu.custom.common.oauth.OAuthAuthxRequest;
 import oauth2.oltu.custom.common.oauth.OAuthTokenHandleDispatcher;
 import oauth2.oltu.custom.common.oauth.OAuthTokenxRequest;
 import oauth2.oltu.custom.common.utils.WebUtils;
-import oauth2.oltu.custom.service.CustomOauth2AuthService;
 
 /**
  * 
@@ -37,13 +34,7 @@ public class CustomOauth2AuthController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(CustomOauth2AuthController.class);
 	
-	@Autowired
-	private OAuthIssuer oAuthIssuer;
-	
-	@Autowired
-	private CustomOauth2AuthService service;
-	
-	
+
 	
 	
 	/**
