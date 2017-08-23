@@ -1,5 +1,6 @@
 package license.rsa;
 
+import java.io.ByteArrayOutputStream;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -24,6 +25,18 @@ import javax.crypto.Cipher;
  */
 public class RSACoder extends Coder{
 
+	
+	/** *//** 
+     * RSA最大加密明文大小 
+     */  
+    private static final int MAX_ENCRYPT_BLOCK = 117;  
+      
+    /** *//** 
+     * RSA最大解密密文大小 
+     */  
+    private static final int MAX_DECRYPT_BLOCK = 128; 
+    
+    
 	public static final String KEY_ALGORITHM = "RSA";
 //	public static final String SIGNATURE_ALGORITHM = "MD5withRSA";
 	public static final String SIGNATURE_ALGORITHM = "SHA256withRSA";
@@ -143,7 +156,28 @@ public class RSACoder extends Coder{
 		//对数据解密
 		Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
 		cipher.init(Cipher.DECRYPT_MODE, publicKey);
-		return cipher.doFinal(data);
+		
+		int inputLen = data.length;  
+        ByteArrayOutputStream out = new ByteArrayOutputStream();  
+        int offSet = 0;  
+        byte[] cache;  
+        int i = 0;  
+        // 对数据分段解密  
+        while (inputLen - offSet > 0) {  
+            if (inputLen - offSet > MAX_DECRYPT_BLOCK) {  
+                cache = cipher.doFinal(data, offSet, MAX_DECRYPT_BLOCK);  
+            } else {  
+                cache = cipher.doFinal(data, offSet, inputLen - offSet);  
+            }  
+            out.write(cache, 0, cache.length);  
+            i++;  
+            offSet = i * MAX_DECRYPT_BLOCK;  
+        }  
+        byte[] decryptedData = out.toByteArray();  
+        out.close();  
+        
+        
+		return decryptedData;
 	}
 	
 	

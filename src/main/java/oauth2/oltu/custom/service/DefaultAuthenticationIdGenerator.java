@@ -4,6 +4,7 @@ import org.apache.oltu.oauth2.common.OAuth;
 import org.apache.oltu.oauth2.common.utils.OAuthUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -20,6 +21,7 @@ import java.util.Map;
  *
  * @author Shengzhao Li
  */
+@Component
 public class DefaultAuthenticationIdGenerator implements AuthenticationIdGenerator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultAuthenticationIdGenerator.class);
