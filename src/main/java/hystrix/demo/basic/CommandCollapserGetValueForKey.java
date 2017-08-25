@@ -1,6 +1,8 @@
 package hystrix.demo.basic;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,10 +15,15 @@ import com.netflix.hystrix.HystrixCollapser;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandKey;
+import com.netflix.hystrix.HystrixEventType;
+import com.netflix.hystrix.HystrixInvokableInfo;
 import com.netflix.hystrix.HystrixRequestLog;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
 
 /**
+ * 
+ * Sample {@link HystrixCollapser} that automatically batches multiple requests to execute()/queue()
+ * into a single {@link HystrixCommand} execution for all requests within the defined batch (time or size).
  * 
  * @author yuezh2   2017年8月24日 下午5:20:06
  *
@@ -118,8 +125,25 @@ public class CommandCollapserGetValueForKey extends HystrixCollapser<List<String
 				int numExecuted = HystrixRequestLog.getCurrentRequest().getAllExecutedCommands().size();
 				System.err.println("num executed : "+numExecuted);
 				
+				// assert that the batch command 'GetValueForKey' was in fact executed and that it executed only 
+                // once or twice (due to non-determinism of scheduler since this example uses the real timer)
+				if(numExecuted>2){
+					fail("some of the commands should have been collapsed");
+				}
 				
+				System.err.println("HystrixRequestLog.getCurrentRequest().getAllExecutedCommands : "+HystrixRequestLog.getCurrentRequest().getAllExecutedCommands());
 				
+				int numLogs = 0;
+				for(HystrixInvokableInfo<?> command : HystrixRequestLog.getCurrentRequest().getAllExecutedCommands()){
+					numLogs ++;
+					
+					//assert the command is the one we're expecting
+					assertEquals("GetValueForKey", command.getCommandKey().name());
+					
+					//confirm that it was a command execution
+					assertTrue(command.getExecutionEvents().contains(HystrixEventType.COLLAPSED));
+					assertTrue(command.getExecutionEvents().contains(HystrixEventType.SUCCESS));
+				}
 				
 			}catch(Exception e){
 				e.printStackTrace();
