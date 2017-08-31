@@ -59,7 +59,7 @@ public class CommandUsingRequestCacheInvalidation {
          */
 		public static void flushCache(int id){
 			HystrixRequestCache.getInstance(GETTER_KEY, HystrixConcurrencyStrategyDefault.getInstance())
-			.clear(String.valueOf(id));
+						.clear(String.valueOf(id));
 		}
 		
 		
@@ -124,7 +124,9 @@ public class CommandUsingRequestCacheInvalidation {
 				new SetterCommand(1, "ValueAfterSet_").execute();
 				//fetch it again
 				GetterCommand commondAfterSet = new GetterCommand(1);
-				
+				// the getter should return with the new prefix, not the value from cache
+                assertFalse(commondAfterSet.isResponseFromCache());
+                assertEquals("ValueAfterSet_1", commondAfterSet.execute());
 			}finally{
 				context.shutdown();
 			}
