@@ -192,7 +192,7 @@ public class MatchTemplateDemo
         // load the native OpenCV library
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        String[] params = new String[]{"f://111.jpg" , "f://333.jpg" };
+        String[] params = new String[]{"d://111.jpg" , "d://222.jpg" };
         
         // run code
         new MatchTemplateDemoRun().run(params);

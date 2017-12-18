@@ -9,8 +9,8 @@ public class akaze {
         try{  
             System.loadLibrary(Core.NATIVE_LIBRARY_NAME);  
               
-            Mat src1=Imgcodecs.imread("f://999.jpg");  
-            Mat src2=Imgcodecs.imread("f://888.jpg");  
+            Mat src1=Imgcodecs.imread("d://555.jpg");  
+            Mat src2=Imgcodecs.imread("d://666.jpg");  
             if(src1.empty()||src2.empty()){  
                 throw new Exception("no file");  
             }  
@@ -48,12 +48,18 @@ public class akaze {
                 }  
             }  
             System.out.println("Min Distance:" + minDist);  
-            System.out.println("Max Distance:" + maxDist);  
+//            System.out.println("Max Distance:" + maxDist);  
+            
+            if(minDist<200){
+            	System.out.println("通过");
+            }else{
+            	System.out.println("不通过");
+            }
               
             Mat dst=new Mat();  
             Features2d.drawMatches(src1, keypoint1, src2, keypoint2, matches, dst);  
               
-            Imgcodecs.imwrite("f://akaze.jpg", dst);  
+            Imgcodecs.imwrite("d://akaze.jpg", dst);  
         }catch(Exception e){  
             System.out.println("例外:"+e);  
         }  

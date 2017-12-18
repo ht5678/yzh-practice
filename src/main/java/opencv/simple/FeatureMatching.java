@@ -63,7 +63,7 @@ public class FeatureMatching {
     	
         FeatureMatching mather = new FeatureMatching(new ConsoleView());  
         //FeatureMatching mather = new FeatureMatching(new GEivView());  
-        mather.setSource("f://222.jpg");  
-        mather.doMaping("f://333.jpg");  
+        mather.setSource("d://222.jpg");  
+        mather.doMaping("d://333.jpg");  
     }  
 }  
