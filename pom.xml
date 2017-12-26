@@ -114,6 +114,14 @@
 	    <artifactId>hystrix-core</artifactId>
 	    <version>1.5.12</version>
 	</dependency>
+	
+	<!-- commons-math3 -->
+	<dependency>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-math3</artifactId>
+	    <version>3.6.1</version>
+	</dependency>
+	
     
     <!-- apache oauth2.0 -->
     <dependency>
