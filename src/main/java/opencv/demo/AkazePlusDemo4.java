@@ -15,6 +15,7 @@ import org.opencv.core.MatOfKeyPoint;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
+import org.opencv.core.TermCriteria;
 import org.opencv.features2d.DescriptorExtractor;
 import org.opencv.features2d.DescriptorMatcher;
 import org.opencv.features2d.FeatureDetector;
@@ -23,29 +24,71 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 /**
- * opencv3
- * @author yuezh2   2018年1月2日 下午4:51:44
+ * 
+ * @author yuezh2   2018年1月10日 下午6:13:36
  *
  */
-public class AkazePlusDemo3 {
+public class AkazePlusDemo4 {
+
 	
 	
+
 	public static void main(String[] args) {
 		//加载本地的OpenCV库，这样就可以用它来调用Java API  
 	    System.loadLibrary(Core.NATIVE_LIBRARY_NAME); 
-		Mat img_object_src = Imgcodecs.imread("d://191919.jpg");
-		Mat img_scene_src  = Imgcodecs.imread("d://181818.jpg");
+		Mat img_object_src = Imgcodecs.imread("d://pics/121212.jpg");
+		Mat img_scene_src  = Imgcodecs.imread("d://pics/171717.jpg");
+		
+		Mat img_object_m = new Mat(img_object_src.rows(),img_object_src.cols(),CvType.CV_8UC1);
+		Mat img_scene_m = new Mat(img_scene_src.rows(),img_scene_src.cols(),CvType.CV_8UC1);
+		
+		Imgproc.cvtColor(img_object_src, img_object_m, Imgproc.COLOR_RGBA2RGB);
+		Imgproc.cvtColor(img_scene_src, img_scene_m, Imgproc.COLOR_RGBA2RGB);		
 		
 		Mat img_object = new Mat(img_object_src.rows(),img_object_src.cols(),CvType.CV_8UC1);
 		Mat img_scene = new Mat(img_scene_src.rows(),img_scene_src.cols(),CvType.CV_8UC1);
 		
-		//灰度
-//		Imgproc.cvtColor(img_object_src, img_object, Imgproc.COLOR_RGB2GRAY);
-//		Imgproc.cvtColor(img_scene_src, img_scene, Imgproc.COLOR_RGB2GRAY);
+		Imgproc.cvtColor(img_object_m, img_object, Imgproc.COLOR_RGB2HSV,3);
+		Imgproc.cvtColor(img_scene_m, img_scene, Imgproc.COLOR_RGB2HSV,3);
 		
 		
-		Imgproc.cvtColor(img_object_src, img_object, Imgproc.COLOR_RGBA2RGB);
-		Imgproc.cvtColor(img_scene_src, img_scene, Imgproc.COLOR_RGBA2RGB);		
+		//kmeans
+		//
+		List<Mat> hsv_planes = new ArrayList<Mat>(3);
+        Core.split(img_object, hsv_planes);
+
+
+        Mat channel = hsv_planes.get(2);
+        channel = Mat.zeros(img_object.rows(),img_object.cols(),CvType.CV_8UC1);
+        hsv_planes.set(2,channel);
+        Core.merge(hsv_planes,img_object);
+
+
+
+        Mat clusteredHSV = new Mat();
+        img_object.convertTo(img_object, CvType.CV_32FC3);
+        TermCriteria criteria = new TermCriteria(TermCriteria.EPS + TermCriteria.MAX_ITER,100,0.1);
+        Core.kmeans(img_object, 2, clusteredHSV, criteria, 10, Core.KMEANS_PP_CENTERS);
+        
+//        Imgcodecs.imwrite("d://kmeans1.jpg", clusteredHSV);
+        
+        //pic2
+        hsv_planes = new ArrayList<Mat>(3);
+        Core.split(img_scene, hsv_planes);
+
+        channel = hsv_planes.get(2);
+        channel = Mat.zeros(img_scene.rows(),img_scene.cols(),CvType.CV_8UC1);
+        hsv_planes.set(2,channel);
+        Core.merge(hsv_planes,img_scene);
+
+        clusteredHSV = new Mat();
+        img_scene.convertTo(img_scene, CvType.CV_32FC3);
+        criteria = new TermCriteria(TermCriteria.EPS + TermCriteria.MAX_ITER,100,0.1);
+        Core.kmeans(img_scene, 2, clusteredHSV, criteria, 10, Core.KMEANS_PP_CENTERS);
+		
+//        Imgcodecs.imwrite("d://kmeans2.jpg", clusteredHSV);
+		
+		
 		
 		//-- Step 1: Detect the keypoints using SURF Detector  
 	    MatOfKeyPoint keypoints_object = new MatOfKeyPoint();
@@ -85,7 +128,7 @@ public class AkazePlusDemo3 {
 		  //-- Draw only "good" matches (i.e. whose distance is less than 3*min_dist )
 		  MatOfDMatch good_matches = new MatOfDMatch();
 		  List<DMatch> list = new ArrayList<>();
-		  for( int i = 0; i < descriptors_object.rows(); i++ ){ 
+		  for( int i = 0; i < descriptors_object.rows(); i++ ){
 			  if( matchArr[i].distance < 3*min_dist ){
 				  list.add(matchArr[i]); 
 			  }
@@ -116,12 +159,19 @@ public class AkazePlusDemo3 {
 		  obj.fromArray(objPoints);
 		  scene.fromArray(scenePoints);
 		  
+		  
+//		  System.out.println(good_matches.size());
 		  System.out.println(objPoints.length);
 		  System.out.println(scenePoints.length);
-		  System.out.println(obj.empty());
-		  System.out.println(scene.empty());
+//		  System.out.println(obj.empty());
+//		  System.out.println(scene.empty());
+		  
+		  
 //		  Calib3d.findHomography(obj, scene, 0, 3L);
-		  Mat H = Calib3d.findHomography(obj, scene,Calib3d.RANSAC,5 );
+		  Mat H = Calib3d.findHomography(obj, scene,Calib3d.RANSAC,6 );
+		  System.out.println(H.elemSize());
+		  System.out.println(good_matches.elemSize());
+		  System.out.println(H.elemSize()/(good_matches.elemSize()*1F));
 		  
 		  Mat tmp_corners = new Mat(4,1,CvType.CV_32FC2);
 		  Mat scene_corners = new Mat(4,1,CvType.CV_32FC2);
@@ -132,6 +182,7 @@ public class AkazePlusDemo3 {
 		  tmp_corners.put(2, 0, new double[] {img_object.cols(),img_object.rows()});
 		  tmp_corners.put(3, 0, new double[] {0,img_object.rows()});
 
+		  //透视变换
 		  Core.perspectiveTransform(tmp_corners,scene_corners, H);
 
 		  //output image
@@ -145,7 +196,8 @@ public class AkazePlusDemo3 {
 		  Imgproc.line(img_matches, new Point(scene_corners.get(2,0)), new Point(scene_corners.get(3,0)), new Scalar(0, 255, 0),4);
 		  Imgproc.line(img_matches, new Point(scene_corners.get(3,0)), new Point(scene_corners.get(0,0)), new Scalar(0, 255, 0),4);
 		  
-		  Imgcodecs.imwrite("d://compare.jpg", img_matches);
+		  Imgcodecs.imwrite("d://pics/compare.jpg", img_matches);
 		    
 	}
 }
+
