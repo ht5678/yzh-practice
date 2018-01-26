@@ -33,8 +33,8 @@ public class AkazePlusDemo3 {
 	public static void main(String[] args) {
 		//加载本地的OpenCV库，这样就可以用它来调用Java API  
 	    System.loadLibrary(Core.NATIVE_LIBRARY_NAME); 
-		Mat img_object_src = Imgcodecs.imread("d://191919.jpg");
-		Mat img_scene_src  = Imgcodecs.imread("d://181818.jpg");
+		Mat img_object_src = Imgcodecs.imread("d://121212.jpg");
+		Mat img_scene_src  = Imgcodecs.imread("d://131313.jpg");
 		
 		Mat img_object = new Mat(img_object_src.rows(),img_object_src.cols(),CvType.CV_8UC1);
 		Mat img_scene = new Mat(img_scene_src.rows(),img_scene_src.cols(),CvType.CV_8UC1);
@@ -140,12 +140,12 @@ public class AkazePlusDemo3 {
 //		    Features2d.drawMatches(img1, keypoints1, img2, keypoints2, gm, outputImg, Scalar.all(-1), Scalar.all(-1), drawnMatches,Features2d.NOT_DRAW_SINGLE_POINTS);
 
 		    //边界线
-		  Imgproc.line(img_matches, new Point(scene_corners.get(0,0)), new Point(scene_corners.get(1,0)), new Scalar(0, 255, 0),4);
-		  Imgproc.line(img_matches, new Point(scene_corners.get(1,0)), new Point(scene_corners.get(2,0)), new Scalar(0, 255, 0),4);
-		  Imgproc.line(img_matches, new Point(scene_corners.get(2,0)), new Point(scene_corners.get(3,0)), new Scalar(0, 255, 0),4);
-		  Imgproc.line(img_matches, new Point(scene_corners.get(3,0)), new Point(scene_corners.get(0,0)), new Scalar(0, 255, 0),4);
+		  Imgproc.line(img_scene, new Point(scene_corners.get(0,0)), new Point(scene_corners.get(1,0)), new Scalar(0, 255, 0),4);
+		  Imgproc.line(img_scene, new Point(scene_corners.get(1,0)), new Point(scene_corners.get(2,0)), new Scalar(0, 255, 0),4);
+		  Imgproc.line(img_scene, new Point(scene_corners.get(2,0)), new Point(scene_corners.get(3,0)), new Scalar(0, 255, 0),4);
+		  Imgproc.line(img_scene, new Point(scene_corners.get(3,0)), new Point(scene_corners.get(0,0)), new Scalar(0, 255, 0),4);
 		  
-		  Imgcodecs.imwrite("d://compare.jpg", img_matches);
+		  Imgcodecs.imwrite("d://compare.jpg", img_scene);
 		    
 	}
 }

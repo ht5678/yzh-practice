@@ -24,7 +24,7 @@ public class KMeansDemo {
 		//加载本地的OpenCV库，这样就可以用它来调用Java API  
 	    System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 	    
-	    Mat rgba = Imgcodecs.imread("d://202020.jpg");
+	    Mat rgba = Imgcodecs.imread("d://pics/121212.jpg");
 		
 		Mat mHSV = new Mat(rgba.rows(),rgba.cols(),CvType.CV_8UC1);
 		
@@ -46,7 +46,7 @@ public class KMeansDemo {
         TermCriteria criteria = new TermCriteria(TermCriteria.EPS + TermCriteria.MAX_ITER,100,0.1);
         double result = Core.kmeans(mHSV, 2, clusteredHSV, criteria, 10, Core.KMEANS_PP_CENTERS);
         System.out.println(result);
-        Imgcodecs.imwrite("d://kmeans.jpg", mHSV);
+        Imgcodecs.imwrite("d://pics/kmeans.jpg", mHSV);
 	}
 	
 	

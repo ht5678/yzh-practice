@@ -28,8 +28,8 @@ public class AkazePlusDemo {
 		
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);  
         
-        Mat src1=Imgcodecs.imread("d://111.jpg");  
-        Mat src2=Imgcodecs.imread("d://222.jpg");  
+        Mat src1=Imgcodecs.imread("d://pics/111.jpg");  
+        Mat src2=Imgcodecs.imread("d://pics/222.jpg");  
         if(src1.empty()||src2.empty()){  
             throw new Exception("no file");  
         }  

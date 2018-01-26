@@ -36,8 +36,8 @@ public class AkazePlusDemo4 {
 	public static void main(String[] args) {
 		//加载本地的OpenCV库，这样就可以用它来调用Java API  
 	    System.loadLibrary(Core.NATIVE_LIBRARY_NAME); 
-		Mat img_object_src = Imgcodecs.imread("d://pics/121212.jpg");
-		Mat img_scene_src  = Imgcodecs.imread("d://pics/171717.jpg");
+		Mat img_object_src = Imgcodecs.imread("d://pics/181818.jpg");
+		Mat img_scene_src  = Imgcodecs.imread("d://pics/191919.jpg");
 		
 		Mat img_object_m = new Mat(img_object_src.rows(),img_object_src.cols(),CvType.CV_8UC1);
 		Mat img_scene_m = new Mat(img_scene_src.rows(),img_scene_src.cols(),CvType.CV_8UC1);
@@ -68,7 +68,7 @@ public class AkazePlusDemo4 {
         Mat clusteredHSV = new Mat();
         img_object.convertTo(img_object, CvType.CV_32FC3);
         TermCriteria criteria = new TermCriteria(TermCriteria.EPS + TermCriteria.MAX_ITER,100,0.1);
-        Core.kmeans(img_object, 2, clusteredHSV, criteria, 10, Core.KMEANS_PP_CENTERS);
+        Core.kmeans(img_object, 3, clusteredHSV, criteria, 10, Core.KMEANS_PP_CENTERS);
         
 //        Imgcodecs.imwrite("d://kmeans1.jpg", clusteredHSV);
         
@@ -84,7 +84,7 @@ public class AkazePlusDemo4 {
         clusteredHSV = new Mat();
         img_scene.convertTo(img_scene, CvType.CV_32FC3);
         criteria = new TermCriteria(TermCriteria.EPS + TermCriteria.MAX_ITER,100,0.1);
-        Core.kmeans(img_scene, 2, clusteredHSV, criteria, 10, Core.KMEANS_PP_CENTERS);
+        Core.kmeans(img_scene, 3, clusteredHSV, criteria, 10, Core.KMEANS_PP_CENTERS);
 		
 //        Imgcodecs.imwrite("d://kmeans2.jpg", clusteredHSV);
 		
@@ -191,12 +191,12 @@ public class AkazePlusDemo4 {
 //		    Features2d.drawMatches(img1, keypoints1, img2, keypoints2, gm, outputImg, Scalar.all(-1), Scalar.all(-1), drawnMatches,Features2d.NOT_DRAW_SINGLE_POINTS);
 
 		    //边界线
-		  Imgproc.line(img_matches, new Point(scene_corners.get(0,0)), new Point(scene_corners.get(1,0)), new Scalar(0, 255, 0),4);
-		  Imgproc.line(img_matches, new Point(scene_corners.get(1,0)), new Point(scene_corners.get(2,0)), new Scalar(0, 255, 0),4);
-		  Imgproc.line(img_matches, new Point(scene_corners.get(2,0)), new Point(scene_corners.get(3,0)), new Scalar(0, 255, 0),4);
-		  Imgproc.line(img_matches, new Point(scene_corners.get(3,0)), new Point(scene_corners.get(0,0)), new Scalar(0, 255, 0),4);
+		  Imgproc.line(img_scene, new Point(scene_corners.get(0,0)), new Point(scene_corners.get(1,0)), new Scalar(0, 255, 0),4);
+		  Imgproc.line(img_scene, new Point(scene_corners.get(1,0)), new Point(scene_corners.get(2,0)), new Scalar(0, 255, 0),4);
+		  Imgproc.line(img_scene, new Point(scene_corners.get(2,0)), new Point(scene_corners.get(3,0)), new Scalar(0, 255, 0),4);
+		  Imgproc.line(img_scene, new Point(scene_corners.get(3,0)), new Point(scene_corners.get(0,0)), new Scalar(0, 255, 0),4);
 		  
-		  Imgcodecs.imwrite("d://pics/compare.jpg", img_matches);
+		  Imgcodecs.imwrite("d://pics/compare.jpg", img_scene);
 		    
 	}
 }
