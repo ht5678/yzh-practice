@@ -55,7 +55,7 @@ import org.opencv.imgproc.Imgproc;
  * @author yuezh2   2018年1月29日 下午8:44:52
  *
  */
-public class MatDemo {
+public class Filter2DDemo {
 
 	
 	
