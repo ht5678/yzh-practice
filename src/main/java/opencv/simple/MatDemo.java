@@ -49,6 +49,9 @@ import org.opencv.imgproc.Imgproc;
  * int data[] = {  1, 1, 1, 1, 1, 1, 1, 1, 1 };
  * 
  * 
+ * Core.getTickCount()
+ * 
+ * 
  * @author yuezh2   2018年1月29日 下午8:44:52
  *
  */
@@ -70,9 +73,14 @@ public class MatDemo {
 		Mat kernel = new Mat( 3, 3, CvType.CV_32S );
 		kernel.put( 0, 0, data );
 		
+
+		long t = Core.getTickCount();
 		//掩膜
 		Mat dst = new Mat().zeros(src.size(), src.type());
 		Imgproc.filter2D(src, dst, src.depth(), kernel);		//src.depth()表示位图深度 , 有32 , 24 ,8 等  . 默认-1 , 表示和原图深度一样 , 不一样可能会出错
+		
+		double time = (Core.getTickCount()-t)/Core.getTickFrequency();
+		System.out.println(time);//秒
 		
 	    Imgcodecs.imwrite("d://pics/mask.jpg", dst);
 	}
