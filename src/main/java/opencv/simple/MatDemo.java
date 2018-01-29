@@ -3,6 +3,8 @@ package opencv.simple;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.features2d.Features2d;
+import org.opencv.highgui.Highgui;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -17,6 +19,20 @@ import org.opencv.imgproc.Imgproc;
  * saturate_cast<uchar> (100)  , 返回100
  * 
  * 
+ * java:
+ * 
+ * private final static int MAX_UCHAR = 255;
+
+	public static int saturateCastUchar(int x) {
+	  return x > MAX_UCHAR ? MAX_UCHAR : (x < 0 ? 0 : x);
+	}
+	
+	public static int saturateCastUchar(float x) {
+	  return (int) (x > MAX_UCHAR ? MAX_UCHAR : (x < 0 ? 0 : x));
+	}
+ * 
+ * 
+ * 
  * 
  * 掩膜操作实现图像的对比度调整
  * 
@@ -27,6 +43,11 @@ import org.opencv.imgproc.Imgproc;
 	//allocate Mat before calling put
 	Mat img = new Mat( 3, 3, CvType.CV_32S );
 	img.put( row, col, data );
+ * 
+ * 
+ * 我们用这个函数实现一个平滑滤波的功能，我们只要把矩阵核写成下面这样：
+ * int data[] = {  1, 1, 1, 1, 1, 1, 1, 1, 1 };
+ * 
  * 
  * @author yuezh2   2018年1月29日 下午8:44:52
  *
@@ -51,8 +72,8 @@ public class MatDemo {
 		
 		//掩膜
 		Mat dst = new Mat().zeros(src.size(), src.type());
-		Imgproc.filter2D(src, dst, src.depth(), kernel);
-	    
+		Imgproc.filter2D(src, dst, src.depth(), kernel);		//src.depth()表示位图深度 , 有32 , 24 ,8 等  . 默认-1 , 表示和原图深度一样 , 不一样可能会出错
+		
 	    Imgcodecs.imwrite("d://pics/mask.jpg", dst);
 	}
 	
