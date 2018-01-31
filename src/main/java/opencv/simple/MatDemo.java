@@ -1,6 +1,7 @@
 package opencv.simple;
 
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -32,6 +33,13 @@ import org.opencv.imgcodecs.Imgcodecs;
 	
  * 
  * 
+ * 
+ * CV_8UC3
+ * 8表示每个通道占8位 , U表示无符号 , C表示char类型 , 3表示通道的数量是3
+ * 
+ * 
+ * 
+ * 
  * @author yuezh2   2018年1月29日 下午10:18:20
  *
  */
@@ -61,7 +69,18 @@ public class MatDemo {
 	    //看src有多少个通道
 //	    src.channels();
 	    
+	    
+//	    Mat m = new Mat(100, 100, CvType.CV_8UC3, new Scalar(0, 0 , 255));
+	    Mat m = new Mat(100, 100, CvType.CV_8UC1, new Scalar(127));
+	    /*
+	     * eye方法的作用是对角线的地方都会变成1
+	     * [1 , 0]
+	     * [0 , 1]
+	     */
+//	    Mat.eye(size, type)
+	    
 	    Imgcodecs.imwrite("d://pics/mat.jpg", dst);
+	    Imgcodecs.imwrite("d://pics/mat2.jpg", m);
 	}
 	
 	
