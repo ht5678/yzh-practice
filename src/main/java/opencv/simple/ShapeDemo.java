@@ -2,9 +2,9 @@ package opencv.simple;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.opencv.core.Core;
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
@@ -48,8 +48,8 @@ public class ShapeDemo {
 		myEllipse();
 		myCircle();
 		myPolygon();
-		
 		Imgproc.putText(bgImage, "Hello OpenCV", new Point(300 ,300), Core.FONT_HERSHEY_COMPLEX, 1.0, new Scalar(12,23,200), 1 , Core.LINE_8, false);
+		randomLineDemo();
 		
 		Imgcodecs.imwrite("d://pics/shape.jpg", bgImage);
 	}
@@ -128,6 +128,28 @@ public class ShapeDemo {
 //		Imgproc.fillPoly(bgImage, list, color, Core.LINE_8, 0,new Point());
 		
  	}
+	
+	/**
+	 * 随机生成直线
+	 */
+	public void randomLineDemo(){
+		Point pt1 = new Point(); 
+		Point pt2 = new Point();
+		Random ran = new Random(12345);
+		Mat bg = new Mat(bgImage.size(),bgImage.type());
+		
+		for(int i = 0 ; i < 100 ; i++){
+			pt1.x = ran.nextInt(bgImage.cols());
+			pt2.x = ran.nextInt(bgImage.cols());
+			pt1.y = ran.nextInt(bgImage.rows());
+			pt2.y = ran.nextInt(bgImage.rows());
+			
+			Scalar color = new Scalar(ran.nextInt(255) , ran.nextInt(255) , ran.nextInt(255));
+			Imgproc.line(bg, pt1, pt2, color , 1 , Core.LINE_8 , 0);
+		}
+		
+		Imgcodecs.imwrite("d://pics/randomline.jpg", bg);
+	}
 	
 
 	
