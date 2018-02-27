@@ -5,19 +5,27 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.UnpooledByteBufAllocator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.mqtt.MqttDecoder;
+import io.netty.handler.codec.mqtt.MqttFixedHeader;
 import io.netty.handler.codec.mqtt.MqttMessage;
+import io.netty.handler.codec.mqtt.MqttMessageType;
 import io.netty.handler.codec.mqtt.MqttPublishMessage;
+import io.netty.handler.codec.mqtt.MqttPublishVariableHeader;
+import io.netty.handler.codec.mqtt.MqttQoS;
 import io.netty.handler.ssl.SslHandler;
+import io.netty.util.CharsetUtil;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import io.netty.util.concurrent.GlobalEventExecutor;
@@ -39,17 +47,23 @@ public class MqttServerHandler extends SimpleChannelInboundHandler<MqttMessage>{
 	
 	private static final  List<Channel> list = new ArrayList<>(); 
 	
+	private static final ByteBufAllocator ALLOCATOR = new UnpooledByteBufAllocator(false);
+	
 	
 	@Override
 	public void channelActive(final ChannelHandlerContext ctx) throws Exception {
 		
-		channels.add(ctx.channel());
+		// Send greeting for a new connection.
+        ctx.writeAndFlush(createPublishMessage("Welcome to " + InetAddress.getLocalHost().getHostName() + "!\r\n"   +   "It is " + new Date() + " now.\r\n"));
+//        ctx.flush();
 		
-		if(list.size()<10){
-			list.add(ctx.channel());
-		}
-		
-		System.out.println("在线用户数:"+channels.size()+" : 消息数 : "+count + "");
+//		channels.add(ctx.channel());
+//		
+//		if(list.size()<10){
+//			list.add(ctx.channel());
+//		}
+//		
+//		System.out.println("在线用户数:"+channels.size()+" : 消息数 : "+count + "");
 	}
 	
 	
@@ -74,16 +88,17 @@ public class MqttServerHandler extends SimpleChannelInboundHandler<MqttMessage>{
 		System.out.println(charBuffer.toString());
 		count++;
 		
-		if(list.size()>0){
-			for(Channel c : list){
+		if(channels.size()>0){
+			for(Channel c : channels){
 				if(c!=null && c.isActive() && c.isWritable()){
 					c.writeAndFlush(msg);
+//					c.write(msg);
 				}
 			}
 		}
 		
 //		msg.release();
-		
+//		ctx.write(msg);
 		// Close the connection if the client has sent 'bye'.
 		if("bye".equals(charBuffer.toString()) && ctx.channel().isActive()){
 			ctx.close();
@@ -100,5 +115,15 @@ public class MqttServerHandler extends SimpleChannelInboundHandler<MqttMessage>{
 		ctx.close();
 	}
 	
+	
+	
+	private static MqttPublishMessage createPublishMessage(String message) {
+        MqttFixedHeader mqttFixedHeader =
+                new MqttFixedHeader(MqttMessageType.PUBLISH, false, MqttQoS.AT_LEAST_ONCE, true, 0);
+        MqttPublishVariableHeader mqttPublishVariableHeader = new MqttPublishVariableHeader("/abc", 1234);
+        ByteBuf payload =  ALLOCATOR.buffer();
+        payload.writeBytes(message.getBytes(CharsetUtil.UTF_8));
+        return new MqttPublishMessage(mqttFixedHeader, mqttPublishVariableHeader, payload);
+    }
 	
 }
