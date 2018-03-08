@@ -41,7 +41,30 @@ public class MqttClientHandler extends SimpleChannelInboundHandler<MqttMessage>{
 	
 	
 	
-	
+
+	@Override
+	public void channelActive(ChannelHandlerContext ctx) throws Exception {
+		// TODO Auto-generated method stub
+		super.channelActive(ctx);
+	}
+
+
+	@Override
+	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		// TODO Auto-generated method stub
+		super.channelInactive(ctx);
+	}
+
+
+	@Override
+	public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
+		// TODO Auto-generated method stub
+		super.channelUnregistered(ctx);
+	}
+
+
+
+
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		cause.printStackTrace();

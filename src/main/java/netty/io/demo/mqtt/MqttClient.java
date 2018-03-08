@@ -9,10 +9,12 @@ import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.UnpooledByteBufAllocator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.mqtt.MqttEncoder;
 import io.netty.handler.codec.mqtt.MqttFixedHeader;
 import io.netty.handler.codec.mqtt.MqttMessageType;
 import io.netty.handler.codec.mqtt.MqttPublishMessage;
@@ -107,6 +109,26 @@ public class MqttClient {
 		
 	}
 	
+	
+	   public Bootstrap createBootstrap(Bootstrap bootstrap, EventLoopGroup eventLoop) {  
+		     if (bootstrap != null) {
+		       final ReconnectionInboundHandler handler = new ReconnectionInboundHandler(this);  
+		       bootstrap.group(eventLoop);  
+		       bootstrap.channel(NioSocketChannel.class);  
+		       bootstrap.option(ChannelOption.SO_KEEPALIVE, true);  
+		       bootstrap.handler(new ChannelInitializer<SocketChannel>() {  
+		         @Override  
+		         protected void initChannel(SocketChannel socketChannel) throws Exception {  
+		           socketChannel.pipeline().addLast(handler);  
+		         }  
+		       });  
+		       bootstrap.remoteAddress("localhost", 8888);
+		       bootstrap.connect().addListener(new ReconnectionListener(this)); 
+		     }  
+		     
+		     return bootstrap;  
+		     
+		   } 
 	
 	
 	
