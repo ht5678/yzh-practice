@@ -61,14 +61,17 @@ public class Filter2DDemo {
 	
 	public static void main(String[] args) {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-	    Mat src = Imgcodecs.imread("d://pics/121212.jpg");
+	    Mat src = Imgcodecs.imread("d://pics/151515.jpg");
 	    
 	    if(src.empty()){
 	    	System.out.println("图片地址不存在");
 	    	return;
 	    }
 	    
-	    int data[] = {  0, -1, 0, -1, 5, -1, 0, -1, 0 };
+	    int data[] = {  
+	    		0, -1, 0, 
+	    		-1, 5, -1, 
+	    		0, -1, 0 };
 		//allocate Mat before calling put
 		Mat kernel = new Mat( 3, 3, CvType.CV_32S );
 		kernel.put( 0, 0, data );
