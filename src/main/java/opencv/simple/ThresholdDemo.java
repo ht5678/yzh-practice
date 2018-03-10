@@ -12,7 +12,7 @@ import org.opencv.imgproc.Imgproc;
  * 图像阈值 , 简单点说就是吧图像分割的标尺 , 这个标尺是根据什么产生的 , 阈值产生算法 , 阈值类型
  * 
  * 
- * 阈值类型:
+ * 阈值类型(只有灰度图像用):
  * *阈值二值化		-THRESH_BINARY			-0
  * *阈值反二值化	-THRESH_BINARY_INV	-1
  * *截断					-THRESH_TRUNC				-2
