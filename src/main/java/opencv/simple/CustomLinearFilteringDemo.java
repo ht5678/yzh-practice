@@ -134,8 +134,9 @@ public class CustomLinearFilteringDemo {
 	    Mat dst = new Mat(src.size() ,src.type());
 	    for(int i =0;i<5;i++){
 	    	ksize = 4+(i%5)*2+1;
-	    	
-	    	Mat kernel = Mat.ones(ksize, ksize, CvType.CV_32F) / (float)(ksize*ksize);
+	    	System.out.println(ksize);
+	    	Mat kernel = Mat.ones(ksize, ksize, CvType.CV_32F);
+//	    			/ (float)(ksize*ksize);
 	    	Imgproc.filter2D(src, dst, -1, kernel,new Point(-1,-1),0.0);
 	    
 	    	Imgcodecs.imwrite("d://pics/cline"+i+".jpg", laDst);
