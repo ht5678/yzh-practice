@@ -45,13 +45,17 @@ public class HLineAndVLine {
 	    Mat hline = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(src.rows()/16, 1) , new Point(-1,-1));
 	    //垂直结构元素
 	    Mat vline = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(1, src.cols()/16) , new Point(-1,-1));
+	    
+	    //验证码 识别
+//	    Mat ocr = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5) , new Point(-1,-1));
+	    
 	    //3.先腐蚀后膨胀 , 开操作
 	    Imgproc.morphologyEx(threDst, dst, Imgproc.MORPH_OPEN, vline);
 	    Imgproc.morphologyEx(threDst, hdst, Imgproc.MORPH_OPEN, hline);
 	    //4.背景色取反
 	    Core.bitwise_not(dst, vbwDst);
 	    Core.bitwise_not(hdst, hbwDst);
-	    //5.去除椒盐噪声
+	    //5.去除椒盐噪声 , 验证码识别的时候不用这个操作
 	    Imgproc.blur(hbwDst, hresult, new Size(3,3));
 	    Imgproc.blur(vbwDst, vresult, new Size(3,3));
 	    //6.输出
