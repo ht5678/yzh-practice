@@ -3,6 +3,8 @@ package netty.io.demo.mqtt;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import javax.net.ssl.SSLException;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -45,22 +47,27 @@ public class MqttClient {
 	
 	
 	public static void main(String[] args) throws Exception{
-		//configure ssl
-		final SslContext sslCtx;
 		
-		if(SSL){
-			sslCtx = SslContextBuilder.forClient()
-					.trustManager(InsecureTrustManagerFactory.INSTANCE).build();
-		}else{
-			sslCtx = null;
-		}
+		MqttClient client = new MqttClient();
+		client.initBootstrap(new Bootstrap() , new NioEventLoopGroup());
 		
-		
-		EventLoopGroup group = new NioEventLoopGroup();
-		
-		
+	}
+	
+	public static Bootstrap initBootstrap(Bootstrap b , EventLoopGroup group ){
 		try{
-			Bootstrap b = new Bootstrap();
+			
+			//configure ssl
+			final SslContext sslCtx;
+			
+			if(SSL){
+				sslCtx = SslContextBuilder.forClient()
+						.trustManager(InsecureTrustManagerFactory.INSTANCE).build();
+			}else{
+				sslCtx = null;
+			}
+			
+			
+			
 			b.group(group)
 			  .channel(NioSocketChannel.class)
 			  .handler(new MqttClientInitializer(sslCtx));
@@ -103,32 +110,35 @@ public class MqttClient {
 			//print out the answer
 //			System.err.format("mqtt of %,d is: %,d", COUNT, handler);
 			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}finally{
 			group.shutdownGracefully();
 		}
 		
+		return b;
 	}
 	
 	
-	   public Bootstrap createBootstrap(Bootstrap bootstrap, EventLoopGroup eventLoop) {  
-		     if (bootstrap != null) {
-		       final ReconnectionInboundHandler handler = new ReconnectionInboundHandler(this);  
-		       bootstrap.group(eventLoop);  
-		       bootstrap.channel(NioSocketChannel.class);  
-		       bootstrap.option(ChannelOption.SO_KEEPALIVE, true);  
-		       bootstrap.handler(new ChannelInitializer<SocketChannel>() {  
-		         @Override  
-		         protected void initChannel(SocketChannel socketChannel) throws Exception {  
-		           socketChannel.pipeline().addLast(handler);  
-		         }  
-		       });  
-		       bootstrap.remoteAddress("localhost", 8888);
-		       bootstrap.connect().addListener(new ReconnectionListener(this)); 
-		     }  
-		     
-		     return bootstrap;  
-		     
-		   } 
+//	   public Bootstrap createBootstrap(Bootstrap bootstrap, EventLoopGroup eventLoop) {  
+//		     if (bootstrap != null) {
+//		       final ReconnectionInboundHandler handler = new ReconnectionInboundHandler(this);  
+//		       bootstrap.group(eventLoop);  
+//		       bootstrap.channel(NioSocketChannel.class);  
+//		       bootstrap.option(ChannelOption.SO_KEEPALIVE, true);  
+//		       bootstrap.handler(new ChannelInitializer<SocketChannel>() {  
+//		         @Override  
+//		         protected void initChannel(SocketChannel socketChannel) throws Exception {  
+//		           socketChannel.pipeline().addLast(handler);  
+//		         }  
+//		       });  
+//		       bootstrap.remoteAddress("localhost", 8888);
+//		       bootstrap.connect().addListener(new ReconnectionListener(this)); 
+//		     }  
+//		     
+//		     return bootstrap;  
+//		     
+//		   } 
 	
 	
 	
@@ -140,5 +150,9 @@ public class MqttClient {
         payload.writeBytes(message.getBytes(CharsetUtil.UTF_8));
         return new MqttPublishMessage(mqttFixedHeader, mqttPublishVariableHeader, payload);
     }
+	
+	
+	
+	
 	
 }

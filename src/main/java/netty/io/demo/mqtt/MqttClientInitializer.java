@@ -1,5 +1,8 @@
 package netty.io.demo.mqtt;
 
+import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -8,6 +11,7 @@ import io.netty.handler.codec.compression.ZlibWrapper;
 import io.netty.handler.codec.mqtt.MqttDecoder;
 import io.netty.handler.codec.mqtt.MqttEncoder;
 import io.netty.handler.ssl.SslContext;
+import io.netty.handler.timeout.IdleStateHandler;
 
 /**
  * 
@@ -18,7 +22,8 @@ public class MqttClientInitializer  extends ChannelInitializer<SocketChannel>{
 
 	
 	private final SslContext sslCtx;
-	
+
+	private static MqttClientHandler handler = new MqttClientHandler();
 	
 	
 	public MqttClientInitializer(SslContext sslCtx){
@@ -42,10 +47,27 @@ public class MqttClientInitializer  extends ChannelInitializer<SocketChannel>{
 		//add the number codec first
 		pipeline.addLast(MqttEncoder.INSTANCE);
 		pipeline.addLast(new MqttDecoder());
-		
+		//重新连接
+		pipeline.addLast(new IdleStateHandler(MqttConstant.READ_TIMEOUT, 0, 0) );
 		//and then business logic
 		pipeline.addLast(new MqttClientHandler());
 	}
 
 	
+	/**
+	 * 连接通道
+	 * @param b
+	 */
+	static void connect(Bootstrap b){
+		b.connect().addListener(new ChannelFutureListener() {
+			
+			@Override
+			public void operationComplete(ChannelFuture future) throws Exception {
+				if(future.cause() != null){
+					handler.startTime = -1;
+					handler.println("Failed to connect : "+future.cause());
+				}
+			}
+		});
+	}
 }

@@ -84,7 +84,6 @@ public class MqttServerHandler extends SimpleChannelInboundHandler<MqttMessage>{
 //		CharBuffer charBuffer = decoder.decode(decodedMessage.payload().nioBuffer().asReadOnlyBuffer());
 		
 		CharBuffer charBuffer = decoder.decode(((MqttPublishMessage)msg).payload().nioBuffer().asReadOnlyBuffer());
-		
 		System.out.println(charBuffer.toString());
 		count++;
 		
