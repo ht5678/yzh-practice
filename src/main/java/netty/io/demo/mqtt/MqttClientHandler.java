@@ -3,14 +3,18 @@ package netty.io.demo.mqtt;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.EventLoop;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.mqtt.MqttDecoder;
 import io.netty.handler.codec.mqtt.MqttMessage;
 import io.netty.handler.codec.mqtt.MqttPublishMessage;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
+import netty.io.demo.fundamental.uptime.UptimeClient;
 
 /**
  * 
@@ -22,6 +26,8 @@ public class MqttClientHandler extends SimpleChannelInboundHandler<MqttMessage>{
 	
 	private CharsetDecoder decoder = Charset.forName("UTF-8").newDecoder();
 	private final MqttDecoder mqttDecoder = new MqttDecoder();
+	long startTime = -1;
+	
 	
 	
 	@Override
@@ -42,24 +48,59 @@ public class MqttClientHandler extends SimpleChannelInboundHandler<MqttMessage>{
 	
 	
 
+	/**
+	 * 通道开始连接
+	 */
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		// TODO Auto-generated method stub
-		super.channelActive(ctx);
+		if(startTime<0){
+			startTime = System.currentTimeMillis();
+		}
+		println("Connected to : "+ctx.channel().remoteAddress());
 	}
 
-
+	
+	/**
+	 * 通道失去连接
+	 */
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		// TODO Auto-generated method stub
-		super.channelInactive(ctx);
+		println("Disconnected from : " +ctx.channel().remoteAddress());
 	}
 
 
+	/**
+	 * 通道注销
+	 */
 	@Override
 	public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
-		// TODO Auto-generated method stub
-		super.channelUnregistered(ctx);
+		println("Sleeping for : "+UptimeClient.RECONNECT_DELAY+"s");
+		
+		final EventLoop loop = ctx.channel().eventLoop();
+		loop.schedule(new Runnable() {
+			public void run() {
+				println("Reconnecting to :"+UptimeClient.HOST+":"+UptimeClient.PORT);
+				MqttClientInitializer.connect(MqttClient.initBootstrap(new Bootstrap() , loop));
+			}
+		}, MqttConstant.RECONNECT_DELAY, TimeUnit.SECONDS);
+	}
+
+
+
+
+	@Override
+	public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+		if(!(evt instanceof IdleStateEvent)){
+			return;
+		}
+		
+		IdleStateEvent e = (IdleStateEvent)evt;
+		
+		if(e.state() == IdleState.READER_IDLE){
+			//the connection was ok but there was no traffic for last period
+			println("Disconnecting due to inbound traffic");
+			ctx.close();
+		}
 	}
 
 
@@ -72,5 +113,13 @@ public class MqttClientHandler extends SimpleChannelInboundHandler<MqttMessage>{
 	}
 	
 	
+	
+    void println(String msg) {
+        if (startTime < 0) {
+            System.err.format("[SERVER IS DOWN] %s%n", msg);
+        } else {
+            System.err.format("[UPTIME: %5ds] %s%n", (System.currentTimeMillis() - startTime) / 1000, msg);
+        }
+    }
 
 }
