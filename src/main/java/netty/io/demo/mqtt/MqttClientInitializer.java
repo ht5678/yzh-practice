@@ -48,6 +48,9 @@ public class MqttClientInitializer  extends ChannelInitializer<SocketChannel>{
 		pipeline.addLast(MqttEncoder.INSTANCE);
 		pipeline.addLast(new MqttDecoder());
 		//重新连接
+		//readerIdleTimeSeconds, 读超时. 即当在指定的时间间隔内没有从 Channel 读取到数据时, 会触发一个 READER_IDLE 的 IdleStateEvent 事件.
+		//writerIdleTimeSeconds, 写超时. 即当在指定的时间间隔内没有数据写入到 Channel 时, 会触发一个 WRITER_IDLE 的 IdleStateEvent 事件.
+		//allIdleTimeSeconds, 读/写超时. 即当在指定的时间间隔内没有读或写操作时, 会触发一个 ALL_IDLE 的 IdleStateEvent 事件.
 		pipeline.addLast(new IdleStateHandler(MqttConstant.READ_TIMEOUT, 0, 0) );
 		//and then business logic
 		pipeline.addLast(new MqttClientHandler());

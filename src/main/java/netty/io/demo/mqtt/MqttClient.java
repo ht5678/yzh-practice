@@ -3,19 +3,14 @@ package netty.io.demo.mqtt;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import javax.net.ssl.SSLException;
-
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.UnpooledByteBufAllocator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.mqtt.MqttFixedHeader;
 import io.netty.handler.codec.mqtt.MqttMessageType;
@@ -107,14 +102,17 @@ public class MqttClient {
     			lastWriteFuture.sync();
     		}
     		
+//    		ch.close().sync();
+    		
 			//print out the answer
 //			System.err.format("mqtt of %,d is: %,d", COUNT, handler);
 			
 		} catch (Exception e) {
-			e.printStackTrace();
-		}finally{
-			group.shutdownGracefully();
+			System.out.println(e.getMessage());
 		}
+//		finally{
+//			group.shutdownGracefully();
+//		}
 		
 		return b;
 	}

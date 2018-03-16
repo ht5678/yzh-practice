@@ -80,14 +80,19 @@ public class MqttClientHandler extends SimpleChannelInboundHandler<MqttMessage>{
 		loop.schedule(new Runnable() {
 			public void run() {
 				println("Reconnecting to :"+UptimeClient.HOST+":"+UptimeClient.PORT);
-				MqttClientInitializer.connect(MqttClient.initBootstrap(new Bootstrap() , loop));
+				Bootstrap b = new Bootstrap();
+				MqttClient.initBootstrap(b , loop);
+//				MqttClientInitializer.connect(b);
 			}
 		}, MqttConstant.RECONNECT_DELAY, TimeUnit.SECONDS);
 	}
 
 
 
-
+	
+	/**
+	 * 
+	 */
 	@Override
 	public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
 		if(!(evt instanceof IdleStateEvent)){
