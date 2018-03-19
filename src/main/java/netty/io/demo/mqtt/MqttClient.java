@@ -110,9 +110,9 @@ public class MqttClient {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-//		finally{
-//			group.shutdownGracefully();
-//		}
+		finally{
+			group.shutdownGracefully();
+		}
 		
 		return b;
 	}

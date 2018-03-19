@@ -9,6 +9,7 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.EventLoop;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.handler.codec.mqtt.MqttDecoder;
 import io.netty.handler.codec.mqtt.MqttMessage;
 import io.netty.handler.codec.mqtt.MqttPublishMessage;
@@ -81,8 +82,8 @@ public class MqttClientHandler extends SimpleChannelInboundHandler<MqttMessage>{
 			public void run() {
 				println("Reconnecting to :"+UptimeClient.HOST+":"+UptimeClient.PORT);
 				Bootstrap b = new Bootstrap();
-				MqttClient.initBootstrap(b , loop);
-//				MqttClientInitializer.connect(b);
+//				MqttClient.initBootstrap(b , loop);
+				MqttClient.initBootstrap(b ,new NioEventLoopGroup());
 			}
 		}, MqttConstant.RECONNECT_DELAY, TimeUnit.SECONDS);
 	}

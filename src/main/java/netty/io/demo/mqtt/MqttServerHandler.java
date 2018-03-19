@@ -57,13 +57,13 @@ public class MqttServerHandler extends SimpleChannelInboundHandler<MqttMessage>{
         ctx.writeAndFlush(createPublishMessage("Welcome to " + InetAddress.getLocalHost().getHostName() + "!\r\n"   +   "It is " + new Date() + " now.\r\n"));
 //        ctx.flush();
 		
-//		channels.add(ctx.channel());
-//		
+		channels.add(ctx.channel());
+		
 //		if(list.size()<10){
 //			list.add(ctx.channel());
 //		}
-//		
-//		System.out.println("在线用户数:"+channels.size()+" : 消息数 : "+count + "");
+		
+		System.out.println("在线用户数:"+channels.size()+" : 消息数 : "+count + "");
 	}
 	
 	
@@ -72,8 +72,6 @@ public class MqttServerHandler extends SimpleChannelInboundHandler<MqttMessage>{
 	
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, MqttMessage msg) throws Exception {
-		
-		
 //		final List<Object> out = new LinkedList<Object>();
 //        mqttDecoder.decode(ctx, msg, out);
 //        final MqttPublishMessage decodedMessage = (MqttPublishMessage) out.get(0);
@@ -87,12 +85,11 @@ public class MqttServerHandler extends SimpleChannelInboundHandler<MqttMessage>{
 		System.out.println(charBuffer.toString());
 		count++;
 		
-		if(channels.size()>0){
-			for(Channel c : channels){
-				if(c!=null && c.isActive() && c.isWritable()){
-					c.writeAndFlush(msg);
-//					c.write(msg);
-				}
+		for(Channel c : channels){
+			if(c!=ctx.channel()){
+				c.writeAndFlush(createPublishMessage("["+ctx.channel().remoteAddress()+"] "+msg+'\n'));
+			}else{
+				c.writeAndFlush(createPublishMessage("[you] "+ msg + '\n'));
 			}
 		}
 		
