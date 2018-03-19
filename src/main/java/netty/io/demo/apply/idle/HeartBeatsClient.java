@@ -46,7 +46,6 @@ public class HeartBeatsClient {
                 }
             };
             
-            ChannelFuture future;
             //进行连接
             try {
                 synchronized (boot) {
@@ -59,11 +58,11 @@ public class HeartBeatsClient {
                         }
                     });
 
-                    future = boot.connect(host,port);
+                    IdleConstant.future = boot.connect(host,port);
                 }
 
                 // 以下代码在synchronized同步块外面是安全的
-                future.sync();
+                IdleConstant.future.sync();
             } catch (Throwable t) {
                 throw new Exception("connects to  fails", t);
             }
@@ -83,6 +82,11 @@ public class HeartBeatsClient {
             }
         }
         new HeartBeatsClient().connect(port, "127.0.0.1");
+        for(int i = 0 ; i<500;i++){
+        	Thread.sleep(7000);
+        	System.out.println("-----------------------"+IdleConstant.future);
+        	IdleConstant.future.channel().writeAndFlush("test1");
+        }
     }
 
 }

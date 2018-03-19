@@ -82,10 +82,10 @@ public abstract class ConnectionWatchdog extends ChannelInboundHandlerAdapter im
                     ch.pipeline().addLast(handlers());
                 }
             });
-            future = bootstrap.connect(host,port);
+            IdleConstant.future = bootstrap.connect(host,port);
         }
         //future对象
-        future.addListener(new ChannelFutureListener() {
+        IdleConstant.future.addListener(new ChannelFutureListener() {
 
             public void operationComplete(ChannelFuture f) throws Exception {
                 boolean succeed = f.isSuccess();
