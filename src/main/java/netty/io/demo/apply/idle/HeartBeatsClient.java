@@ -88,7 +88,7 @@ public class HeartBeatsClient {
                 // 采用默认值
             }
         }
-        new HeartBeatsClient().connect(port, "127.0.0.1");
+        new HeartBeatsClient().connect(port, "10.250.0.30");
 //        for(int i = 0 ; i<500;i++){
 //        	Thread.sleep(7000);
 //        	System.out.println("-----------------------"+IdleConstant.future);
