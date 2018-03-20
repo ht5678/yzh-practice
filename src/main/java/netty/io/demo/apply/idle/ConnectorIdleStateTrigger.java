@@ -21,7 +21,8 @@ public class ConnectorIdleStateTrigger extends ChannelInboundHandlerAdapter {
             IdleState state = ((IdleStateEvent) evt).state();
             if (state == IdleState.WRITER_IDLE) {
                 // write heartbeat to server
-                ctx.writeAndFlush(HEARTBEAT_SEQUENCE.duplicate());
+                ctx.writeAndFlush(MqttUtils.createPublishMessage("Heartbeat"));
+//            	ctx.writeAndFlush(HEARTBEAT_SEQUENCE.duplicate());
             }
         } else {
             super.userEventTriggered(ctx, evt);

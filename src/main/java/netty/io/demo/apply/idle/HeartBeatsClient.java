@@ -1,21 +1,24 @@
 package netty.io.demo.apply.idle;
 
+import java.util.concurrent.TimeUnit;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.compression.ZlibCodecFactory;
+import io.netty.handler.codec.compression.ZlibWrapper;
+import io.netty.handler.codec.mqtt.MqttDecoder;
+import io.netty.handler.codec.mqtt.MqttEncoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.HashedWheelTimer;
-
-import java.util.concurrent.TimeUnit;
 
 public class HeartBeatsClient {
     
@@ -37,10 +40,14 @@ public class HeartBeatsClient {
                 public ChannelHandler[] handlers() {
                     return new ChannelHandler[] {
                             this,
+//                            ZlibCodecFactory.newZlibDecoder(ZlibWrapper.GZIP),
+//                            ZlibCodecFactory.newZlibEncoder(ZlibWrapper.GZIP),
+//                            new StringDecoder(),
+//                            new StringEncoder(),
+                            MqttEncoder.INSTANCE,
+                            new MqttDecoder(),
                             new IdleStateHandler(0, 4, 0, TimeUnit.SECONDS),
                             idleStateTrigger,
-                            new StringDecoder(),
-                            new StringEncoder(),
                             new HeartBeatClientHandler()
                     };
                 }
@@ -82,11 +89,11 @@ public class HeartBeatsClient {
             }
         }
         new HeartBeatsClient().connect(port, "127.0.0.1");
-        for(int i = 0 ; i<500;i++){
-        	Thread.sleep(7000);
-        	System.out.println("-----------------------"+IdleConstant.future);
-        	IdleConstant.future.channel().writeAndFlush("test1");
-        }
+//        for(int i = 0 ; i<500;i++){
+//        	Thread.sleep(7000);
+//        	System.out.println("-----------------------"+IdleConstant.future);
+//        	IdleConstant.future.channel().writeAndFlush(MqttUtils.createPublishMessage("test1"));
+//        }
     }
 
 }

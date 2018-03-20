@@ -71,7 +71,6 @@ public abstract class ConnectionWatchdog extends ChannelInboundHandlerAdapter im
 
     public void run(Timeout timeout) throws Exception {
         
-        ChannelFuture future;
         //bootstrap已经初始化好了，只需要将handler填入就可以了
         synchronized (bootstrap) {
             bootstrap.handler(new ChannelInitializer<Channel>() {

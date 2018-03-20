@@ -1,11 +1,10 @@
 package netty.io.demo.apply.idle;
 
+import java.util.Date;
+
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.util.ReferenceCountUtil;
-
-import java.util.Date;
 
 @Sharable
 public class HeartBeatClientHandler extends ChannelInboundHandlerAdapter {
@@ -27,12 +26,12 @@ public class HeartBeatClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        String message = (String) msg;
-        System.out.println(message);
-        if (message.equals("Heartbeat")) {
-            ctx.write("has read message from server");
-            ctx.flush();
-        }
-        ReferenceCountUtil.release(msg);
+//        String message = (String) msg;
+//        System.out.println(message);
+//        if (message.equals("Heartbeat")) {
+//            ctx.write(MqttUtils.createPublishMessage("has read message from server"));
+//            ctx.flush();
+//        }
+//        ReferenceCountUtil.release(msg);
     }
 }
