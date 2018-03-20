@@ -40,8 +40,8 @@ public class HeartBeatsClient {
                 public ChannelHandler[] handlers() {
                     return new ChannelHandler[] {
                             this,
-//                            ZlibCodecFactory.newZlibDecoder(ZlibWrapper.GZIP),
-//                            ZlibCodecFactory.newZlibEncoder(ZlibWrapper.GZIP),
+                            ZlibCodecFactory.newZlibDecoder(ZlibWrapper.GZIP),
+                            ZlibCodecFactory.newZlibEncoder(ZlibWrapper.GZIP),
 //                            new StringDecoder(),
 //                            new StringEncoder(),
                             MqttEncoder.INSTANCE,

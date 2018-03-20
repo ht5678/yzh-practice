@@ -37,8 +37,8 @@ public class HeartBeatServer {
                     .channel(NioServerSocketChannel.class).handler(new LoggingHandler(LogLevel.INFO))
                     .localAddress(new InetSocketAddress(port)).childHandler(new ChannelInitializer<SocketChannel>() {
                         protected void initChannel(SocketChannel ch) throws Exception {
-//                            ch.pipeline().addLast(ZlibCodecFactory.newZlibEncoder(ZlibWrapper.GZIP));
-//                            ch.pipeline().addLast(ZlibCodecFactory.newZlibDecoder(ZlibWrapper.GZIP));
+                            ch.pipeline().addLast(ZlibCodecFactory.newZlibEncoder(ZlibWrapper.GZIP));
+                            ch.pipeline().addLast(ZlibCodecFactory.newZlibDecoder(ZlibWrapper.GZIP));
                     		ch.pipeline().addLast(MqttEncoder.INSTANCE);
                     		ch.pipeline().addLast(new MqttDecoder());
 //                            ch.pipeline().addLast(new StringDecoder());
