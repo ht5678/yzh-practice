@@ -21,15 +21,7 @@ public class TestDemo {
     public static void main(String[] args) throws Exception{  
     	
     	for(int m =0 ; m<5 ; m++){
-	    	//测试组1
-	        CyclicBarrier barrier = new CyclicBarrier(size, new Runnable() {  
-	            //栅栏动作，在计数器为0的时候执行  
-	            @Override  
-	            public void run() {  
-	                System.out.println("我们都准备好了.");  
-	            }  
-	        });  
-	          
+	        CyclicBarrier barrier = new CyclicBarrier(size);  
 	        ExecutorService es = Executors.newCachedThreadPool();  
 	        for (int i = 0; i < size; i++) {  
 	            es.execute(new Roommate(barrier));  
@@ -53,9 +45,7 @@ class Roommate implements Runnable {
   
     @Override  
     public void run() {  
-        System.out.println(id + " : 我到了");  
         try {  
-            //通知barrier，已经完成动作，在等待  
             barrier.await();  
             new HeartBeatsClient().connect(8080, "10.250.0.30");
         } catch (Exception e) {  
