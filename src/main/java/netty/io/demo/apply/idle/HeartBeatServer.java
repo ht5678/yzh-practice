@@ -43,7 +43,7 @@ public class HeartBeatServer {
                     		ch.pipeline().addLast(new MqttDecoder());
 //                            ch.pipeline().addLast(new StringDecoder());
 //                            ch.pipeline().addLast(new StringEncoder());
-                    		ch.pipeline().addLast(new IdleStateHandler(5, 0, 0, TimeUnit.SECONDS));
+                    		ch.pipeline().addLast(new IdleStateHandler(200, 0, 0, TimeUnit.SECONDS));
                             ch.pipeline().addLast(idleStateTrigger);
                     		ch.pipeline().addLast(new HeartBeatServerHandler());
                         };

@@ -46,7 +46,7 @@ public class HeartBeatsClient {
 //                            new StringEncoder(),
                             MqttEncoder.INSTANCE,
                             new MqttDecoder(),
-                            new IdleStateHandler(0, 4, 0, TimeUnit.SECONDS),
+                            new IdleStateHandler(0, 180, 0, TimeUnit.SECONDS),
                             idleStateTrigger,
                             new HeartBeatClientHandler()
                     };

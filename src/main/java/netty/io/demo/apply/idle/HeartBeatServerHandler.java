@@ -20,6 +20,8 @@ public class HeartBeatServerHandler
 	
 	private CharsetDecoder decoder = Charset.forName("UTF-8").newDecoder();
 	
+	private int count = 0;
+	
 	static final ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 	
 
@@ -35,11 +37,15 @@ public class HeartBeatServerHandler
 
 	@Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        System.out.println("server channelRead..");
 //        System.out.println(ctx.channel().remoteAddress() + "->Server :" + msg.toString());
         try{
-	        CharBuffer charBuffer = decoder.decode(((MqttPublishMessage)msg).payload().nioBuffer().asReadOnlyBuffer());
-			System.out.println("共有"+channels.size()+"个客户端连接 : "+charBuffer.toString());
+        	count++;
+        	if(count==100){
+        		System.out.println("server channelRead..");
+        		count=0;
+    	        CharBuffer charBuffer = decoder.decode(((MqttPublishMessage)msg).payload().nioBuffer().asReadOnlyBuffer());
+    			System.out.println("共有"+channels.size()+"个客户端连接 : "+charBuffer.toString());
+        	}
         }catch(Exception e){
         	e.printStackTrace();
         }

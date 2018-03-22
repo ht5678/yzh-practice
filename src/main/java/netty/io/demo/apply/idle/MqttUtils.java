@@ -31,6 +31,7 @@ public class MqttUtils {
         MqttPublishVariableHeader mqttPublishVariableHeader = new MqttPublishVariableHeader("/abc", 1234);
         ByteBuf payload =  ALLOCATOR.buffer();
         payload.writeBytes(message.getBytes(CharsetUtil.UTF_8));
+        payload.clear();
         return new MqttPublishMessage(mqttFixedHeader, mqttPublishVariableHeader, payload);
     }
 	
