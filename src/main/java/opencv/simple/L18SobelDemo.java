@@ -79,7 +79,7 @@ import org.opencv.imgproc.Imgproc;
  * @author sdwhy
  *
  */
-public class SobelDemo {
+public class L18SobelDemo {
 	
 	
 	
@@ -91,7 +91,7 @@ public class SobelDemo {
 	    	System.out.println("图片地址不存在");
 	    	return;
 	    }
-	    
+	    //sobel算子对噪声敏感 , 容易受到影响 , 所以使用高斯模糊平滑降噪
 	    Mat blur = new Mat(src.size(),src.type());
 	    Mat gray = new Mat(src.size(),src.type());
 	    Imgproc.GaussianBlur(src, blur, new Size(3, 3), 0,0);
@@ -102,14 +102,21 @@ public class SobelDemo {
 	    Mat xgrad = new Mat(src.size(),src.type());
 	    Mat ygrad = new Mat(src.size(),src.type());
 	    
-	    Imgproc.Sobel(gray, xgrad,CvType.CV_16S, 1, 0);
-	    Imgproc.Sobel(gray, ygrad,CvType.CV_16S, 0, 1);
+	    //Sobel算子
+//	    Imgproc.Sobel(src, dst, ddepth, dx, dy, ksize, scale, delta);
+//	    Imgproc.Sobel(gray, xgrad,CvType.CV_16S, 1, 0);
+//	    Imgproc.Sobel(gray, ygrad,CvType.CV_16S, 0, 1);
 	    
+	    //sobel加强版 , 可以不害怕噪声影响
+	    Imgproc.Scharr(gray, xgrad,CvType.CV_16S, 1, 0);
+	    Imgproc.Scharr(gray, ygrad,CvType.CV_16S, 0, 1);
+	    
+	    //全变成正的
 	    Core.convertScaleAbs(xgrad, xgrad);
 	    Core.convertScaleAbs(ygrad, ygrad);
 	    
-	    Imgcodecs.imwrite("d://pics/sobel_xgray.jpg", xgrad);
-	    Imgcodecs.imwrite("d://pics/sobel_ygray.jpg", ygrad);
+	    Imgcodecs.imwrite("d://pics/sobel_xgray.jpg", xgrad);//x方向梯度
+	    Imgcodecs.imwrite("d://pics/sobel_ygray.jpg", ygrad);//y方向梯度
 	    
 	    Mat xygrad = new Mat(src.size(),src.type());
 	    Core.addWeighted(xgrad, 0.5, ygrad, 0.5, 0, xygrad);
