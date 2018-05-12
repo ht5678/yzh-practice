@@ -27,7 +27,7 @@ import org.opencv.imgproc.Imgproc;
  * @author sdwhy
  *
  */
-public class BlurDemo {
+public class L9BlurDemo {
 	
 	
 	public static void main(String[] args) {
