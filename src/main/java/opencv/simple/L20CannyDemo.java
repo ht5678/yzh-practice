@@ -50,14 +50,13 @@ public class L20CannyDemo {
 	    Imgproc.blur(gray, gray, new Size(3,3) ,new Point(-1, -1) , Core.BORDER_DEFAULT);
 	    
 	    //t1Value的值越大 , 保留的细节越少 , 受噪声影响越小
-	    int t1Value = 100;
+	    int t1Value = 50;
 	    int t2Value=255;//用于有滑动条的时候 , 方便看效果
 	    Imgproc.Canny(gray, edgeOut, t1Value, t1Value*2, 3, false);
 	    
 	    Mat dst = new Mat(src.size(),src.type());
-	    src.copyTo(dst, edgeOut);//这个操作是 , 将计算出来的边缘点的像素赋值回去 , 变成彩色
+//	    src.copyTo(dst, edgeOut);//这个操作是 , 将计算出来的边缘点的像素赋值回去 , 变成彩色 , 否则看到黑白色的
 	    Imgcodecs.imwrite("d://pics/canny.jpg", dst);
-	    
 	}
 
 }
