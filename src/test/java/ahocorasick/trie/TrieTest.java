@@ -27,7 +27,7 @@ public class TrieTest
     {
         Trie trie = new Trie(false);
         trie.addKeyword("中国");
-        Collection<Emit> emits = trie.parseText("我爱中国");
+        Collection<Emit> emits = trie.parseText("我爱中,国");
         Iterator<Emit> iterator = emits.iterator();
         checkEmit(iterator.next(), 1, 3, "abc");
     }
