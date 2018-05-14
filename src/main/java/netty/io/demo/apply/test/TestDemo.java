@@ -23,10 +23,11 @@ public class TestDemo {
             	
             	String host =args[0];
                 int port = Integer.valueOf(args[1]);
+                int group = Integer.valueOf(args[2]);
     	
                 System.out.println(host+":"+port);
                 
-		    	for(int m =0 ; m<5 ; m++){
+		    	for(int m =0 ; m<group ; m++){
 			        CyclicBarrier barrier = new CyclicBarrier(size);  
 			        ExecutorService es = Executors.newCachedThreadPool();  
 			        for (int i = 0; i < size; i++) {  
