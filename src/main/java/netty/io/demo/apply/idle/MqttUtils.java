@@ -27,7 +27,23 @@ public class MqttUtils {
 	 */
 	public static MqttPublishMessage createPublishMessage(String message) {
         MqttFixedHeader mqttFixedHeader =
-                new MqttFixedHeader(MqttMessageType.PUBLISH, false, MqttQoS.AT_LEAST_ONCE, true, 0);
+                new MqttFixedHeader(MqttMessageType.CONNECT, false, MqttQoS.AT_LEAST_ONCE, true, 0);
+        MqttPublishVariableHeader mqttPublishVariableHeader = new MqttPublishVariableHeader("/abc", 1234);
+        ByteBuf payload =  ALLOCATOR.buffer();
+        payload.writeBytes(message.getBytes(CharsetUtil.UTF_8));
+        payload.clear();
+        return new MqttPublishMessage(mqttFixedHeader, mqttPublishVariableHeader, payload);
+    }
+	
+	
+	/**
+	 * 包装mqtt协议消息
+	 * @param message
+	 * @return
+	 */
+	public static MqttPublishMessage createPublishMessage(MqttMessageType type ,String message) {
+        MqttFixedHeader mqttFixedHeader =
+                new MqttFixedHeader(type, false, MqttQoS.AT_LEAST_ONCE, true, 0);
         MqttPublishVariableHeader mqttPublishVariableHeader = new MqttPublishVariableHeader("/abc", 1234);
         ByteBuf payload =  ALLOCATOR.buffer();
         payload.writeBytes(message.getBytes(CharsetUtil.UTF_8));
