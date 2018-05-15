@@ -51,7 +51,7 @@ import org.opencv.imgproc.Imgproc;
  * @author sdwhy
  *
  */
-public class L21HoughDemo {
+public class L21HoughLineDemo {
 	
 	
 	public static void main(String[] args) {
