@@ -48,19 +48,19 @@ public class L23RemapDemo {
 	    Mat dst = new Mat(src.size() ,src.type());
 	    
 	    updateMap(matX, matY, src, 0);
-	    Imgproc.remap(src, dst, matX, matY, Imgproc.INTER_LINEAR, Core.BORDER_CONSTANT, new Scalar(255, 255, 255));
+	    Imgproc.remap(src, dst, matX, matY, Imgproc.INTER_LINEAR, Core.BORDER_CONSTANT, new Scalar(0, 255, 255));
 	    Imgcodecs.imwrite("d://pics/remapIndex0.jpg", dst);
 	    
 	    updateMap(matX, matY, src, 1);
-	    Imgproc.remap(src, dst, matX, matY, Imgproc.INTER_LINEAR, Core.BORDER_CONSTANT, new Scalar(255, 255, 255));
+	    Imgproc.remap(src, dst, matX, matY, Imgproc.INTER_LINEAR, Core.BORDER_CONSTANT, new Scalar(0, 255, 255));
 	    Imgcodecs.imwrite("d://pics/remapIndex1.jpg", dst);
 	    
 	    updateMap(matX, matY, src, 2);
-	    Imgproc.remap(src, dst, matX, matY, Imgproc.INTER_LINEAR, Core.BORDER_CONSTANT, new Scalar(255, 255, 255));
+	    Imgproc.remap(src, dst, matX, matY, Imgproc.INTER_LINEAR, Core.BORDER_CONSTANT, new Scalar(0, 255, 255));
 	    Imgcodecs.imwrite("d://pics/remapIndex2.jpg", dst);
 	    
 	    updateMap(matX, matY, src, 3);
-	    Imgproc.remap(src, dst, matX, matY, Imgproc.INTER_LINEAR, Core.BORDER_CONSTANT, new Scalar(255, 255, 255));
+	    Imgproc.remap(src, dst, matX, matY, Imgproc.INTER_LINEAR, Core.BORDER_CONSTANT, new Scalar(0, 255, 255));
 	    Imgcodecs.imwrite("d://pics/remapIndex3.jpg", dst);
 	    
 	}
@@ -72,24 +72,24 @@ public class L23RemapDemo {
 		for(int row =0;row<src.rows();row++){
 			for(int col=0;col<src.cols();col++){
 				switch (index) {
-				case 0:
-					if(col>(src.cols()*0.25) && col < (src.cols()*0.75) && row > (src.rows()*0.25) && row<(src.rows()*0.75)){
-						matX.put(row, col,2 * (col - (src.cols()*0.25)+0.5));
-						matY.put(row, col,2 * (row - (src.rows()*0.25)+0.5));
+				case 0://缩小一半
+					if(col>(src.cols()*0.25) && col <= (src.cols()*0.75) && row > (src.rows()*0.25) && row<=(src.rows()*0.75)){
+						matX.put(row, col,2 * (col - (src.cols()*0.25)));
+						matY.put(row, col,2 * (row - (src.rows()*0.25)));
 					}else{
 						matX.put(row, col, 0);
 						matY.put(row, col, 0);
 					}
 					break;
-				case 1:
+				case 1://左右互换
 					matX.put(row, col, (src.cols()-col-1));
 					matY.put(row, col, row);
 					break;
-				case 2:
+				case 2://上下互换
 					matX.put(row, col, col);
 					matY.put(row, col, (src.rows()-row-1));
 					break;
-				case 3:
+				case 3://上下左右互换
 					matX.put(row, col, (src.cols()-col-1));
 					matY.put(row, col, (src.rows()-row-1));
 					break;
