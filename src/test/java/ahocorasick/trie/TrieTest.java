@@ -26,8 +26,10 @@ public class TrieTest
     public void textIsLongerThanKeyword()
     {
         Trie trie = new Trie(false);
-        trie.addKeyword("中国");
-        Collection<Emit> emits = trie.parseText("我爱中,国");
+        trie.addKeyword("中天");
+        trie.addKeyword("爱中");
+        trie.addKeyword("我爱");
+        Collection<Emit> emits = trie.parseText("我爱中国");
         Iterator<Emit> iterator = emits.iterator();
         checkEmit(iterator.next(), 1, 3, "abc");
     }

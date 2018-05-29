@@ -59,7 +59,7 @@ public class L25CalcHistDemo {
 	    }
 	    
 	    //分通道显示
-	    final List<Mat> bgrPlanets = new ArrayList<>();
+	    List<Mat> bgrPlanets = new ArrayList<>();
 	    Core.split(src , bgrPlanets);
 	    
 	    List<Mat> bPlanets = new ArrayList<Mat>();
@@ -71,16 +71,31 @@ public class L25CalcHistDemo {
 	    List<Mat> rPlanets = new ArrayList<Mat>();
 	    rPlanets.add(bgrPlanets.get(2));
 	    
+	    List<Mat> list = new ArrayList<Mat>();
+	    list.add(src);
+	    
 	    int histSize = 256;
 	    float[] range = {0,256};
 	    float[][] histRanges = {range};
-
+//
 	    Mat bHist = new Mat();
 		Mat gHist = new Mat();
 		Mat rHist = new Mat();
-		Imgproc.calcHist(bPlanets, new MatOfInt(1), new Mat(), bHist, new MatOfInt(histSize), new MatOfFloat(range), true);
-		Imgproc.calcHist(gPlanets, new MatOfInt(1), new Mat(), gHist, new MatOfInt(histSize), new MatOfFloat(range), true);
-		Imgproc.calcHist(rPlanets, new MatOfInt(1), new Mat(), rHist, new MatOfInt(histSize), new MatOfFloat(range), true);
+//		
+//		Mat mat = bPlanets.get(0);
+//		for(int i = 0 ;i <mat.rows();i++){
+//			for(int m=0;m<mat.cols();m++){
+//				double[] items = mat.get(i, m);
+//				System.out.println(items[0]);	
+//				if(items[0]<0){
+//					System.out.println();
+//				}
+//			}
+//		}
+		
+		Imgproc.calcHist(bgrPlanets, new MatOfInt(0), new Mat(), bHist, new MatOfInt(histSize), new MatOfFloat(range), false);
+		Imgproc.calcHist(bgrPlanets, new MatOfInt(1), new Mat(), gHist, new MatOfInt(histSize), new MatOfFloat(range), false);
+		Imgproc.calcHist(bgrPlanets, new MatOfInt(2), new Mat(), rHist, new MatOfInt(histSize), new MatOfFloat(range), false);
 		
 		
 		int histH = 400;
@@ -92,16 +107,17 @@ public class L25CalcHistDemo {
 		Core.normalize(gHist, gHist, 0, histH, Core.NORM_MINMAX,-1 , new Mat());
 		Core.normalize(rHist, rHist, 0, histH, Core.NORM_MINMAX,-1 , new Mat());
 		
+		
 		//render histogram chart
 		for(int i =0;i<histSize;i++){
 			Imgproc.line(histImage, new Point((i-1)*binW , histH-Math.round(bHist.get(i-1, 0)[0])), 
-					new Point(i*binW , histH-Math.round(bHist.get(i-1, 0)[0])), new Scalar(255,0,0), 2, Core.LINE_AA, 0);
+					new Point(i*binW , histH-Math.round(bHist.get(i, 0)[0])), new Scalar(255,0,0), 2, Core.LINE_AA, 0);
 			
 			Imgproc.line(histImage, new Point((i-1)*binW , histH-Math.round(gHist.get(i-1, 0)[0])), 
-					new Point(i*binW , histH-Math.round(gHist.get(i-1, 0)[0])), new Scalar(255,0,0), 2, Core.LINE_AA, 0);
+					new Point(i*binW , histH-Math.round(gHist.get(i, 0)[0])), new Scalar(0,255,0), 2, Core.LINE_AA, 0);
 			
 			Imgproc.line(histImage, new Point((i-1)*binW , histH-Math.round(rHist.get(i-1, 0)[0])), 
-					new Point(i*binW , histH-Math.round(rHist.get(i-1, 0)[0])), new Scalar(255,0,0), 2, Core.LINE_AA, 0);
+					new Point(i*binW , histH-Math.round(rHist.get(i, 0)[0])), new Scalar(0,0,255), 2, Core.LINE_AA, 0);
 		}
 		Imgcodecs.imwrite("d://pics/histImage.jpg", histImage);
 	}
