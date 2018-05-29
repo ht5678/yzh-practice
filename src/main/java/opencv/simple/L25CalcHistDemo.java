@@ -51,7 +51,7 @@ public class L25CalcHistDemo {
 	
 	public static void main(String[] args) {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-	    Mat src = Imgcodecs.imread("d://pics/151515.jpg");
+	    Mat src = Imgcodecs.imread("d://pics/161616.jpg");
 	    
 	    if(src.empty()){
 	    	System.out.println("图片地址不存在");
