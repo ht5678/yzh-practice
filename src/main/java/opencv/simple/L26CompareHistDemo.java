@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfFloat;
 import org.opencv.core.MatOfInt;
+import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -62,10 +65,15 @@ public class L26CompareHistDemo {
 		float[] sRanges = {0,256};
 		float[][] ranges = {hRanges,sRanges};
 		
+		Mat histBase = new Mat();
 		List<Mat> list1 = new ArrayList<>();
 		list1.add(src);
-		Imgproc.calcHist(list1, new MatOfInt(0), new Mat(), hist, histSize, ranges);
+		Imgproc.calcHist(list1, new MatOfInt(0), new Mat(), histBase, new MatOfInt(histSize), new MatOfFloat(sRanges), false);
+		Core.normalize(histBase, histBase, 0, 1, Core.NORM_MINMAX,-1,new Mat());
 		
+		double basebase = Imgproc.compareHist(histBase, histBase, Imgproc.CV_COMP_CORREL);
+		
+		Imgproc.putText(histBase, basebase+"", new Point(50,50), , fontScale, color);
 		
 	}
 	
