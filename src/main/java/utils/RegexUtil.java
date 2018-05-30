@@ -15,8 +15,10 @@ public class RegexUtil {
 	
 	
 	public static void main(String[] args) {
-		String str = "abfoewqajfiaf<a href=\"www.google.com\">google</a>is the bestest search engine .<font color='red'>text button</font> i like it ,[[ubb]][[\\ubb]],texst mall price , [ttt] , fdasfdsafd[tt][/tt]";
-        Pattern pattern = Pattern.compile("(<[^>]+>)");
+		String str = "abfoewqajfiaf<a href=\"www.google.com\">google</a>is the bestest search engine .<font color='red'>text button</font> i like it ,[[ubb]][[\\ubb]],texst mall price , [ttt] , fdasfdsafd[tt][/tt],,,发送<a href='https://bbs.thinkpad.com/thread-4469186-1-1.html' target=_blank>https://bbs.thinkpad.com/thread-4469186-1-1.html</a>mmmmhttp://www.baidu.com/index.php xxhttp://clubimg.lenovo.com.cn/pic/10596075443072/0法官";
+//     Pattern pattern = Pattern.compile("(<[^>]+>)");					//<>标签
+//		Pattern pattern = Pattern.compile("(\\[[^\\]]+\\])");		//[]ubb标签
+        Pattern pattern = Pattern.compile("(<[^>]+>|\\[[^\\]]+\\]|(https|http)://[\\d\\w\\.\\/\\-\\?\\=]+)");		//http,https请求
         Matcher matcher = pattern.matcher(str);
 
         List<MatchModel> matchList = new ArrayList<>();
