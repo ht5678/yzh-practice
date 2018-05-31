@@ -9,6 +9,9 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfFloat;
 import org.opencv.core.MatOfInt;
 import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.features2d.Feature2D;
+import org.opencv.features2d.Features2d;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -73,7 +76,18 @@ public class L26CompareHistDemo {
 		
 		double basebase = Imgproc.compareHist(histBase, histBase, Imgproc.CV_COMP_CORREL);
 		
-		Imgproc.putText(histBase, basebase+"", new Point(50,50), , fontScale, color);
+		//CV_FONT_HERSHEY_SIMPLEX - 正常大小无衬线字体。
+		//CV_FONT_HERSHEY_PLAIN - 小号无衬线字体。
+		//CV_FONT_HERSHEY_DUPLEX - 正常大小无衬线字体。( 比CV_FONT_HERSHEY_SIMPLEX更复杂)
+		//CV_FONT_HERSHEY_COMPLEX - 正常大小有衬线字体。
+		//CV_FONT_HERSHEY_TRIPLEX - 正常大小有衬线字体 ( 比CV_FONT_HERSHEY_COMPLEX更复杂)
+		//CV_FONT_HERSHEY_COMPLEX_SMALL - CV_FONT_HERSHEY_COMPLEX 的小译本。
+		//CV_FONT_HERSHEY_SCRIPT_SIMPLEX - 手写风格字体。
+		//CV_FONT_HERSHEY_SCRIPT_COMPLEX - 比CV_FONT_HERSHEY_SCRIPT_SIMPLEX更复杂。
+		//这个参数能够由一个值和可选择的CV_FONT_ITALIC字体标记合成，就是斜体字。
+		Imgproc.putText(histBase, basebase+"", new Point(50,50), Core.FONT_HERSHEY_COMPLEX, 1, new Scalar(0, 0, 255),2,Core.LINE_AA,false);
+
+		Imgcodecs.imwrite("d://pics/compareHist.jpg", histBase);
 		
 	}
 	

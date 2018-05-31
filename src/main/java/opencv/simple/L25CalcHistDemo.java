@@ -62,17 +62,6 @@ public class L25CalcHistDemo {
 	    List<Mat> bgrPlanets = new ArrayList<>();
 	    Core.split(src , bgrPlanets);
 	    
-	    List<Mat> bPlanets = new ArrayList<Mat>();
-	    bPlanets.add(bgrPlanets.get(0));
-	    
-	    List<Mat> gPlanets = new ArrayList<Mat>();
-	    gPlanets.add(bgrPlanets.get(1));
-	    
-	    List<Mat> rPlanets = new ArrayList<Mat>();
-	    rPlanets.add(bgrPlanets.get(2));
-	    
-	    List<Mat> list = new ArrayList<Mat>();
-	    list.add(src);
 	    
 	    int histSize = 256;
 	    float[] range = {0,256};
