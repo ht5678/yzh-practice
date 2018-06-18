@@ -64,14 +64,17 @@ public class L26CompareHistDemo {
 		int sBins = 60;
 		
 		int[] histSize = {hBins , sBins};
-		float[] hRanges = {0,180};
+		float[] hRanges = {0,180,0,256};
 		float[] sRanges = {0,256};
 		float[][] ranges = {hRanges,sRanges};
+		int[] channels = {0,1};
 		
 		Mat histBase = new Mat();
 		List<Mat> list1 = new ArrayList<>();
 		list1.add(src);
-		Imgproc.calcHist(list1, new MatOfInt(0), new Mat(), histBase, new MatOfInt(histSize), new MatOfFloat(sRanges), false);
+		
+//		Core.mixChannels(list1, list2, new MatOfInt(0,0));
+		Imgproc.calcHist(list1, new MatOfInt(0,1), new Mat(), histBase, new MatOfInt(180,256), new MatOfFloat(hRanges), false);
 		Core.normalize(histBase, histBase, 0, 1, Core.NORM_MINMAX,-1,new Mat());
 		
 		double basebase = Imgproc.compareHist(histBase, histBase, Imgproc.CV_COMP_CORREL);
@@ -85,9 +88,9 @@ public class L26CompareHistDemo {
 		//CV_FONT_HERSHEY_SCRIPT_SIMPLEX - 手写风格字体。
 		//CV_FONT_HERSHEY_SCRIPT_COMPLEX - 比CV_FONT_HERSHEY_SCRIPT_SIMPLEX更复杂。
 		//这个参数能够由一个值和可选择的CV_FONT_ITALIC字体标记合成，就是斜体字。
-		Imgproc.putText(histBase, basebase+"", new Point(50,50), Core.FONT_HERSHEY_COMPLEX, 1, new Scalar(0, 0, 255),2,Core.LINE_AA,false);
+		Imgproc.putText(src, basebase+"", new Point(50,50), Core.FONT_HERSHEY_COMPLEX, 1, new Scalar(0, 0, 255),2,Core.LINE_AA,false);
 
-		Imgcodecs.imwrite("d://pics/compareHist.jpg", histBase);
+		Imgcodecs.imwrite("d://pics/compareHist.jpg", src);
 		
 	}
 	
