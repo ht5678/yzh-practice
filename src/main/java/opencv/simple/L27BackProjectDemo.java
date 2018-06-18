@@ -80,9 +80,10 @@ public class L27BackProjectDemo {
 	    	Imgproc.rectangle(
 	    			histImage, 
 	    			new Point((i-1)*binW, (histH-Math.round(hue.get(i-1, 0)[0])*(400/255))), 
-	    			new Point(i*binW, (histH-Math.round(hue.get(i, 0)[0])*(400/255))), 
+//	    			new Point(i*binW, (histH-Math.round(hue.get(i, 0)[0])*(400/255))),
+	    			new Point(i*binW, histH), 
 	    			new Scalar(0, 0, 255),
-	    			-1);
+	    			-1);		//-1代表填充矩形
 	    }
 	    
 	    Imgcodecs.imwrite("d://pics/backProjectHistImage.jpg", histImage);
