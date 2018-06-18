@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfFloat;
 import org.opencv.core.MatOfInt;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -57,15 +60,32 @@ public class L27BackProjectDemo {
 	    
 	    Core.mixChannels(srcs, hsvs, new MatOfInt(0,0));
 	   
-	    
+	    int bins = 20;	//bins可以通过tracker滚动条动态修改看效果
 	    Mat histBase = new Mat(hsv.size(),hsv.type());
-	    Imgproc.calcHist(hsvs, new MatOfInt(0), new Mat(), histBase, new MatOfInt(12), new MatOfFloat(0,180));
+	    Imgproc.calcHist(hsvs, new MatOfInt(0), new Mat(), histBase, new MatOfInt(bins), new MatOfFloat(0,180));
 	    Mat hue = new Mat(src.size(),src.type());
 	    Core.normalize(histBase, hue, 0, 256, Core.NORM_MINMAX,-1);
 	    
 	    Imgproc.calcBackProject(hsvs, new MatOfInt(0), hue, histBase, new MatOfFloat(0,180) , 1);
 	    
 	    Imgcodecs.imwrite("d://pics/backProject.jpg", histBase);
+	    
+	    int histH = 400;
+	    int histW=400;
+	    Mat histImage = new Mat(histW, histH, CvType.CV_8UC3, new Scalar(0,0,0));
+	    int binW = histW/bins;
+	    System.out.println(hue.size());
+	    System.out.println(hue.channels());
+	    for(int i = 1 ; i<bins;i++ ){
+	    	Imgproc.rectangle(
+	    			histImage, 
+	    			new Point((i-1)*binW, (histH-Math.round(hue.get(i-1, 0)[0])*(400/255))), 
+	    			new Point(i*binW, (histH-Math.round(hue.get(i, 0)[0])*(400/255))), 
+	    			new Scalar(0, 0, 255),
+	    			-1);
+	    }
+	    
+	    Imgcodecs.imwrite("d://pics/backProjectHistImage.jpg", histImage);
 	}
 	
 	
