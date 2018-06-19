@@ -43,7 +43,7 @@ import org.opencv.imgproc.Imgproc;
  * enums{
  * TIM_SQDIFF						0
  * TIM_CCORR							1
- * TIM_CCOEFF						2
+ * TIM_CCOEFF						2			算法问题, 有时候会导致失真,匹配不到
  * TIM_SQDIFF_NORMED		3
  * TIM_CCORR_NORMED			4
  * TIM_CCOEFF_NORMED		5
