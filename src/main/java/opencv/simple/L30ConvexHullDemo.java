@@ -55,7 +55,7 @@ public class L30ConvexHullDemo {
 	
 	public static void main(String[] args) {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-	    Mat src = Imgcodecs.imread("d://pics/121212.jpg");
+	    Mat src = Imgcodecs.imread("d://pics/convex.jpg");
 	    
 	    if(src.empty()){
 	    	System.out.println("图片地址不存在");
@@ -69,7 +69,7 @@ public class L30ConvexHullDemo {
 	    Imgproc.blur(gray, gray, new Size(3,3), new Point(-1,-1), Core.BORDER_DEFAULT);
 	    
 	    
-	    int thresholdValue = 100;
+	    int thresholdValue = 115;
 	    int thresholdValueMax = 255;
 	    Imgproc.threshold(gray, binOut, thresholdValue, thresholdValueMax, Imgproc.THRESH_BINARY);
 	    
@@ -78,19 +78,41 @@ public class L30ConvexHullDemo {
 	    Imgproc.findContours(binOut, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE, new Point(0,0));
 	    
 	    List<MatOfInt> convexs = new ArrayList<>(contours.size());
-	    MatOfInt convex = new MatOfInt();
 	    for(int i =0 ; i < contours.size();i++){
-	    	Imgproc.convexHull(contours.get(i), convex, false);
+	    	convexs.add(new MatOfInt());
+	    	Imgproc.convexHull(contours.get(i), convexs.get(i), false);
 	    }
 	    
+	    List<MatOfPoint> hulls = new ArrayList<>();
+	    for(int i =0;i<convexs.size();i++){
+	    	Point[] points = contours.get(i).toArray();
+	    	MatOfInt convex = convexs.get(i);
+	    	int[] indexs = convex.toArray();
+	    	MatOfPoint mop = new MatOfPoint();
+	    	
+	    	List<Point> list = new ArrayList<>();
+	    	for(int index : indexs){
+	    		list.add(points[index]);
+	    	}
+	    	mop.fromList(list);
+	    	hulls.add(mop);
+	    }
 	    
+//	    for(int j=0; j < convexs.toList().size(); j++){
+//	    	hulls.add(contours.get(k).toList().get(hullInt.toList().get(j)));
+//	    }
+	    
+//	    System.out.println(hulls.size());
+//	    System.out.println(contours.size());
+//	    System.out.println(convex.elemSize());
+//	    System.out.println(convex.get(3, 0)[0]);
 	    //绘制
 	    Mat dst = Mat.zeros(src.size(), CvType.CV_8UC3);
 	    Random rd = new Random(255);
 	    for(int i=0;i<contours.size();i++){
 	    	Scalar color = new Scalar(rd.nextInt(),rd.nextInt(),rd.nextInt());
-	    	Imgproc.drawContours(dst, contours, i, color, 2,Imgproc.LINE_8,hierarchy,0,new Point(0,0));
-//	    	Imgproc.drawContours(dst, convexs, i, color, 2,Imgproc.LINE_8,hierarchy,0,new Point(0,0));
+//	    	Imgproc.drawContours(dst, contours, i, color, 2,Imgproc.LINE_8,hierarchy,0,new Point(0,0));
+	    	Imgproc.drawContours(dst, hulls, i, color, 2,Imgproc.LINE_8,new Mat(),0,new Point(0,0));
 	    }
 	    
 	    Imgcodecs.imwrite("d://pics/convexHull.jpg", dst);
