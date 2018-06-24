@@ -69,7 +69,7 @@ public class L30ConvexHullDemo {
 	    Imgproc.blur(gray, gray, new Size(3,3), new Point(-1,-1), Core.BORDER_DEFAULT);
 	    
 	    
-	    int thresholdValue = 115;
+	    int thresholdValue = 200;
 	    int thresholdValueMax = 255;
 	    Imgproc.threshold(gray, binOut, thresholdValue, thresholdValueMax, Imgproc.THRESH_BINARY);
 	    
@@ -80,42 +80,46 @@ public class L30ConvexHullDemo {
 	    List<MatOfInt> convexs = new ArrayList<>(contours.size());
 	    for(int i =0 ; i < contours.size();i++){
 	    	convexs.add(new MatOfInt());
+	    	//convexHull第一个参数是要求凸包的点集，第二个参数是输出的凸包点，第三个参数是一个bool变量，
+	    	//表示求得的凸包是顺时针方向还是逆时针方向，true是顺时针方向。注意：第二个参数可以为vector<int>，此时返回的是凸包点在原轮廓点集中的索引，也可以为vector<Point>，此时存放的是凸包点的位置。
 	    	Imgproc.convexHull(contours.get(i), convexs.get(i), false);
 	    }
 	    
 	    List<MatOfPoint> hulls = new ArrayList<>();
+	    Random rd = new Random(255);
+	    Mat dst = Mat.zeros(src.size(), CvType.CV_8UC3);
+	    Point[] p0 =  contours.get(convexs.size()-1).toArray();
 	    for(int i =0;i<convexs.size();i++){
-	    	Point[] points = contours.get(i).toArray();
 	    	MatOfInt convex = convexs.get(i);
 	    	int[] indexs = convex.toArray();
-	    	MatOfPoint mop = new MatOfPoint();
+	    	Scalar color = new Scalar(rd.nextInt(),rd.nextInt(),rd.nextInt());
 	    	
-	    	List<Point> list = new ArrayList<>();
-	    	for(int index : indexs){
-	    		list.add(points[index]);
-	    	}
-	    	mop.fromList(list);
-	    	hulls.add(mop);
+//	    	List<Point> list = new ArrayList<>();
+//	    	for(int index : indexs){
+	    		MatOfPoint mop = contours.get(indexs[2]);
+	    		hulls.add(mop);
+//	    		list.add(points[index]);
+//	    		Imgproc.line(dst, p0[index], mop, color, 2, Core.LINE_8, 0);
+		    	
+//	    	}
+//	    	p0=points;
+//	    	mop.fromList(list);
+//	    	hulls.add(mop);
 	    }
 	    
 //	    for(int j=0; j < convexs.toList().size(); j++){
 //	    	hulls.add(contours.get(k).toList().get(hullInt.toList().get(j)));
 //	    }
-	    
-//	    System.out.println(hulls.size());
-//	    System.out.println(contours.size());
-//	    System.out.println(convex.elemSize());
-//	    System.out.println(convex.get(3, 0)[0]);
 	    //绘制
-	    Mat dst = Mat.zeros(src.size(), CvType.CV_8UC3);
-	    Random rd = new Random(255);
+	    
+//	    Random rd = new Random(255);
 	    for(int i=0;i<contours.size();i++){
 	    	Scalar color = new Scalar(rd.nextInt(),rd.nextInt(),rd.nextInt());
-//	    	Imgproc.drawContours(dst, contours, i, color, 2,Imgproc.LINE_8,hierarchy,0,new Point(0,0));
-	    	Imgproc.drawContours(dst, hulls, i, color, 2,Imgproc.LINE_8,new Mat(),0,new Point(0,0));
+	    	Imgproc.drawContours(dst, contours, i, color, 2,Imgproc.LINE_8,hierarchy,0,new Point(0,0));
+//	    	Imgproc.drawContours(dst, hulls, i, color, 2,Imgproc.LINE_8,new Mat(),0,new Point(0,0));
 	    }
 	    
-	    Imgcodecs.imwrite("d://pics/convexHull.jpg", dst);
+	    Imgcodecs.imwrite("d://pics/convexHull2.jpg", dst);
 	}
 
 }
