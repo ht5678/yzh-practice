@@ -57,7 +57,7 @@ public class L30ConvexHullDemo {
     {
        try{
           System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
-          Mat source = Imgcodecs.imread("d://pics//samples//palm_p.jpg",
+          Mat source = Imgcodecs.imread("d://pics//131313.jpg",
           Imgcodecs.CV_LOAD_IMAGE_COLOR);
           Mat srcClone=source.clone();
           Mat target = new Mat(source.size(),CvType.CV_8U);
