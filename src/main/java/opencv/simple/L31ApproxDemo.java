@@ -111,6 +111,8 @@ public class L31ApproxDemo {
 			
 			mMOP2f2.convertTo(contours.get(i), CvType.CV_32S);
 			Imgproc.drawContours(drawing, contours, i, new Scalar(255,0,0,255),2);
+			
+			Imgproc.minEnclosingCircle(mMOP2f2, center, radius);
 		}
 		return drawing;
 	}
