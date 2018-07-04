@@ -69,7 +69,16 @@ package tree.bstree;
 (02) 中序遍历结果： 1 2 3 4 5 6 
 (03) 后序遍历结果： 2 1 4 6 5 3
 
+ *
  * 
+ * 
+  前序遍历：根结点 ---> 左子树 ---> 右子树
+
+  中序遍历：左子树---> 根结点 ---> 右子树
+
+  后序遍历：左子树 ---> 右子树 ---> 根结点
+
+  层次遍历：仅仅需按层次遍历就可以
  * 
  * 
  * 前驱和后继
@@ -497,8 +506,13 @@ public class BinarySearchTree <T extends Comparable<T>>{
 //		BSTNode<Integer> node = bst.iterativeSearch(24);
 //		BSTNode<Integer> pre =  bst.predecessor(node);
 //		System.out.println(pre.key);
-		bst.remove(15);
-		bst.print();
+//		bst.remove(15);
+//		bst.print();
+		bst.preOrder();
+		System.out.println("-----");
+		bst.inOrder();
+		System.out.println("-----");
+		bst.postOrder();
 	}
 	
 }
