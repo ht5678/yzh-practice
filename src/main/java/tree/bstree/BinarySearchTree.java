@@ -361,26 +361,31 @@ public class BinarySearchTree <T extends Comparable<T>>{
 	 * @return
 	 */
 	private BSTNode<T> remove(BinarySearchTree<T> bst , BSTNode<T> z){
+		//真正删除节点的子树：左右子树合体的抽象
 		BSTNode<T> x = null;
+		//真正删除的节点
 		BSTNode<T> y = null;
 		
+		//获取真正删除节点
 		if( (z.left==null) || (z.right==null) ){
 			y=z;
 		}else{
 			y = successor(z);
 		}
 		
-		
+		//获取真正删除节点的子树：左右子树合体的抽象
 		if(y.left!=null){
 			x = y.left;
 		}else{
 			x = y.right;
 		}
 		
+		//删除 真正删除节点 
 		if(x!=null){
 			x.parent = y.parent;
 		}
 		
+		//删除之后把子树折断了，准备焊接
 		if(y.parent==null){
 			bst.mRoot = x;
 		}else if(y == y.parent.left){
@@ -389,7 +394,7 @@ public class BinarySearchTree <T extends Comparable<T>>{
 			y.parent.right = x;
 		}
 		
-		
+		//针对情况三的删除转移、做值替换
 		if(y!=z){
 			z.key = y.key;
 		}
@@ -484,12 +489,15 @@ public class BinarySearchTree <T extends Comparable<T>>{
 		bst.insert(30);
 		bst.insert(12);
 		bst.insert(24);
+		bst.insert(9);
+		bst.insert(19);
+		bst.insert(17);
 		
 //		bst.inOrder();
-		BSTNode<Integer> node = bst.iterativeSearch(24);
-		BSTNode<Integer> pre =  bst.predecessor(node);
-		System.out.println(pre.key);
-		
+//		BSTNode<Integer> node = bst.iterativeSearch(24);
+//		BSTNode<Integer> pre =  bst.predecessor(node);
+//		System.out.println(pre.key);
+		bst.remove(15);
 		bst.print();
 	}
 	
