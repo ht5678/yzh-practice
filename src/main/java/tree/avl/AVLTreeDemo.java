@@ -111,8 +111,119 @@ public class AVLTreeDemo <T extends Comparable<T>>{
 	}
 	
 	
-	
-	
+	/**
+	 * (递归实现)查找 'AVL树x'中键值为key的节点
+	 * @param x
+	 * @param key
+	 * @return
+	 */
+	private AVLTreeNode<T> search(AVLTreeNode<T> x , T key){
+		if(x==null){
+			return x;
+		}
+		
+		int cmp = key.compareTo(x.key);
+		if(cmp<0){
+			return search(x.left, key);
+		}else if(cmp>0){
+			return search(x.right, key);
+		}else{
+			return x;
+		}
+		
+	}
 	
 
+	public AVLTreeNode<T> search(T key){
+		return search(mRoot , key);
+	}
+	
+	
+	/**
+	 * (非递归实现)查找'AVL树x'中键值为key的节点
+	 * @param x
+	 * @param key
+	 * @return
+	 */
+	private AVLTreeNode<T> iterativeSearch(AVLTreeNode<T> x, T key){
+		while(x!=null){
+			int cmp = key.compareTo(x.key);
+			
+			if(cmp<0){
+				x = x.left;
+			}else if(cmp>0){
+				x = x.right;
+			}else{
+				return x;
+			}
+		}
+		return x;
+	}
+	
+	
+	public AVLTreeNode<T> iterativeSearch(T key){
+		return iterativeSearch(mRoot, key);
+	}
+	
+	
+	/**
+	 * 查找最小节点,返回tree为根节点的AVL树的最小节点
+	 * @param tree
+	 * @return
+	 */
+	private AVLTreeNode<T> minimum(AVLTreeNode<T> tree){
+		if(tree == null){
+			return null;
+		}
+		
+		while(tree.left!=null){
+			tree = tree.left;
+		}
+		return tree;
+	}
+	
+	
+	
+	public T minumum(){
+		AVLTreeNode<T> p = minimum(mRoot);
+		if(p!=null){
+			return p.key;
+		}
+		return null;
+	}
+	
+	
+	/**
+	 * 查找最大节点,返回tree为根节点的AVL树的最大节点
+	 * @param tree
+	 * @return
+	 */
+	private AVLTreeNode<T> maximum(AVLTreeNode<T> tree){
+		if(tree == null){
+			return null;
+		}
+		
+		while(tree.right!=null){
+			tree = tree.right;
+		}
+		
+		return tree.right;
+	}
+	
+	
+	
+	public T maximum(){
+		AVLTreeNode<T> p = maximum(mRoot);
+		if(p!=null){
+			return p.key;
+		}
+		return null;
+	}
+	
+	
+	
+	
+	
+	
 }
+
