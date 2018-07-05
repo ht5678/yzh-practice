@@ -80,7 +80,7 @@ public class L31RDPDemo {
 	 * 初始化
 	 */
 	private void initialize(){
-		Mat source = Imgcodecs.imread("d://pics//samples//coin.jpg");
+		Mat source = Imgcodecs.imread("d://pics//rqq.jpg");
 		BufferedImage image = matToBufferedImage(source);
 		frmjavaSwing = new JFrame();
 		frmjavaSwing.setTitle("轮廓周围绘制矩形框和圆形框");
@@ -122,7 +122,7 @@ public class L31RDPDemo {
 	
 	
 	public Mat findAndDrawPolygon(double threshold1){
-		Mat source = Imgcodecs.imread("d://pics//samples//coin.jpg",Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
+		Mat source = Imgcodecs.imread("d://pics//rqq.jpg",Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
 		Mat destination = new Mat(source.rows(),source.cols(),source.type());
 		Imgproc.GaussianBlur(source, source, new Size(3,3), 10,0);
 		Imgproc.threshold(source, destination, threshold1, 255, 0);
@@ -133,6 +133,7 @@ public class L31RDPDemo {
 		List<Rect> polyRects = new ArrayList<>();
 		List<Point> ccs = new ArrayList<>();
 		List<float[]> radius = new ArrayList<>();
+		List<MatOfPoint2f> contoursPloy = new ArrayList<>();
 		List<RotatedRect> minRects = new ArrayList<>();
 		List<RotatedRect> myellipse = new ArrayList<>();
 		Mat drawing = Mat.zeros(destination.size(), CvType.CV_8UC3);
@@ -140,11 +141,13 @@ public class L31RDPDemo {
 			MatOfPoint2f mMOP2f1 = new MatOfPoint2f();
 			MatOfPoint2f mMOP2f2 = new MatOfPoint2f();
 			
+			contoursPloy.add(mMOP2f2);
+			
 			contours.get(i).convertTo(mMOP2f1, CvType.CV_32FC2);
 			Imgproc.approxPolyDP(mMOP2f1, mMOP2f2, 8, true);
 			
 			mMOP2f2.convertTo(contours.get(i), CvType.CV_32S);
-			Imgproc.drawContours(drawing, contours, i, new Scalar(255,0,0,255),2);
+//			Imgproc.drawContours(drawing, contours, i, new Scalar(255,0,0,255),2);
 			
 			Rect rect = Imgproc.boundingRect(contours.get(i));
 			polyRects.add(rect);
@@ -164,11 +167,21 @@ public class L31RDPDemo {
 		//draw it
 		Random rd = new Random();
 //		source.copyTo(drawImg);
+		Point[] pts = new Point[4];
 		for(int i = 0 ; i<contours.size();i++){
 			Scalar color = new Scalar(rd.nextInt(255),rd.nextInt(255),rd.nextInt(255));
+			//1. 画圆和方形
+//			Imgproc.rectangle(drawing, polyRects.get(i).tl() , polyRects.get(i).br(),  color);
+//			Imgproc.circle(drawing, ccs.get(i), (int)radius.get(i)[0] , new Scalar(0,255,0),2);
 			
-			Imgproc.rectangle(drawing, polyRects.get(i).tl() , polyRects.get(i).br(),  color);
-			Imgproc.circle(drawing, ccs.get(i), (int)radius.get(i)[0] , new Scalar(0,255,0),2);
+			//2.
+			if(contoursPloy.get(i).dims() >5 ){
+				Imgproc.ellipse(drawing, myellipse.get(i), color, 1, 8);
+				minRects.get(i).points(pts);
+				for (int r = 0; r < 4; r++) {
+					Imgproc.line(drawing, pts[r], pts[(r + 1) % 4], color, 1);
+				}
+			}
 		}
 		
 		return drawing;
