@@ -141,13 +141,13 @@ public class L31RDPDemo {
 			MatOfPoint2f mMOP2f1 = new MatOfPoint2f();
 			MatOfPoint2f mMOP2f2 = new MatOfPoint2f();
 			
-			contoursPloy.add(mMOP2f2);
-			
 			contours.get(i).convertTo(mMOP2f1, CvType.CV_32FC2);
 			Imgproc.approxPolyDP(mMOP2f1, mMOP2f2, 8, true);
 			
 			mMOP2f2.convertTo(contours.get(i), CvType.CV_32S);
 //			Imgproc.drawContours(drawing, contours, i, new Scalar(255,0,0,255),2);
+			
+			contoursPloy.add(mMOP2f2);
 			
 			Rect rect = Imgproc.boundingRect(contours.get(i));
 			polyRects.add(rect);
@@ -157,9 +157,12 @@ public class L31RDPDemo {
 			radius.add(rs);
 			Imgproc.minEnclosingCircle(mMOP2f2, ccs.get(i), rs);
 			
-			if(mMOP2f2.dims()>5){
+			if(mMOP2f2.toList().size()>5){
 				myellipse.add(Imgproc.fitEllipse(mMOP2f2));
 				minRects.add(Imgproc.minAreaRect(mMOP2f2));
+			}else{
+				myellipse.add(null);
+				minRects.add(null);
 			}
 		}
 		
@@ -175,7 +178,7 @@ public class L31RDPDemo {
 //			Imgproc.circle(drawing, ccs.get(i), (int)radius.get(i)[0] , new Scalar(0,255,0),2);
 			
 			//2.
-			if(contoursPloy.get(i).dims() >5 ){
+			if(contoursPloy.get(i).toList().size() >5 ){
 				Imgproc.ellipse(drawing, myellipse.get(i), color, 1, 8);
 				minRects.get(i).points(pts);
 				for (int r = 0; r < 4; r++) {
