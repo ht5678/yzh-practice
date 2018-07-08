@@ -1,6 +1,13 @@
 package opencv.simple;
 
-
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 
 /**
  * 
@@ -36,7 +43,25 @@ public class L33PointPolygonTest {
 	
 	
 	public static void main(String[] args) {
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		
+		int r = 100;
+	    Mat src = Mat.zeros(r*4, r*4 ,CvType.CV_8UC1);
+	    Point[] vert = new Point[6];
+	    
+	    vert[0] = new Point(3 * r / 2,(int)(1.34*r));
+	    vert[1] = new Point(1 * r, 2 * r);
+	    vert[2] = new Point(3 * r / 2, (int)(2.866*r));
+	    vert[3] = new Point(5 * r / 2, (int)(2.866*r));
+	    vert[4] = new Point(3 * r, 2 * r);
+	    vert[5] = new Point(5 * r / 2, (int)(1.34*r));
+	    
+	    for(int i = 0 ; i<6 ;i++){
+	    	Imgproc.line(src, vert[i], vert[(i+1)%6], new Scalar(255),3,8,0);
+	    }
+	    
+	    
+	    Imgcodecs.imwrite("d://pics//pointPolygon.jpg", src);
 	}
 	
 	
