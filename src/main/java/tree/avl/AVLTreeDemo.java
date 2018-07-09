@@ -222,8 +222,289 @@ public class AVLTreeDemo <T extends Comparable<T>>{
 	
 	
 	
+	/**
+	 * 
+	 * LL:左左对应的情况(左单旋转)
+	 * 
+	 * 返回值:旋转后的根值
+	 * 
+	 * @param k2
+	 * @return
+	 */
+	private AVLTreeNode<T> leftLeftRotation(AVLTreeNode<T> k2){
+		AVLTreeNode<T> k1;
+		
+		k1 = k2.left;
+		k2.left = k1.right;
+		k1.right = k2;
+		
+		k2.height = max(height(k2.left), height(k2.right))+1;
+		k1.height = max(height(k1.left), k2.height) + 1;
+		
+		return k1;
+	}
 	
+	
+	/**
+	 * RR:右右对应的情况(右单旋转)
+	 * 
+	 * 返回值:旋转后的根节点
+	 * 
+	 * @param k1
+	 * @return
+	 */
+	private AVLTreeNode<T> rightRightRotation(AVLTreeNode<T> k1){
+		AVLTreeNode<T> k2;
+		
+		k2 = k1.right;
+		k1.right = k2.left;
+		k2.left = k1;
+		
+		k1.height = max(height(k1.left), height(k1.right))+1;
+		k2.height = max(height(k2.right) , k1.height)+1;
+		
+		return k2;
+	}
+	
+	
+	
+	/**
+	 * LR: 左右对应的情况(左双旋转)
+	 * 
+	 * 返回值:旋转后的根节点
+	 * 
+	 * @param k3
+	 * @return
+	 */
+	private AVLTreeNode<T> leftRightRotation(AVLTreeNode<T> k3){
+		k3.left = rightRightRotation(k3.left);
+		
+		return leftLeftRotation(k3);
+	}
+	
+	
+	/**
+	 * RL:右左对应的情况
+	 * 
+	 * 返回值:旋转后的根节点
+	 * 
+	 * @param k1
+	 * @return
+	 */
+	private AVLTreeNode<T> rightLeftRotation(AVLTreeNode<T> k1){
+		k1.right = leftLeftRotation(k1.right);
+		return rightRightRotation(k1);
+	}
+	
+	
+	/**
+	 * 
+	 * 将节点插入到AVL树中 , 并返回根节点
+	 * 
+	 * 参数:
+	 * 		tree	AVL树的根节点
+	 * 		key	插入的节点的键值
+	 * 返回值:
+	 * 		根节点
+	 * 
+	 * @return
+	 */
+	private AVLTreeNode<T> insert(AVLTreeNode<T> tree , T key){
+		if(tree == null){
+			//新建节点
+			tree = new AVLTreeNode<T>(key, null, null);
+		}else{
+			int cmp = key.compareTo(tree.key);
+			
+			if(cmp<0){		//应该key插入到'tree的左子树'的情况
+				tree.left = insert(tree.left, key);
+				//插入节点后 , 如果AVL树失去平衡,进行相应的调节
+				if(height(tree.left) - height(tree.right)==2){
+					if(key.compareTo(tree.left.key)<0){
+						tree = leftLeftRotation(tree);
+					}else{
+						tree = leftRightRotation(tree);
+					}
+				}
+			}else if(cmp>0){		//将key插入到'tree的右子树'的情况
+				tree.right = insert(tree.right, key);
+				
+				//插入节点后,若AVL树失去平衡,则进行相应的调节
+				if(height(tree.right) - height(tree.left) == 2){
+					if(key.compareTo(tree.right.key)>0){
+						tree = rightRightRotation(tree);
+					}else{
+						tree = rightLeftRotation(tree);
+					}
+				}
+			}else{//cmp = 0
+				System.out.println("添加失败:不允许添加相同的节点!");
+			}
+		}
+		
+		tree.height = max(height(tree.left), height(tree.right))+1;
+		
+		return tree;
+	}
+	
+	
+	
+	public void insert(T key){
+		mRoot = insert(mRoot, key);
+	}
+	
+	
+	
+	/**
+	 * 
+	 * 删除节点z , 返回根节点
+	 * 
+	 * 参数说明:
+	 * 		tree AVL树的根节点
+	 * 		z	   待删除的节点
+	 * 
+	 * 返回值:
+	 * 		根节点
+	 * 
+	 * @param tree
+	 * @param z
+	 * @return
+	 */
+	private AVLTreeNode<T> remove(AVLTreeNode<T> tree , AVLTreeNode<T> z){
+		//根为空或者没有要删除的节点 , 直接返回null
+		if(tree == null || z == null){
+			return null;
+		}
+		
+		int cmp = z.key.compareTo(tree.key);
+		if(cmp<0){		//待删除的节点在'tree的左子树'中
+			tree.left = remove(tree.left, z);
+			//删除节点后,若AVL树失去平衡,则进行相应的调节
+			if(height(tree.right) - height(tree.left) == 2){
+				AVLTreeNode<T> r = tree.right;
+				if(height(r.left) > height(r.right)){
+					tree = rightLeftRotation(tree);
+				}else{
+					tree = rightRightRotation(tree);
+				}
+			}
+		}else if(cmp>0){		//待删除的节点在'tree的右子树'中
+			tree.right = remove(tree.right, z);
+			//删除节点后,若AVL树失去平衡,则进行相应的调节
+			if(height(tree.left) - height(tree.right) ==2 ){
+				AVLTreeNode<T> l = tree.left;
+				if(height(l.right) > height(l.left)){
+					tree = leftRightRotation(tree);
+				}else{
+					tree = leftLeftRotation(tree);
+				}
+			}
+		}else{		//tree是对应要删除的节点
+			//tree的左右孩子都非空
+			if((tree.left!=null) && (tree.right!=null)){
+				if(height(tree.left) > height(tree.right)){
+					//如果tree的左子树比右子树高
+					//则(01)找出tree的左子树中的最大节点
+					//   (02)将最大节点的值赋值给tree
+					//   (03)删除该最大节点
+					//这类似于用'tree的左子树中最大节点'做'tree'的替身
+					//采用这种方式的好处是:删除'tree左子树的最大节点'之后,AVL树仍然是平衡的
+					AVLTreeNode<T> max = maximum(tree.left);
+					tree.key = max.key;
+					tree.left = remove(tree.left, max);
+				}else{
+					//如果tree的左子树不比右子树高(即他们相等,或者右子树比左子树高1)
+					//则(01)找出tree的右子树中的最小节点
+					//   (02)将该最小节点的值赋值给tree
+					//   (03)删除该最小节点
+					//这类似于用'tree的右子树中最小节点'做'tree'的替身
+					//采用这种方式的好处是:删除'tree的右子树中的最小节点',AVL树仍然是平衡的
+					AVLTreeNode<T> min = maximum(tree.right);
+					tree.key = min.key;
+					tree.right = remove(tree.right, min);
+				}
+			}else{
+				AVLTreeNode<T> tmp = tree;
+				tree = (tree.left!=null)?tree.left:tree.right;
+				tmp = null;
+			}
+		}
+		return tree;
+	}
+	
+	
+	
+	public void remove(T key){
+		AVLTreeNode<T> z;
+		if((z = search(mRoot , key))!=null){
+			mRoot = remove(mRoot, z);
+		}
+	}
+	
+	
+	
+	/**
+	 * 销毁AVL树
+	 * @param tree
+	 */
+	private void destroy(AVLTreeNode<T> tree){
+		if(tree == null){
+			return;
+		}
+		
+		if(tree.left!=null){
+			destroy(tree.left);
+		}
+		
+		if(tree.right!=null){
+			destroy(tree.right);
+		}
+		
+		tree = null;
+	}
+	
+	
+	
+	public void destroy(){
+		destroy(mRoot);
+	}
+
+	
+	
+	/**
+	 * 打印二叉查找树
+	 * 
+	 * key			-		节点的key值
+	 * direction	-		0,表示该节点是根节点
+	 * 							1,表示该节点是它的父节点的左孩子
+	 * 							2,表示该节点是它的父节点的右孩子
+	 * 
+	 * @param tree
+	 * @param key
+	 * @param direction
+	 */
+	private void print(AVLTreeNode<T> tree , T key , int direction){
+		if(tree != null){
+			if(direction==0){	//tree是根节点
+				System.out.printf("%2d is root\n",tree.key , key);
+			}else{					//tree是分支节点
+				System.out.printf("%2d is %2d's %6s child\n " , tree.key , key , direction==1?"right":"left");
+			}
+			
+			print(tree.left, tree.key, -1);
+			print(tree.right, tree.key, 1);
+			
+		}
+	}
+	
+	
+	public void print(){
+		if(mRoot!=null){
+			print(mRoot,mRoot.key,0);
+		}
+	}
 	
 	
 }
+
 
