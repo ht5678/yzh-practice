@@ -1,8 +1,13 @@
 package opencv.simple;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.opencv.core.Core;
+import org.opencv.core.Core.MinMaxLocResult;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
@@ -61,7 +66,43 @@ public class L33PointPolygonTest {
 	    }
 	    
 	    
-	    Imgcodecs.imwrite("d://pics//pointPolygon.jpg", src);
+	    //-------------------------------
+	    Mat hierarchy = new Mat();
+	    Mat csrc = new Mat(src.size(),src.type());
+	    List<MatOfPoint> contours = new ArrayList<>();
+	    src.copyTo(csrc);
+	    Imgproc.findContours(csrc, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE, new Point(0,0));
+	    Mat rawDist = Mat.zeros(csrc.size(), CvType.CV_32FC1);
+	    for(int row = 0 ; row < rawDist.rows() ; row++){
+	    	for(int col=0 ; col<rawDist.cols();col++){
+	    		double dist = Imgproc.pointPolygonTest(new MatOfPoint2f(contours.get(0).toArray()), new Point(col,row), true);
+	    		rawDist.put(row, col, dist);
+	    	}
+	    }
+	    
+	    
+	    //-----------------------------------
+	    MinMaxLocResult result = Core.minMaxLoc(rawDist);
+	    Mat drawImg = Mat.zeros(src.size(), CvType.CV_8UC3);
+	    for(int row = 0 ; row < drawImg.rows() ; row++){
+	    	for(int col = 0 ; col < drawImg.cols() ; col++){
+	    		double dist = rawDist.get(row, col)[0];
+	    		double[] items = drawImg.get(row, col);
+	    		if(dist>0){
+	    			items[0] = (Math.abs(1.0 - (dist / result.maxVal)) * 255);
+	    		}else if(dist<0){
+	    			items[2] = (Math.abs(1.0 - (dist / result.minVal)) * 255);
+	    		}else{
+	    			items[0] = (Math.abs(255 - dist));
+	    			items[1] = (Math.abs(255 - dist));
+	    			items[2] = (Math.abs(255 - dist));
+	    		}
+	    		drawImg.put(row, col, items);
+	    	}
+	    }
+	    
+	    
+	    Imgcodecs.imwrite("d://pics//pointPolygon.jpg", drawImg);
 	}
 	
 	
