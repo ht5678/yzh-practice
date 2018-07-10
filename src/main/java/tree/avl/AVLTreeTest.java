@@ -39,7 +39,17 @@ public class AVLTreeTest {
 		tree.print();
 		
 		int i =8;
-		System.out.printf("");
+		System.out.printf("\n== 删除根节点: %d", i);
+		tree.remove(i);
+
+		System.out.printf("\n== 高度: %d", tree.height());
+		System.out.printf("\n== 中序遍历: ");
+		tree.inOrder();
+		System.out.printf("\n== 树的详细信息: \n");
+		tree.print();
+
+		// 销毁二叉树
+		tree.destroy();
 		
 	}
 	
