@@ -1,6 +1,6 @@
 package opencv.simple;
 
-
+import org.opencv.core.Core;
 
 /**
  * 基于距离变换和分水岭的图像分割(image segmentation)
@@ -61,5 +61,18 @@ package opencv.simple;
  *
  */
 public class L34ImageSegmentation {
+	
+	
+	static{
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+	}
+	
+	
+	
+	
+	public static void main(String[] args) {
+		
+	}
+	
 
 }
