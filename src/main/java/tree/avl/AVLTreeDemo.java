@@ -241,7 +241,7 @@ public class AVLTreeDemo <T extends Comparable<T>>{
 		k2.height = max(height(k2.left), height(k2.right))+1;
 		k1.height = max(height(k1.left), k2.height) + 1;
 		
-		return k1;
+		return k1; 
 	}
 	
 	
