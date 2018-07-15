@@ -1,6 +1,13 @@
 package opencv.simple;
 
+import java.util.Arrays;
+
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 
 /**
  * 基于距离变换和分水岭的图像分割(image segmentation)
@@ -71,6 +78,41 @@ public class L34ImageSegmentation {
 	
 	
 	public static void main(String[] args) {
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+	    Mat src = Imgcodecs.imread("d://pics/12345.png");
+	    
+	    if(src.empty()){
+	    	System.out.println("图片地址不存在");
+	    	return;
+	    }
+	    
+	    //1.把白色背景改成黑色背景
+	    for(int i =0 ; i < src.rows();i++){
+	    	for(int j=0;j<src.cols();j++){
+	    		double[] item = new double[]{255,255,255};
+	    		if(Arrays.equals(src.get(i, j) , item)){
+	    			item[0]=0;
+	    			item[1]=0;
+	    			item[2]=0;
+	    			src.put(i, j, item);
+	    		}
+	    	}
+	    }
+	    
+	    //sharpen锐化
+		Mat kernel =new Mat(3,3, CvType.CV_32F);
+		kernel.put(0, 0, new float[]{ 1, 1, 1});
+		kernel.put(1, 0, new float[]{1, -8, 1});
+		kernel.put(2, 0, new float[]{1, 1, 1});
+	    
+		Mat imgLaplance = new Mat(src.size(),src.type());
+		Mat sharpenImg = src;
+		Imgproc.filter2D(src, imgLaplance, CvType.CV_32F, kernel, new Point(-1,-1) , 0, Core.BORDER_DEFAULT);
+		src.convertTo(sharpenImg, CvType.CV_32F);
+		Mat resultImg = sharpenImg - imgLaplance;
+		
+		
+	    Imgcodecs.imwrite("d://pics/imageSegmentation.jpg", src);
 		
 	}
 	
