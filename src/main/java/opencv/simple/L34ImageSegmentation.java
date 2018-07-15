@@ -105,14 +105,15 @@ public class L34ImageSegmentation {
 		kernel.put(1, 0, new float[]{1, -8, 1});
 		kernel.put(2, 0, new float[]{1, 1, 1});
 	    
+		Mat resultImg = new Mat(src.size(),src.type());
 		Mat imgLaplance = new Mat(src.size(),src.type());
 		Mat sharpenImg = src;
 		Imgproc.filter2D(src, imgLaplance, CvType.CV_32F, kernel, new Point(-1,-1) , 0, Core.BORDER_DEFAULT);
 		src.convertTo(sharpenImg, CvType.CV_32F);
-		Mat resultImg = sharpenImg - imgLaplance;
+		Core.subtract(sharpenImg, imgLaplance, resultImg);
 		
 		
-	    Imgcodecs.imwrite("d://pics/imageSegmentation.jpg", src);
+	    Imgcodecs.imwrite("d://pics/imageSegmentation.jpg", resultImg);
 		
 	}
 	
