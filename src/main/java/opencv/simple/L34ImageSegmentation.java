@@ -8,7 +8,6 @@ import java.util.Random;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfInt;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
@@ -114,7 +113,8 @@ public class L34ImageSegmentation {
 	    
 		Mat resultImg = new Mat(src.size(),src.type());
 		Mat imgLaplance = new Mat(src.size(),src.type());
-		Mat sharpenImg = src;
+		Mat sharpenImg = new Mat(src.size(),src.type());
+		src.copyTo(sharpenImg);
 		Imgproc.filter2D(src, imgLaplance, CvType.CV_32F, kernel, new Point(-1,-1) , 0, Core.BORDER_DEFAULT);
 		src.convertTo(sharpenImg, CvType.CV_32F);
 		Core.subtract(sharpenImg, imgLaplance, resultImg);
@@ -125,7 +125,7 @@ public class L34ImageSegmentation {
 		
 		//convert to binary
 		Imgproc.cvtColor(src, resultImg, Imgproc.COLOR_BGR2GRAY);
-		Mat binaryImg = new Mat(resultImg.size(),resultImg.type());
+		Mat binaryImg = new Mat(src.size(),src.type());
 		Imgproc.threshold(resultImg, binaryImg, 40, 255, Imgproc.THRESH_BINARY|Imgproc.THRESH_OTSU);
 		System.out.println("binary image");
 		
