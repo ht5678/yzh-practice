@@ -13,6 +13,8 @@ import javax.swing.event.ChangeListener;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -20,33 +22,23 @@ import org.opencv.imgproc.Imgproc;
 
 /**
  * 
- * 图像的特征:
- * 边缘
- * 角点
- * 纹理
- * 
- * 必须用灰度图像
- * cornorHarris(
- * InputArray src,
- * OutputArray dst,
- * int blockSize,
- * int ksize,
- * double k,
- * int borderType=BORDER_DEFAULT
+ * goodFeaturesToTrack(
+ * InputArray image,
+ * OutputArray corners,	
+ * int maxCorners,			表示返回角点的数目,如果检测角点数目大于最大数则返回响应值最强前规定数目
+ * double qualityLevel,		表示最小可接受的向量值,1500 , 0.01 , 15 
+ * double minDistance,	两个角点之间的最小距离(欧几里得距离)
+ * InputArray mask = noArray,
+ * int blockSize=3,			表示计算导数微分不同的窗口大小
+ * bool useHarrisDetector=false,		是否使用harris角点检测
+ * double k=0.4
  * )
- * 
- * 
- * blocksize计算λ1λ2时候的矩阵大小
- * ksize窗口大小
- * k表示计算角度响应时候的参数大小
- * 默认在0.04-0.06之间
- * -阈值t,用来过滤角度响应
- * 
  * 
  * @author sdwhy
  *
  */
-public class L01HarrisDemo {
+public class L03GoodFeaturesDemo {
+
 
 	
 	static{
@@ -56,7 +48,7 @@ public class L01HarrisDemo {
 	private JFrame frmjavaSwing;
 	
 	
-	public L01HarrisDemo(){
+	public L03GoodFeaturesDemo(){
 		initialize();
 	}
 	
@@ -65,7 +57,7 @@ public class L01HarrisDemo {
 	 * 初始化
 	 */
 	private void initialize(){
-		Mat source = Imgcodecs.imread("d://pics//171717.jpg");
+		Mat source = Imgcodecs.imread("d://pics//lena.png");
 		BufferedImage image = matToBufferedImage(source);
 		frmjavaSwing = new JFrame();
 		frmjavaSwing.setTitle("harris角点检测");
@@ -106,29 +98,30 @@ public class L01HarrisDemo {
 	}
 	
 	
-	public Mat findAndDrawPolygon(double threshold1){
-		Mat src = Imgcodecs.imread("d://pics//171717.jpg",Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
-		Mat dst = new Mat(src.rows(),src.cols(),CvType.CV_32FC1);
-		Mat normDst = new Mat(src.rows(),src.cols(),src.type());
-		Mat scalarDst = new Mat(src.rows(),src.cols(),src.type());
+	public Mat findAndDrawPolygon(int maxCorners){
+		Mat src = Imgcodecs.imread("d://pics//lena.png");
 		
-//		Imgproc.cvtColor(src, dst, CvType.CV_32FC1);
+		if(maxCorners<5){
+			maxCorners=5;
+		}
 		
-		int blockSize=2;
-		int ksize=3;
-		double k = 0.04;
+		MatOfPoint corners = new MatOfPoint();
+		double qualityLevel = 0.01;
+		double minDistance=10;
+		int blockSize=3;
+		boolean useHarris = false;
+		double k =0.04;
 		
-		Imgproc.cornerHarris(src, dst, blockSize, ksize, k, Core.BORDER_DEFAULT);
-		Core.normalize(dst, normDst, 0, 255, Core.NORM_MINMAX,CvType.CV_32FC1,new Mat());
-		Core.convertScaleAbs(normDst, scalarDst);
+		Mat graySrc = new Mat(src.size(),src.type());
+		Imgproc.cvtColor(src, graySrc, Imgproc.COLOR_BGR2GRAY);
+		Imgproc.goodFeaturesToTrack(graySrc, corners, maxCorners, qualityLevel, minDistance, new Mat(), blockSize, useHarris, k);
 		
-		Mat resultImg = src.clone();
-		for(int row = 0 ; row <resultImg.rows();row++){
-			for(int col = 0 ; col<resultImg.cols();col++){
-				if(scalarDst.get(row, col)[0]>threshold1){
-					Imgproc.circle(src, new Point(row,col), 6, new Scalar(0,0,255),1,8,0);
-				}
-			}
+		MatOfPoint2f pts = new MatOfPoint2f();
+		corners.convertTo(pts, CvType.CV_32FC2);
+		Point[] allPoints = pts.toArray();
+		System.out.println(maxCorners);
+		for(Point px : allPoints){
+			Imgproc.circle(src, px, 6, new Scalar(0,0,255));
 		}
 		
 		return src;
@@ -177,7 +170,7 @@ public class L01HarrisDemo {
 			@Override
 			public void run() {
 				try {
-					L01HarrisDemo demo = new L01HarrisDemo();
+					L03GoodFeaturesDemo demo = new L03GoodFeaturesDemo();
 					demo.frmjavaSwing.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -187,5 +180,6 @@ public class L01HarrisDemo {
 	}
 
 }
+
 
 
