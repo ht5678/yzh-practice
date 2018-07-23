@@ -12,6 +12,13 @@
     <finalName>yzh-practice</finalName>
   </build>
   
+   <repositories>
+	  <repository>
+	   <id>xuggle repo</id>
+	   <url>http://xuggle.googlecode.com/svn/trunk/repo/share/java/</url>
+	  </repository>
+	</repositories>
+  
   <properties>
        <skipTests>true</skipTests>
        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -90,6 +97,14 @@
         <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
         <version>1.0.2</version>
     </dependency>
+    
+    <!-- opencv视频流相关处理 -->
+<!-- 	  <dependency>
+	   <groupId>xuggle</groupId>
+	   <artifactId>xuggle-xuggler</artifactId>
+	   <version>5.2</version>
+	  </dependency> -->
+    
     
     <!-- mysql -->
    	<dependency>
