@@ -11,9 +11,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.opencv.core.Core;
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
 import org.opencv.core.Core.MinMaxLocResult;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -61,6 +62,14 @@ public class L04CustomCornerDemo {
 	
 	private JFrame frmjavaSwing;
 	
+	private static Mat src = null;
+	
+	private static MinMaxLocResult result = null;
+	
+	private static int maxCount = 300;
+	
+	private static Mat harrisRspImg = null;
+	
 	
 	public L04CustomCornerDemo(){
 		initialize();
@@ -91,7 +100,7 @@ public class L04CustomCornerDemo {
 		final JSlider slider_cth1 = new JSlider();
 		slider_cth1.setValue(1);
 		slider_cth1.setMinimum(1);
-		slider_cth1.setMaximum(300);
+		slider_cth1.setMaximum(maxCount);
 		slider_cth1.setBounds(15, 21, 110, 25);
 		frmjavaSwing.getContentPane().add(slider_cth1);
 		
@@ -104,7 +113,36 @@ public class L04CustomCornerDemo {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				showShapeValue.setText(slider_cth1.getValue()+"");
-				BufferedImage newImage = matToBufferedImage(findAndDrawPolygon(slider_cth1.getValue()));
+				
+				src = Imgcodecs.imread("d://pics//lena.png");
+				
+				Mat graySrc = new Mat(src.size(),src.type());
+				Mat harrisDst = Mat.zeros(src.size(), src.type());
+				harrisRspImg = Mat.zeros(src.size(), src.type());
+				
+				Imgproc.cvtColor(src, graySrc, Imgproc.COLOR_BGR2GRAY);
+				//计算特征值
+				int blockSize=3;
+				int ksize=3;
+				double k = 0.04;
+				
+				Imgproc.cornerEigenValsAndVecs(graySrc, harrisDst, blockSize, ksize, Core.BORDER_DEFAULT);
+				//计算响应
+				for(int row=0;row<harrisDst.rows();row++){
+					for(int col=0;col<harrisDst.cols();col++){
+						double lambda1 = harrisDst.get(row, col)[0];
+						double lambda2 = harrisDst.get(row, col)[1];
+						
+						harrisRspImg.put(row, col, (lambda1*lambda2 - k*Math.pow((lambda1+lambda2), 2)));
+					}
+				}
+				
+				result = Core.minMaxLoc(graySrc);
+				
+				Mat mat = CustomHarrisDemo(slider_cth1.getValue());
+				BufferedImage newImage = matToBufferedImage(mat);
+				
+				
 				lblNewLabel.setIcon(new ImageIcon(newImage));
 			}
 		});
@@ -112,37 +150,23 @@ public class L04CustomCornerDemo {
 	}
 	
 	
-	public Mat findAndDrawPolygon(int qualityLevel){
-		Mat src = Imgcodecs.imread("d://pics//lena.png");
-		
-		if(qualityLevel<5){
-			qualityLevel=5;
+	public Mat CustomHarrisDemo(double qualityLevel){
+		if(qualityLevel<10){
+			qualityLevel=10;
 		}
-		Mat graySrc = new Mat(src.size(),src.type());
-		Mat harrisDst = Mat.zeros(src.size(), src.type());
-		Mat harrisRspImg = Mat.zeros(src.size(), src.type());
 		
-		Imgproc.cvtColor(src, graySrc, Imgproc.COLOR_BGR2GRAY);
-		//计算特征值
-		int blockSize=3;
-		int ksize=3;
-		double k = 0.04;
-		
-		Imgproc.cornerEigenValsAndVecs(graySrc, harrisDst, blockSize, ksize, Core.BORDER_DEFAULT);
-		//计算响应
-		for(int row=0;row<harrisDst.rows();row++){
-			for(int col=0;col<harrisDst.cols();col++){
-				double lambda1 = harrisDst.get(row, col)[0];
-				double lambda2 = harrisDst.get(row, col)[1];
-				
-				harrisRspImg.put(row, col, (lambda1*lambda2 - k*Math.pow((lambda1+lambda2), 2)));
+		Mat resultImg = src.clone();
+		double t = result.minVal + ((qualityLevel/maxCount) * (result.maxVal-result.minVal));
+		for(int row = 0 ; row < src.rows();row++){
+			for(int col=0;col<src.cols();col++){
+				double v = harrisRspImg.get(row, col)[0];
+				if(v>t){
+					Imgproc.circle(resultImg, new Point(col,row), 2, new Scalar(0,0,255), 2,8,0);
+				}
 			}
 		}
 		
-		MinMaxLocResult result = Core.minMaxLoc(graySrc);
-		
-		
-		return src;
+		return resultImg;
 	}
 	
 	
