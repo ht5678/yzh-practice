@@ -15,6 +15,31 @@ import org.dom4j.Element;
 import BillCode.service.SequenceServImpl;
 import dto.annotation.PropertyHelper;
 
+
+/**
+ * 
+ * 
+ *   ┏┛┻━━━┛┻┓
+ *  ┃　　　　　　　┃
+ *  ┃　　　━　　　┃
+ *  ┃　┳┛　┗┳　┃
+ *  ┃　　　　　　　┃
+ *  ┃　　　┻　　　┃
+ *  ┃　　　　　　　┃
+ *  ┗━┓　　　┏━┛
+ *　     ┃　　　┃
+ *　 　┃　　　┃
+ *　 　┃　　　┗━━━┓
+ *　 　┃　　　　　　　┣┓
+ *　 　┃　　　　　　　┏┛
+ *　 　┗┓┓┏━┳┓┏┛
+ *　　 　┃┫┫　┃┫┫
+ *　   　 ┗┻┛　┗┻┛
+ *
+ *
+ * @author yuezh2   2018年7月29日 下午9:10:36
+ *
+ */
 public class BillCode {
 
 	private static Map<String,BillCode> billcodes = new HashMap<String, BillCode>();
