@@ -2,6 +2,10 @@ package bitcoin.model;
 
 import java.util.List;
 
+import com.alibaba.fastjson.JSON;
+
+import bitcoin.util.CryptoUtil;
+
 /**
  * 区块结构
  * @author yuezh2   2018年7月26日 下午8:14:31
@@ -38,8 +42,64 @@ public class Block {
 		this.previousHash=previousHash;
 		this.hash=hash;
 	}
+	
+	
+	
+	/**
+	 * 查询余额
+	 * @param blockChain
+	 * @param address
+	 * @return
+	 */
+	public static int getWalletBalance(List<Block> blockChain , String address){
+		int balance = 0;
+		for(Block block : blockChain){
+			List<Transaction> transactions = block.getTransactions();
+			for(Transaction transaction : transactions){
+				if(address.equals(transaction.getRecipient())){
+					balance = balance+transaction.getAmount();
+				}
+				if(address.equals(transaction.getSender())){
+					balance = balance-transaction.getAmount();
+				}
+			}
+		}
+		return balance;
+	}
+
 
 	
+	
+	/**
+	 * 挖矿
+	 * @param blockChain	整个区块链
+	 * @param txs				需记账交易记录
+	 * @param address		矿工钱包地址
+	 */
+	public static void mineBlock(List<Block> blockChain , List<Transaction> txs , String address){
+		//加入系统奖励的交易,默认挖矿10个比特币
+		Transaction sysTx = new Transaction(CryptoUtil.UUID(),"",address,10);
+		txs.add(sysTx);
+		//获取当前区块链的最后一个区块
+		Block latestBlock = blockChain.get(blockChain.size()-1);
+		//随机数
+		int nonce = 1;
+		String hash = "";
+		while(true){
+			hash = CryptoUtil.SHA256(latestBlock.getHash()+JSON.toJSONString(txs)+nonce);
+			if(hash.startsWith("0000")){
+				System.out.println("======计算结果正确，计算次数为："+nonce+",hash:"+hash);
+				break;
+			}
+			nonce++;
+			System.out.println("计算错误，hash:"+hash);
+		}
+		
+		//解出难题，可以构造新区块并加入到区块链
+		Block newBlock = new Block(latestBlock.getIndex()+1, System.currentTimeMillis(), txs, nonce, latestBlock.getHash(), hash);
+		blockChain.add(newBlock);
+		System.out.println("挖矿后的区块链："+JSON.toJSONString(blockChain));
+	}
 	
 	
 	
