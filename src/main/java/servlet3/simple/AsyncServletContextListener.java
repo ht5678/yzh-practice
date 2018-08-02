@@ -1,4 +1,4 @@
-package servlet3;
+package servlet3.simple;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;

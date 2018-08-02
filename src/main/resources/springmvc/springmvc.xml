@@ -26,6 +26,80 @@
 	<context:component-scan base-package="springmvc"/>
 	
 	<context:component-scan base-package="miaosha"/>
+	
+	<context:component-scan base-package="servlet3"/>
     
+
+
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/pages/"></property>
+		<property name="suffix" value=".jsp"></property>		
+	</bean>
+	
+	
+	<mvc:annotation-driven validator="validator">
+		<mvc:message-converters register-defaults="true">
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter" />
+			<bean
+				class="org.springframework.http.converter.ResourceHttpMessageConverter" />
+			<!-- fastjosn spring support -->
+			<bean id="jsonConverter"
+				class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<!-- <bean class="org.springframework.http.MediaType">
+							<constructor-arg index="0" value="application" />
+							<constructor-arg index="1" value="json" />
+							<constructor-arg index="2" value="UTF-8" />
+						</bean> -->
+						<bean class="org.springframework.http.MediaType">
+							<constructor-arg index="0" value="text" />
+							<constructor-arg index="1" value="html" />
+							<constructor-arg index="2" value="UTF-8" />
+						</bean>
+					</list>
+				</property>
+				<property name="features">
+					<list>
+						<value>WriteNullStringAsEmpty</value>
+						<value>QuoteFieldNames</value>
+						<value>DisableCircularReferenceDetect</value>
+						<value>WriteDateUseDateFormat</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	
+	
+	<bean id="validator"
+	    class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" >
+	</bean>
+	
+	
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+		<property name="cookieName" value="clientlanguage" />
+		<property name="cookieMaxAge" value="-1" />
+	</bean>
+	
+	
+		<!-- 文件上传,多文件上传的时候不适合使用  30M限制-->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize">
+        	<value>31457280</value> 
+        </property>
+        <!-- resolveLazily属性启用是为了推迟文件解析，以便在UploadController 中捕获文件大小异常 -->  
+        <property name="resolveLazily" value="true"/>
+    </bean>
+	
+	<!-- 对静态资源文件的访问 方案二 （二选一）--><mvc:default-servlet-handler /> 
+
+
+	<!-- 开启定时任务 -->
+	<task:executor id="executor" pool-size="5"/>
+    <task:scheduler id="scheduler" pool-size="10"/>
+    <task:annotation-driven executor="executor" scheduler="scheduler"/>
+
 
 </beans>
