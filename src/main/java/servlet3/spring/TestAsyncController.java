@@ -1,6 +1,5 @@
 package servlet3.spring;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +29,8 @@ import org.springframework.web.context.request.async.DeferredResult;
  *
  *-------------------- 神兽保佑 永无bug --------------------
  * 
- * 
+ * 测试:
+ * http://localhost:8081/yzh-practice/async/test/1
  * 
  * @author yuezh2   2018年8月2日 上午11:15:53
  *
