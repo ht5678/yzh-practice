@@ -11,6 +11,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Core.MinMaxLocResult;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -80,7 +81,7 @@ public class L04CustomCornerDemo {
 	 * 初始化
 	 */
 	private void initialize(){
-		Mat source = Imgcodecs.imread("d://pics//lena.png");
+		Mat source = Imgcodecs.imread("d://pics//wx.jpg");
 		BufferedImage image = matToBufferedImage(source);
 		frmjavaSwing = new JFrame();
 		frmjavaSwing.setTitle("harris角点检测");
@@ -98,7 +99,7 @@ public class L04CustomCornerDemo {
 		frmjavaSwing.getContentPane().add(lblNewLabel);
 		
 		final JSlider slider_cth1 = new JSlider();
-		slider_cth1.setValue(1);
+		slider_cth1.setValue(10);
 		slider_cth1.setMinimum(1);
 		slider_cth1.setMaximum(maxCount);
 		slider_cth1.setBounds(15, 21, 110, 25);
@@ -114,11 +115,11 @@ public class L04CustomCornerDemo {
 			public void stateChanged(ChangeEvent e) {
 				showShapeValue.setText(slider_cth1.getValue()+"");
 				
-				src = Imgcodecs.imread("d://pics//lena.png");
+				src = Imgcodecs.imread("d://pics//timg3.jpg");
 				
 				Mat graySrc = new Mat(src.size(),src.type());
-				Mat harrisDst = Mat.zeros(src.size(), src.type());
-				harrisRspImg = Mat.zeros(src.size(), src.type());
+				Mat harrisDst = Mat.zeros(src.size(), CvType.CV_32FC(6));
+				harrisRspImg = Mat.zeros(src.size(), CvType.CV_32FC1);
 				
 				Imgproc.cvtColor(src, graySrc, Imgproc.COLOR_BGR2GRAY);
 				//计算特征值
@@ -161,6 +162,7 @@ public class L04CustomCornerDemo {
 			for(int col=0;col<src.cols();col++){
 				double v = harrisRspImg.get(row, col)[0];
 				if(v>t){
+					System.out.println(v+":"+t);
 					Imgproc.circle(resultImg, new Point(col,row), 2, new Scalar(0,0,255), 2,8,0);
 				}
 			}
