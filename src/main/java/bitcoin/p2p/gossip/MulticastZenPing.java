@@ -3,6 +3,9 @@ package bitcoin.p2p.gossip;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.elasticsearch.ExceptionsHelper;
 import org.elasticsearch.Version;
@@ -117,6 +120,14 @@ public class MulticastZenPing {
 //                clusterName.writeTo(out);
 //                nodesProvider.nodes().localNode().writeTo(out);
 //                out.close();
+//            	String str = "this is a test message";
+//            	byte[] bytes = str.getBytes();
+//            	
+//            	byte[] msgs = new byte[bytes.length+INTERNAL_HEADER.length];
+//            	
+//            	List<Byte> list = new ArrayList<>();
+//            	list.addAll(bytes);
+            	
                 datagramPacketSend.setData(INTERNAL_HEADER);
                 multicastSocket.send(datagramPacketSend);
             } catch (Exception e) {
@@ -124,8 +135,6 @@ public class MulticastZenPing {
             }
         }
     }
-    
-    
     
     
     
