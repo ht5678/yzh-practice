@@ -47,6 +47,15 @@
 		    </properties>
 		</profile> 
 	  </profiles>
+	  
+	  
+	<!-- springboot -->
+    <!-- Inherit defaults from Spring Boot -->
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.0.4.RELEASE</version>
+	</parent>
     
     
     
@@ -90,6 +99,16 @@
             <artifactId>shiro-spring</artifactId>
             <version>${shiro.version}</version>
         </dependency>
+        
+        
+	
+	<!-- springboot -->
+	<!-- Add typical dependencies for a web application -->
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-web</artifactId>
+	</dependency>
+    
     
     <!-- mqtt -->
     <dependency>
@@ -573,5 +592,15 @@
 			<systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
 		</dependency> -->
   </dependencies>
+  
+  
+    <!-- springboot -->
+  	<!-- Package as an executable jar -->
+	<plugins>
+		<plugin>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-maven-plugin</artifactId>
+		</plugin>
+	</plugins>
   
 </project>
